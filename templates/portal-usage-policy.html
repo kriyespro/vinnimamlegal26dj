@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% block title %}Portal Usage Policy | VinnitaLegal{% endblock %}
+{% block description %}Rules for staff, partners and clients using the VinnitaLegal portal — access, confidentiality, data handling and DPDP Act 2023 compliance.{% endblock %}
+{% block xdata %}, tab:'scope'{% endblock %}
+{% block content %}
+
+  <section class="hero-gradient pt-20 pb-14">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+      <div class="section-badge" style="background:rgba(255,255,255,0.12);color:white;border:1px solid rgba(255,255,255,0.2);">Effective · Portal Access Condition</div>
+      <h1 class="text-3xl md:text-5xl font-extrabold text-white mt-4 mb-4">Portal Usage Policy</h1>
+      <p class="text-white/70 text-lg max-w-2xl mx-auto">Rules for Office Staff, Partners/Advocates, and Clients using the VinnitaLegal legal services portal — access, confidentiality, conduct, and data handling under Indian law.</p>
+    </div>
+  </section>
+
+  <section class="bg-white border-b border-slate-100 sticky top-16 z-40">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 flex gap-2 overflow-x-auto py-3">
+      <button @click="tab='scope'" :class="tab==='scope'?'bg-navy text-white':'bg-slate-100 text-navy'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold">1. Scope</button>
+      <button @click="tab='staff'" :class="tab==='staff'?'bg-navy text-white':'bg-slate-100 text-navy'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold">2. Staff</button>
+      <button @click="tab='partner'" :class="tab==='partner'?'bg-navy text-white':'bg-slate-100 text-navy'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold">3. Partners</button>
+      <button @click="tab='client'" :class="tab==='client'?'bg-navy text-white':'bg-slate-100 text-navy'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold">4. Clients</button>
+      <button @click="tab='general'" :class="tab==='general'?'bg-navy text-white':'bg-slate-100 text-navy'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold">5. General</button>
+    </div>
+  </section>
+
+  <section class="section-padding">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+
+      <!-- 1. Purpose & Scope -->
+      <div x-show="tab==='scope'" class="space-y-6">
+        <h2 class="text-2xl font-bold text-navy">1. Purpose &amp; Scope</h2>
+        <p class="text-slate-600 leading-relaxed">This policy governs the use of VinnitaLegal’s legal services portal by three categories of users: <strong>Office / Back-End Staff</strong>, <strong>Partners / Advocates</strong>, and <strong>Clients / Customers</strong>. It establishes rules for access, confidentiality, conduct, and data handling to ensure professional service delivery and compliance with applicable Indian law, including:</p>
+        <ul class="list-disc pl-5 space-y-2 text-slate-600">
+          <li>Digital Personal Data Protection Act, 2023 (DPDP Act)</li>
+          <li>Information Technology Act, 2000 (and applicable IT Rules)</li>
+          <li>Bar Council of India Rules governing professional conduct</li>
+        </ul>
+        <p class="text-slate-600 leading-relaxed">All users of the portal are required to read, understand, and comply with this policy as a <strong>condition of access</strong>.</p>
+      </div>
+
+      <!-- 2. Staff -->
+      <div x-show="tab==='staff'" x-cloak class="space-y-8">
+        <div>
+          <h2 class="text-2xl font-bold text-navy mb-2">2. Rules for Office / Back-End Staff</h2>
+          <p class="text-slate-500 text-sm">Applicable to all administrative, paralegal, and support staff with portal access.</p>
+        </div>
+        <div>
+          <h3 class="font-bold text-navy text-lg mb-3">2.1 Access &amp; Confidentiality</h3>
+          <ul class="space-y-2 text-slate-600">
+            <li class="flex gap-2"><span class="text-gold font-bold">•</span> Staff may access only the case files, client data, and documents relevant to their assigned tasks.</li>
+            <li class="flex gap-2"><span class="text-gold font-bold">•</span> Client information (personal, financial, or case-related) must never be shared outside the Firm without written authorization.</li>
+            <li class="flex gap-2"><span class="text-gold font-bold">•</span> Login credentials are personal and must not be shared with any other person, including colleagues or supervisors.</li>
+            <li class="flex gap-2"><span class="text-gold font-bold">•</span> Access rights must be reviewed and revoked immediately upon a staff member’s transfer or exit from the Firm.</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-bold text-navy text-lg mb-3">2.2 Conduct</h3>
+          <ul class="space-y-2 text-slate-600">
+            <li class="flex gap-2"><span class="text-gold font-bold">•</span> All client communication (calls, emails, meetings) must be documented in the relevant case file on the portal.</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-bold text-navy text-lg mb-3">2.3 Data Handling</h3>
+          <ul class="space-y-2 text-slate-600">
+            <li class="flex gap-2"><span class="text-gold font-bold">•</span> Client documents must not be downloaded to personal devices, personal email, or personal cloud storage.</li>
+            <li class="flex gap-2"><span class="text-gold font-bold">•</span> All uploads, edits, and deletions on the portal are logged (user ID, timestamp, and action) and subject to audit.</li>
+            <li class="flex gap-2"><span class="text-gold font-bold">•</span> Any suspected data breach, phishing attempt, or unauthorised access must be reported immediately to the designated Compliance / IT Officer.</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-bold text-navy text-lg mb-3">2.4 Escalation</h3>
+          <ul class="space-y-2 text-slate-600">
+            <li class="flex gap-2"><span class="text-gold font-bold">•</span> Any client query that requires legal advice, opinion, or a settlement decision must be escalated to the concerned Partner / Advocate and must not be answered directly by staff.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 3. Partners -->
+      <div x-show="tab==='partner'" x-cloak class="space-y-8">
+        <div>
+          <h2 class="text-2xl font-bold text-navy mb-2">3. Rules for Partners / Advocates</h2>
+          <p class="text-slate-500 text-sm">Applicable to all partners, associates, and advocates handling client matters.</p>
+        </div>
+        <div>
+          <h3 class="font-bold text-navy text-lg mb-3">3.1 Case Ownership</h3>
+          <ul class="space-y-2 text-slate-600">
+            <li class="flex gap-2"><span class="text-gold font-bold">•</span> Each Partner is responsible for the cases assigned to them and must ensure timely status updates on the portal.</li>
+            <li class="flex gap-2"><span class="text-gold font-bold">•</span> All major documents (contracts, pleadings, notices, opinions) must be reviewed and approved by the concerned Partner before being shared with the client.</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-bold text-navy text-lg mb-3">3.2 Confidentiality &amp; Conflict of Interest</h3>
+          <ul class="space-y-2 text-slate-600">
+            <li class="flex gap-2"><span class="text-gold font-bold">•</span> Partners must disclose any potential conflict of interest before accepting a new case or client.</li>
+            <li class="flex gap-2"><span class="text-gold font-bold">•</span> Client information shared between Partners must be limited to a need-to-know basis.</li>
+            <li class="flex gap-2"><span class="text-gold font-bold">•</span> Partners must comply with the Bar Council of India Rules on client confidentiality and professional ethics.</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-bold text-navy text-lg mb-3">3.3 Portal Usage</h3>
+          <ul class="space-y-2 text-slate-600">
+            <li class="flex gap-2"><span class="text-gold font-bold">•</span> Case status, hearing dates, and billing details must be updated on the portal on a regular basis.</li>
+            <li class="flex gap-2"><span class="text-gold font-bold">•</span> Staff-submitted drafts must be reviewed and approved or rejected within 24–48 hours.</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-bold text-navy text-lg mb-3">3.4 Financial</h3>
+          <ul class="space-y-2 text-slate-600">
+            <li class="flex gap-2"><span class="text-gold font-bold">•</span> Billing structures and fee arrangements must be transparent and consistent with what has been communicated to the client.</li>
+            <li class="flex gap-2"><span class="text-gold font-bold">•</span> Any change in fee structure must be communicated to the client in writing / via the portal before it takes effect.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 4. Clients -->
+      <div x-show="tab==='client'" x-cloak class="space-y-8">
+        <div>
+          <h2 class="text-2xl font-bold text-navy mb-2">4. Rules for Clients / Customers</h2>
+          <p class="text-slate-500 text-sm">Applicable to all individuals and entities engaging VinnitaLegal’s services through the portal.</p>
+        </div>
+        <div>
+          <h3 class="font-bold text-navy text-lg mb-3">4.1 Access</h3>
+          <ul class="space-y-2 text-slate-600">
+            <li class="flex gap-2"><span class="text-gold font-bold">•</span> Clients are given view-only or limited access restricted to their own case documents and status; no client may view another client’s data.</li>
+            <li class="flex gap-2"><span class="text-gold font-bold">•</span> Clients must verify their identity (e.g., OTP or secure login) before accessing sensitive documents.</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-bold text-navy text-lg mb-3">4.2 Communication</h3>
+          <ul class="space-y-2 text-slate-600">
+            <li class="flex gap-2"><span class="text-gold font-bold">•</span> All formal instructions and queries should be routed through the portal for record-keeping, rather than informal channels such as WhatsApp or personal calls alone.</li>
+            <li class="flex gap-2"><span class="text-gold font-bold">•</span> Standard response times will be communicated to clients (queries answered within business days).</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-bold text-navy text-lg mb-3">4.3 Document Submission</h3>
+          <ul class="space-y-2 text-slate-600">
+            <li class="flex gap-2"><span class="text-gold font-bold">•</span> Clients must upload only the requested documents, in the specified formats (e.g., PDF, JPEG) and within stated file-size limits.</li>
+            <li class="flex gap-2"><span class="text-gold font-bold">•</span> Clients are solely responsible for the accuracy and authenticity of the documents and information they submit.</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-bold text-navy text-lg mb-3">4.4 Fees &amp; Payments</h3>
+          <ul class="space-y-2 text-slate-600">
+            <li class="flex gap-2"><span class="text-gold font-bold">•</span> Payment terms, invoicing schedules, and late-fee policies (if any) will be clearly stated on the portal.</li>
+            <li class="flex gap-2"><span class="text-gold font-bold">•</span> Any refund or cancellation policy applicable to the engagement will be disclosed at the time of onboarding.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 5. General -->
+      <div x-show="tab==='general'" x-cloak class="space-y-6">
+        <h2 class="text-2xl font-bold text-navy">5. General / Cross-Cutting Rules</h2>
+        <div class="space-y-4">
+          <div class="glass-card rounded-2xl p-5">
+            <h3 class="font-bold text-navy mb-1">Data Retention</h3>
+            <p class="text-slate-600 text-sm leading-relaxed">Client data and case documents will be retained on the portal for a defined period after case closure, in line with the DPDP Act, 2023 and applicable limitation periods, after which they will be securely archived or deleted.</p>
+          </div>
+          <div class="glass-card rounded-2xl p-5">
+            <h3 class="font-bold text-navy mb-1">Grievance Redressal</h3>
+            <p class="text-slate-600 text-sm leading-relaxed">A designated contact point is available for complaints or grievances raised by clients or staff: <a href="mailto:{{ site.email }}" class="text-royal font-semibold">{{ site.email }}</a> / {{ site.phone }}.</p>
+          </div>
+          <div class="glass-card rounded-2xl p-5">
+            <h3 class="font-bold text-navy mb-1">Audit Trail</h3>
+            <p class="text-slate-600 text-sm leading-relaxed">Every action on the portal (upload, edit, delete, approval) is logged with a timestamp and user ID for accountability.</p>
+          </div>
+          <div class="glass-card rounded-2xl p-5">
+            <h3 class="font-bold text-navy mb-1">Compliance</h3>
+            <p class="text-slate-600 text-sm leading-relaxed">VinnitaLegal and all portal users shall comply with the Digital Personal Data Protection Act, 2023, the Information Technology Act, 2000 (including applicable IT Rules), and the Bar Council of India Rules governing advocate conduct.</p>
+          </div>
+          <div class="glass-card rounded-2xl p-5">
+            <h3 class="font-bold text-navy mb-1">Amendments</h3>
+            <p class="text-slate-600 text-sm leading-relaxed">This policy may be revised from time to time; users will be notified of material changes via the portal.</p>
+          </div>
+        </div>
+        <p class="text-slate-400 text-sm pt-4">— End of Document — VinnitaLegal Legal Services · Portal Usage Policy</p>
+      </div>
+
+      <div class="mt-12 hero-gradient rounded-3xl p-8 text-center">
+        <h2 class="text-xl font-bold text-white mb-2">Access the VinnitaLegal Portal</h2>
+        <p class="text-white/70 text-sm mb-5">By signing in you confirm you have read and agree to this Portal Usage Policy.</p>
+        <a href="{{ url_for('portal') }}" class="btn-primary">Go to Portal Login</a>
+      </div>
+    </div>
+  </section>
+{% endblock %}

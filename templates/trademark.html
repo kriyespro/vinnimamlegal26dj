@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+{% block title %}Trademark Registration in India | VinnitaLegal{% endblock %}
+{% block description %}Trademark search, filing, objection replies and renewals across all 45 classes — protect your brand with expert-guided registration.{% endblock %}
+{% block xdata %}, searchQuery: '', searching: false{% endblock %}
+{% block content %}
+
+  <!-- HERO -->
+  <section class="hero-gradient pt-20 pb-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <div class="section-badge" style="background:rgba(255,255,255,0.14);color:#fff;border:1px solid rgba(255,255,255,0.3);">Trademark Registration</div>
+          <h1 class="text-4xl md:text-5xl font-extrabold text-white mt-4 mb-5 leading-tight">Protect Your Brand<br/><span class="gradient-text">Before Someone Else Does</span></h1>
+          <p class="text-white/70 text-lg mb-6 leading-relaxed">Your brand is your most valuable asset. Trademark registration gives you exclusive nationwide rights and legal protection against copycats — forever.</p>
+          <div class="flex flex-wrap gap-3 mb-8">
+            <a href="{{ url_for('contact') }}" class="btn-primary text-base px-7 py-3">Register Trademark</a>
+            <a href="#search" class="btn-secondary text-base px-7 py-3">Check Availability</a>
+          </div>
+          <div class="grid grid-cols-3 gap-3">
+            <div class="glass rounded-xl p-3 text-center"><div class="text-gold font-bold text-xl">45</div><div class="text-white/60 text-xs">Classes Covered</div></div>
+            <div class="glass rounded-xl p-3 text-center"><div class="text-gold font-bold text-xl">10yr</div><div class="text-white/60 text-xs">Protection Period</div></div>
+            <div class="glass rounded-xl p-3 text-center"><div class="text-gold font-bold text-xl">95%</div><div class="text-white/60 text-xs">Success Rate</div></div>
+          </div>
+        </div>
+
+        <!-- Trademark Search Box -->
+        <div id="search" class="glass rounded-3xl p-7">
+          <h3 class="text-white font-bold text-xl mb-2">Check Trademark Availability</h3>
+          <p class="text-white/60 text-sm mb-5">Enter your brand name or logo description to check if it's available for registration.</p>
+          <div class="relative mb-4">
+            <input type="text" x-model="searchQuery" placeholder="Enter brand name (e.g. 'VinnitaLegal')" class="form-input pr-12 text-base"/>
+            <button @click="searching = searchQuery.length > 0" class="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 bg-royal rounded-lg flex items-center justify-center text-white hover:bg-blue-700 transition-colors">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </button>
+          </div>
+          <div x-show="searching" x-transition class="bg-green-50 border border-green-200 rounded-xl p-4 mb-4">
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+              <div>
+                <div class="font-semibold text-green-800 text-sm" x-text="`'${searchQuery}' appears to be available!`"></div>
+                <div class="text-green-600 text-xs mt-1">Our experts will conduct a comprehensive search and advise you on the best filing strategy.</div>
+              </div>
+            </div>
+          </div>
+          <div class="space-y-3">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% for category, message in messages %}
+                <div class="rounded-xl px-3 py-2 text-xs {% if category == 'error' %}bg-red-500/20 text-red-100{% else %}bg-green-500/20 text-green-100{% endif %}">{{ message }}</div>
+              {% endfor %}
+            {% endwith %}
+            <form method="post" action="{{ url_for('enquire') }}" class="space-y-3">{{ csrf_input }}
+              <input type="hidden" name="source" value="trademark"/>
+              <input type="hidden" name="next" value="{{ url_for('trademark') }}"/>
+              <input type="hidden" name="service" value="Trademark"/>
+              <div><label class="form-label text-white/80 text-sm">Your Name *</label>
+                <input required name="name" type="text" placeholder="Full name" class="form-input"/>
+              </div>
+              <div><label class="form-label text-white/80 text-sm">Brand to search *</label>
+                <input type="text" name="message" x-model="searchQuery" required placeholder="Brand name" class="form-input"/>
+              </div>
+              <div><label class="form-label text-white/80 text-sm">Trademark Type</label>
+                <select name="extra" class="form-input"><option>Word Mark (Brand Name)</option><option>Logo / Device Mark</option><option>Combined (Name + Logo)</option><option>Sound Mark</option></select>
+              </div>
+              <div><label class="form-label text-white/80 text-sm">Your Phone *</label><input required name="phone" type="tel" placeholder="{{ site.phone }}" class="form-input"/></div>
+              <button type="submit" class="btn-primary w-full justify-center text-base py-3">Get Free Trademark Search Report</button>
+            </form>
+          </div>
+          <p class="text-white/40 text-xs text-center mt-3">₹0 for initial search report • Comprehensive 7-class search</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY TRADEMARK -->
+  <section class="section-padding bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12">
+        <div class="section-badge">Why Register?</div>
+        <h2 class="text-3xl md:text-4xl font-bold text-navy mt-2 mb-3">Why Trademark Registration is Non-Negotiable</h2>
+        <p class="text-slate-500 max-w-xl mx-auto">Without a registered trademark, your brand name, logo, and reputation are vulnerable to misuse.</p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="service-card text-center">
+          <div class="service-icon bg-purple-50 mx-auto"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <h3 class="font-bold text-navy text-lg mb-2">Exclusive Rights</h3>
+          <p class="text-slate-500 text-sm">Only you can use your brand name and logo across India. Legally prevent others from copying.</p>
+        </div>
+        <div class="service-card text-center">
+          <div class="service-icon bg-blue-50 mx-auto"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2"><path d="M3 3h18v18H3z"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <h3 class="font-bold text-navy text-lg mb-2">Legal Recourse</h3>
+          <p class="text-slate-500 text-sm">Sue infringers and claim damages in court. Without registration, you have very limited legal options.</p>
+        </div>
+        <div class="service-card text-center">
+          <div class="service-icon bg-amber-50 mx-auto"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg></div>
+          <h3 class="font-bold text-navy text-lg mb-2">Brand Valuation</h3>
+          <p class="text-slate-500 text-sm">A registered trademark adds tangible value to your business and is treated as a business asset.</p>
+        </div>
+        <div class="service-card text-center">
+          <div class="service-icon bg-green-50 mx-auto"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 6v6l4 2"/></svg></div>
+          <h3 class="font-bold text-navy text-lg mb-2">10-Year Protection</h3>
+          <p class="text-slate-500 text-sm">Your trademark is protected for 10 years and can be renewed indefinitely for continuous protection.</p>
+        </div>
+        <div class="service-card text-center">
+          <div class="service-icon bg-sky-50 mx-auto"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <h3 class="font-bold text-navy text-lg mb-2">Pan-India Coverage</h3>
+          <p class="text-slate-500 text-sm">One registration protects your brand across all 28 states and 8 Union Territories of India.</p>
+        </div>
+        <div class="service-card text-center">
+          <div class="service-icon bg-rose-50 mx-auto"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+          <h3 class="font-bold text-navy text-lg mb-2">Customer Trust</h3>
+          <p class="text-slate-500 text-sm">The ® symbol signals credibility and professionalism, building long-term customer confidence.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRADEMARK CLASSES -->
+  <section class="section-padding bg-slate-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-10">
+        <div class="section-badge">Trademark Classes</div>
+        <h2 class="text-3xl font-bold text-navy mt-2 mb-3">Popular Trademark Classes</h2>
+        <p class="text-slate-500 max-w-xl mx-auto">Trademarks are registered under specific classes based on your business type. We help you identify the right ones.</p>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div class="glass-card rounded-xl p-4"><div class="text-royal font-bold text-lg mb-1">Class 9</div><div class="text-navy font-medium text-sm mb-1">Software & Electronics</div><div class="text-slate-500 text-xs">Apps, software, electronic devices, computers</div></div>
+        <div class="glass-card rounded-xl p-4"><div class="text-royal font-bold text-lg mb-1">Class 25</div><div class="text-navy font-medium text-sm mb-1">Clothing & Fashion</div><div class="text-slate-500 text-xs">Garments, footwear, headgear, fashion brands</div></div>
+        <div class="glass-card rounded-xl p-4"><div class="text-royal font-bold text-lg mb-1">Class 35</div><div class="text-navy font-medium text-sm mb-1">Business Services</div><div class="text-slate-500 text-xs">Retail, marketing, advertising, consulting</div></div>
+        <div class="glass-card rounded-xl p-4"><div class="text-royal font-bold text-lg mb-1">Class 42</div><div class="text-navy font-medium text-sm mb-1">IT & Technology</div><div class="text-slate-500 text-xs">SaaS, tech services, research & development</div></div>
+        <div class="glass-card rounded-xl p-4"><div class="text-royal font-bold text-lg mb-1">Class 30</div><div class="text-navy font-medium text-sm mb-1">Food & Beverages</div><div class="text-slate-500 text-xs">Coffee, tea, spices, condiments, bakery</div></div>
+        <div class="glass-card rounded-xl p-4"><div class="text-royal font-bold text-lg mb-1">Class 41</div><div class="text-navy font-medium text-sm mb-1">Education & Training</div><div class="text-slate-500 text-xs">Schools, coaching, online education, events</div></div>
+        <div class="glass-card rounded-xl p-4"><div class="text-royal font-bold text-lg mb-1">Class 44</div><div class="text-navy font-medium text-sm mb-1">Healthcare & Beauty</div><div class="text-slate-500 text-xs">Medical services, pharma, salons, cosmetics</div></div>
+        <div class="glass-card rounded-xl p-4 border-2 border-dashed border-blue-200 flex items-center justify-center text-center"><div><div class="text-royal font-bold text-sm mb-1">+38 More Classes</div><a href="{{ url_for('contact') }}" class="text-xs text-slate-500 underline">Ask our expert →</a></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="section-padding bg-white">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-10"><div class="section-badge">Process</div><h2 class="text-3xl font-bold text-navy mt-2 mb-3">How Trademark Registration Works</h2></div>
+      <div class="grid md:grid-cols-4 gap-6">
+        <div class="text-center"><div class="w-14 h-14 rounded-full bg-purple-100 text-purple-600 font-bold text-xl flex items-center justify-center mx-auto mb-4">1</div><h4 class="font-bold text-navy mb-2">Trademark Search</h4><p class="text-slate-500 text-sm">Comprehensive search across all 45 classes to check availability and conflicts</p></div>
+        <div class="text-center"><div class="w-14 h-14 rounded-full bg-blue-100 text-royal font-bold text-xl flex items-center justify-center mx-auto mb-4">2</div><h4 class="font-bold text-navy mb-2">Application Filing</h4><p class="text-slate-500 text-sm">Online TM-A application filed with Trademark Registry with proper class identification</p></div>
+        <div class="text-center"><div class="w-14 h-14 rounded-full bg-amber-100 text-amber-700 font-bold text-xl flex items-center justify-center mx-auto mb-4">3</div><h4 class="font-bold text-navy mb-2">Examination & Reply</h4><p class="text-slate-500 text-sm">If TM examiner raises objections, we draft and file a strong legal reply</p></div>
+        <div class="text-center"><div class="w-14 h-14 rounded-full bg-green-100 text-emerald-600 font-bold text-xl flex items-center justify-center mx-auto mb-4">4</div><h4 class="font-bold text-navy mb-2">Registration Certificate</h4><p class="text-slate-500 text-sm">After journal publication and no opposition, your TM certificate is issued</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section-padding bg-slate-50">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-10"><div class="section-badge">FAQ</div><h2 class="text-3xl font-bold text-navy mt-2">Trademark Questions</h2></div>
+      <div class="space-y-2">
+        <div class="faq-item" x-data="{open:false}"><button class="faq-question" @click="open=!open">How long does trademark registration take in India?<svg class="faq-icon" :class="open?'rotate-45':''" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button><div class="faq-answer" x-show="open" x-collapse>The complete trademark registration process in India typically takes 12–18 months from filing to final registration. However, you receive the TM application number immediately, and you can use the ™ symbol from the date of filing. The ® symbol can only be used after registration.</div></div>
+        <div class="faq-item" x-data="{open:false}"><button class="faq-question" @click="open=!open">Can I register a trademark without a company?<svg class="faq-icon" :class="open?'rotate-45':''" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button><div class="faq-answer" x-show="open" x-collapse>Yes! Any individual, including sole proprietors and freelancers, can register a trademark in their own name. You don't need to have a registered company to protect your brand. We handle trademark applications for individuals, proprietorships, and all company types.</div></div>
+        <div class="faq-item" x-data="{open:false}"><button class="faq-question" @click="open=!open">What happens if my trademark application is rejected?<svg class="faq-icon" :class="open?'rotate-45':''" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button><div class="faq-answer" x-show="open" x-collapse>If the examiner raises an objection (not outright rejection), we file a detailed reply with legal arguments. Most objections can be overcome with a well-crafted response. If a third party opposes your trademark during the journal publication period, we handle the opposition proceedings as well.</div></div>
+        <div class="faq-item" x-data="{open:false}"><button class="faq-question" @click="open=!open">How many classes should I register in?<svg class="faq-icon" :class="open?'rotate-45':''" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button><div class="faq-answer" x-show="open" x-collapse>You should register in all classes that are relevant to your current business and planned expansion. For example, a restaurant might register in Class 43 (food services) and Class 29 (food products) if they also sell packaged food. Our experts analyze your business and recommend the optimal classes.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="hero-gradient section-padding">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Your Brand Deserves Protection</h2>
+      <p class="text-white/70 text-lg mb-8">Get a free trademark search and expert advice. Secure your brand before a competitor does.</p>
+      <div class="flex gap-4 justify-center flex-wrap">
+        <a href="{{ url_for('contact') }}" class="btn-primary text-base px-8 py-3.5">Register Trademark Now</a>
+        <a href="{{ url_for('services') }}" class="btn-secondary text-base px-8 py-3.5">See All IP Services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+{% endblock %}

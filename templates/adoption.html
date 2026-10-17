@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block title %}Adoption Legal Assistance | VinnitaLegal{% endblock %}
+{% block description %}Adoption documentation support under the JJ Act and HAMA — deed drafting, court petition guidance and certified copies, handled with care.{% endblock %}
+{% block xdata %}, openFaq:null{% endblock %}
+{% block content %}
+
+  <section class="hero-gradient pt-20 pb-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="max-w-3xl">
+        <div class="section-badge" style="background:rgba(255,255,255,0.12);color:white;border:1px solid rgba(255,255,255,0.2);">Family Law</div>
+        <h1 class="text-4xl md:text-5xl font-extrabold text-white mt-4 mb-5 leading-tight">Adoption Legal<br/><span class="gradient-text">Assistance in India</span></h1>
+        <p class="text-white/70 text-lg mb-6">Clear guidance on Hindu Adoptions and Maintenance Act (HAMA), Juvenile Justice Act / CARA process, documentation, petitions and certified copies — with sensitive, expert support.</p>
+        <div class="flex gap-4 flex-wrap">
+          <a href="{{ url_for('contact') }}" class="btn-primary text-base px-7 py-3">Book Confidential Call</a>
+          <a href="{{ url_for('expert-portal') }}" class="btn-secondary text-base px-7 py-3">Find a Family Lawyer</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-padding bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-10">
+        <div class="section-badge">Pathways</div>
+        <h2 class="text-3xl font-bold text-navy mt-2">Two Main Legal Routes</h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="glass-card rounded-2xl p-8">
+          <h3 class="text-xl font-bold text-navy mb-3">HAMA (Hindu Law)</h3>
+          <p class="text-slate-500 text-sm mb-4">Applies to Hindus, Buddhists, Jains and Sikhs. Adoption creates a permanent parent-child relationship. Often used for relative / known-child adoptions with deed and ceremony formalities.</p>
+          <ul class="text-sm text-slate-600 space-y-2">
+            <li>• Adoption deed on stamp paper</li>
+            <li>• Capacity &amp; consent requirements</li>
+            <li>• Registration / notarisation as advised</li>
+          </ul>
+        </div>
+        <div class="glass-card rounded-2xl p-8">
+          <h3 class="text-xl font-bold text-navy mb-3">JJ Act / CARA</h3>
+          <p class="text-slate-500 text-sm mb-4">Statutory route for orphaned / abandoned children through recognised agencies. Mandatory for most inter-country and many domestic institutional adoptions.</p>
+          <ul class="text-sm text-slate-600 space-y-2">
+            <li>• Home study &amp; eligibility</li>
+            <li>• Agency / CARA process</li>
+            <li>• Court order for adoption</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-padding">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <h2 class="text-3xl font-bold text-navy text-center mb-10">How We Support You</h2>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-2xl p-6 border border-slate-100">
+          <div class="text-gold font-bold text-sm mb-2">CONSULT</div>
+          <h3 class="font-bold text-navy mb-2">Route Selection</h3>
+          <p class="text-slate-500 text-sm">We assess your situation and explain which law applies — without pressure.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-slate-100">
+          <div class="text-gold font-bold text-sm mb-2">DRAFT</div>
+          <h3 class="font-bold text-navy mb-2">Deeds &amp; Petitions</h3>
+          <p class="text-slate-500 text-sm">Adoption deed, affidavits, court petitions and supporting schedules drafted by lawyers.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-slate-100">
+          <div class="text-gold font-bold text-sm mb-2">FOLLOW-THROUGH</div>
+          <h3 class="font-bold text-navy mb-2">Court &amp; Certificates</h3>
+          <p class="text-slate-500 text-sm">Guidance on filing, hearings, certified copies and name/birth record updates.</p>
+        </div>
+      </div>
+      <div class="mt-10 max-w-xl mx-auto bg-amber-50 border border-amber-200 rounded-2xl p-5 text-sm text-amber-900">
+        <strong>Important:</strong> VinnitaLegal provides documentation and procedural assistance. Formal adoption of children through agencies must follow CARA / JJ Act rules. We do not bypass statutory safeguards.
+      </div>
+      <div class="mt-8 max-w-2xl mx-auto bg-white rounded-2xl border border-slate-200 p-6">
+        <h3 class="font-bold text-navy mb-2">Stamp Paper for Adoption Deed</h3>
+        <p class="text-slate-500 text-sm mb-3">Adoption deeds are executed on non-judicial stamp paper. Indicative stamp duty: <strong class="text-navy">₹25 – ₹500</strong> depending on the state (e.g. some states list a low fixed duty; others require higher values). Exact amount confirmed before drafting.</p>
+        <a href="{{ url_for('contracts') }}#stamp-paper" class="text-royal text-sm font-semibold">View full stamp paper price list →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-padding bg-white">
+    <div class="max-w-3xl mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-8">FAQs</h2>
+      <div class="space-y-3">
+        <div class="border border-slate-200 rounded-xl overflow-hidden">
+          <button @click="openFaq=openFaq===1?null:1" class="w-full flex justify-between items-center p-5 text-left font-semibold"><span>Can a single parent adopt in India?</span><span x-text="openFaq===1?'−':'+'"></span></button>
+          <div x-show="openFaq===1" x-cloak class="px-5 pb-5 text-sm text-slate-500">Yes, subject to age, marital status and rules under HAMA or JJ Act / CARA. Eligibility differs by route — speak to our family-law expert for your case.</div>
+        </div>
+        <div class="border border-slate-200 rounded-xl overflow-hidden">
+          <button @click="openFaq=openFaq===2?null:2" class="w-full flex justify-between items-center p-5 text-left font-semibold"><span>How long does the process take?</span><span x-text="openFaq===2?'−':'+'"></span></button>
+          <div x-show="openFaq===2" x-cloak class="px-5 pb-5 text-sm text-slate-500">Relative/HAMA documentation may complete faster; CARA / court adoptions often take several months depending on agency and court timelines.</div>
+        </div>
+      </div>
+      <div class="text-center mt-10">
+        <a href="{{ url_for('contact') }}" class="btn-primary text-base px-8 py-3.5">Request Confidential Consultation</a>
+      </div>
+    </div>
+  </section>
+{% endblock %}

@@ -1,0 +1,347 @@
+{% extends 'base.html' %}
+{% block title %}VinnitaLegal | Legal Services in Gujarat{% endblock %}
+{% block description %}Business registration, trademark, contracts, MSME and marriage certificate services in Gujarat — expert-reviewed filings, clear prices and live case tracking.{% endblock %}
+{% block content %}
+
+  <!-- ===== HERO (light) ===== -->
+  <section class="hero-light pt-10 pb-24 md:pt-16 md:pb-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+      <div class="grid lg:grid-cols-[1.08fr_1fr] gap-10 lg:gap-14 items-center">
+
+        <div>
+          <div class="inline-flex items-center gap-2 bg-white border border-blue-100 shadow-sm rounded-full px-3.5 py-1.5 mb-5 animate-fade-up">
+            <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+            <span class="text-xs sm:text-sm font-semibold text-royal">Expert-led legal &amp; compliance · Gujarat</span>
+          </div>
+          <h1 class="text-4xl sm:text-5xl xl:text-[3.5rem] font-extrabold text-navy leading-[1.08] mb-5 animate-fade-up delay-100">
+            Legal work made simple —<br/>
+            <span class="gradient-text-orange">registered, protected,</span><br/>
+            compliant.
+          </h1>
+          <p class="text-base md:text-lg text-slate-600 mb-7 max-w-xl leading-relaxed animate-fade-up delay-200">
+            Business registration, trademarks, contracts, MSME and more — with expert-reviewed filings, clear fixed prices and live tracking in your own portal. Founded &amp; led by <span class="font-bold text-navy">Vinnita Maheshwari</span>.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-3 mb-6 animate-fade-up delay-300">
+            <a href="{{ url_for('contact') }}" class="btn-primary text-base px-7 py-3.5 justify-center">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              Get a free consultation
+            </a>
+            <a href="{{ url_for('services') }}" class="btn-outline-blue text-base px-7 py-3.5 justify-center">Explore all services →</a>
+          </div>
+          <div class="animate-fade-up delay-400">
+            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">Popular right now</div>
+            <div class="flex flex-wrap gap-2">
+              {% for name, label in [('business-registration', 'Company registration'), ('trademark', 'Trademark'), ('partnership', 'Partnership firm'), ('msme', 'MSME / Udyam'), ('contracts', 'Contracts'), ('marriage-certificate', 'Marriage certificate')] %}
+                <a href="{{ url_for(name) }}" class="chip-link">{{ label }}</a>
+              {% endfor %}
+            </div>
+          </div>
+          <ul class="mt-7 grid sm:grid-cols-3 gap-3 text-sm animate-fade-up delay-500">
+            {% for title, sub in [('Expert-reviewed', 'every filing checked by a CA / CS / advocate'), ('Fixed, clear prices', 'professional fee shown upfront'), ('Live tracking', 'steps, documents and payments in one portal')] %}
+              <li class="flex items-start gap-2.5"><span class="mt-0.5 w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[11px] font-bold shrink-0">✓</span><span><b class="block text-navy leading-tight">{{ title }}</b><span class="text-xs text-slate-500">{{ sub }}</span></span></li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        {# --- product preview: what the client portal looks like --- #}
+        <div class="relative hidden md:block animate-fade-up delay-300" aria-hidden="true">
+          <div class="absolute -inset-6 bg-gradient-to-br from-blue-200/40 via-transparent to-orange-200/40 rounded-[2.5rem] blur-2xl"></div>
+          <div class="relative bg-white rounded-3xl shadow-2xl border border-blue-100 p-5 max-w-md ml-auto">
+            <div class="flex items-center justify-between mb-3">
+              <div><div class="text-[10px] font-bold text-royal">VL-2026-0142</div><div class="font-extrabold text-navy leading-tight">Pvt Ltd Incorporation</div></div>
+              <span class="pill pill-blue">In progress</span>
+            </div>
+            <div class="flex items-center gap-3 mb-3"><div class="db-bar flex-1 !h-2"><i style="width: 62%"></i></div><b class="text-royal text-sm">62%</b></div>
+            <div class="flex flex-wrap gap-1.5 mb-4">
+              <span class="db-step done">✓ Name approved</span><span class="db-step done">✓ Documents</span><span class="db-step now">● MCA filing</span><span class="db-step">○ Certificate</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2.5">
+              <div class="rounded-xl bg-slate-50 border border-slate-100 p-3"><div class="text-[10px] font-bold uppercase text-slate-400">Documents</div><div class="text-sm font-bold text-navy mt-0.5">PAN verified</div><div class="text-[11px] text-emerald-600 font-semibold">✓ 2 of 3 received</div></div>
+              <div class="rounded-xl bg-slate-50 border border-slate-100 p-3"><div class="text-[10px] font-bold uppercase text-slate-400">Next date</div><div class="text-sm font-bold text-navy mt-0.5">DIR-3 KYC</div><div class="text-[11px] text-orange-600 font-semibold">due in 12 days</div></div>
+            </div>
+          </div>
+          <div class="absolute -left-14 top-[58%] bg-white rounded-2xl shadow-xl border border-slate-100 px-4 py-3 flex items-center gap-3 animate-float">
+            <span class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">₹</span>
+            <div><div class="text-xs font-bold text-navy">Payment received</div><div class="text-[11px] text-slate-500">₹7,999 · UPI</div></div>
+          </div>
+          <div class="absolute -right-4 -bottom-12 bg-white rounded-2xl shadow-xl border border-slate-100 px-4 py-3 flex items-center gap-3 animate-float" style="animation-delay:.8s">
+            <span class="w-9 h-9 rounded-xl bg-blue-100 text-royal flex items-center justify-center">💬</span>
+            <div><div class="text-xs font-bold text-navy">Adv. Malhotra replied</div><div class="text-[11px] text-slate-500">“Filing submitted ✔”</div></div>
+          </div>
+          <div class="absolute left-6 -bottom-3 text-[10px] font-semibold text-slate-400">Sample client dashboard</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CALLBACK BAR (overlaps hero) ===== -->
+  <section id="callback" class="relative z-20 -mt-14 md:-mt-16 px-4 sm:px-6" aria-label="Request a callback">
+    <div class="max-w-5xl mx-auto bg-white rounded-3xl shadow-2xl border border-blue-100 p-4 sm:p-5">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <div><h2 class="text-lg font-extrabold text-navy leading-tight">Get a free callback in 30 minutes</h2><p class="text-xs text-slate-500">Mon–Sat, 9 AM – 7 PM IST · no spam, no obligation</p></div>
+        <a href="tel:{{ site.phone_e164 }}" class="text-sm font-bold text-royal hover:underline">or call {{ site.phone }}</a>
+      </div>
+      {% with msgs = get_flashed_messages(with_categories=true) %}
+        {% for category, message in msgs %}<div role="status" class="mb-3 rounded-xl px-4 py-2.5 text-sm font-medium {% if category == 'error' %}bg-red-50 text-red-800 border border-red-200{% else %}bg-green-50 text-green-800 border border-green-200{% endif %}">{{ message }}</div>{% endfor %}
+      {% endwith %}
+      <form method="post" action="{{ url_for('enquire') }}" class="grid sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1.2fr_auto] gap-2.5">{{ csrf_input }}
+        <input type="hidden" name="source" value="home-callback"/><input type="hidden" name="next" value="/#callback"/>
+        <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" aria-label="Leave this field empty" class="hidden"/>
+        <input name="name" required maxlength="120" autocomplete="name" aria-label="Your name" placeholder="Your name" class="form-input"/>
+        <input name="phone" type="tel" inputmode="tel" required autocomplete="tel" aria-label="Phone number" placeholder="Phone number" class="form-input"/>
+        <select name="service" aria-label="Service needed" class="form-input"><option value="">What do you need? (optional)</option><option>Company registration</option><option>Trademark</option><option>Partnership firm</option><option>MSME / Udyam</option><option>Contracts &amp; agreements</option><option>Marriage certificate</option><option>Something else</option></select>
+        <button type="submit" class="btn-primary justify-center px-7 py-3">Call me back</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===== TRUST STRIP (light) ===== -->
+  <section class="bg-white pt-12 pb-10" aria-label="VinnitaLegal at a glance">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 grid grid-cols-2 md:grid-cols-4 gap-y-6 text-center md:divide-x md:divide-slate-100">
+      {% for num, label in [('2L+', 'Happy clients'), ('15+', 'Years experience'), ('50+', 'Legal services'), ('98%', 'Success rate')] %}
+        <div class="px-4"><div class="stat-number !text-3xl md:!text-4xl">{{ num }}</div><div class="text-sm text-slate-500 mt-0.5">{{ label }}</div></div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- ===== SERVICES SECTION ===== -->
+  <section class="section-padding bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12">
+        <div class="section-badge">Our Services</div>
+        <h2 class="text-3xl md:text-4xl font-bold text-navy mb-4">Everything Your Business Needs</h2>
+        <p class="text-slate-500 max-w-2xl mx-auto text-lg">From day one to decade ten — we handle every legal requirement so you can focus on growing your business.</p>
+      </div>
+
+      <div class="services-grid">
+        <!-- Business Registration -->
+        <a href="{{ url_for('business-registration') }}" class="service-card group">
+          <div class="service-icon bg-blue-50 group-hover:bg-blue-100 transition-colors">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          </div>
+          <h3 class="font-bold text-navy text-lg mb-1.5">Business Registration</h3>
+          <p class="text-slate-500 text-sm leading-relaxed mb-3">Private Limited, LLP, OPC, Section 8, Partnership — all types covered.</p>
+          <div class="flex items-center gap-1.5 text-royal font-semibold text-sm">Learn more <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+        </a>
+
+        <!-- Trademark -->
+        <a href="{{ url_for('trademark') }}" class="service-card group">
+          <div class="service-icon bg-purple-50 group-hover:bg-purple-100 transition-colors">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></svg>
+          </div>
+          <h3 class="font-bold text-navy text-lg mb-1.5">Trademark Registration</h3>
+          <p class="text-slate-500 text-sm leading-relaxed mb-3">Brand protection, trademark search, Class 1–45 filing & renewal services.</p>
+          <div class="flex items-center gap-1.5 text-royal font-semibold text-sm">Learn more <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+        </a>
+
+        <!-- Partnership -->
+        <a href="{{ url_for('partnership') }}" class="service-card group">
+          <div class="service-icon bg-sky-50 group-hover:bg-sky-100 transition-colors">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h3 class="font-bold text-navy text-lg mb-1.5">Partnership Firm</h3>
+          <p class="text-slate-500 text-sm leading-relaxed mb-3">Deed drafting and Registrar of Firms filing — bank and tender ready.</p>
+          <div class="flex items-center gap-1.5 text-royal font-semibold text-sm">Learn more <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+        </a>
+
+        <!-- Legal Drafting -->
+        <a href="{{ url_for('contracts') }}" class="service-card group">
+          <div class="service-icon bg-rose-50 group-hover:bg-rose-100 transition-colors">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <h3 class="font-bold text-navy text-lg mb-1.5">Legal Documents</h3>
+          <p class="text-slate-500 text-sm leading-relaxed mb-3">NDA, MoU, partnership deeds, employment contracts & shareholder agreements.</p>
+          <div class="flex items-center gap-1.5 text-royal font-semibold text-sm">Learn more <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+        </a>
+      </div>
+
+      <div class="text-center mt-10">
+        <a href="{{ url_for('services') }}" class="btn-blue text-base px-8 py-3.5">View All 50+ Services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WHY US SECTION ===== -->
+  <section class="section-padding bg-slate-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <div class="section-badge">Why VinnitaLegal</div>
+          <h2 class="text-3xl md:text-4xl font-bold text-navy mb-5">Built for Businesses That Mean Business</h2>
+          <p class="text-slate-500 text-lg mb-8 leading-relaxed">We combine AI-powered automation with the expertise of 500+ CAs, CSs, and legal professionals to deliver results that are fast, accurate, and fully compliant.</p>
+          <div class="space-y-4">
+            <div class="check-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <div><strong class="text-navy">100% Online</strong> — No physical visits, no paperwork. Everything handled digitally.</div>
+            </div>
+            <div class="check-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <div><strong class="text-navy">Expert-Reviewed</strong> — Every filing is reviewed by a qualified CA or CS before submission.</div>
+            </div>
+            <div class="check-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <div><strong class="text-navy">Transparent Pricing</strong> — Know exactly what you pay. Zero hidden fees, ever.</div>
+            </div>
+            <div class="check-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <div><strong class="text-navy">Real-Time Tracking</strong> — Track your application status live, with instant updates.</div>
+            </div>
+            <div class="check-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <div><strong class="text-navy">Compliance Reminders</strong> — Never miss a deadline with our smart compliance calendar.</div>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-white rounded-2xl p-6 border border-blue-50 text-center shadow-sm">
+            <div class="text-4xl font-extrabold text-royal mb-1">2L+</div>
+            <div class="text-slate-500 text-sm">Businesses Registered</div>
+          </div>
+          <div class="bg-white rounded-2xl p-6 border border-blue-50 text-center shadow-sm mt-8">
+            <div class="text-4xl font-extrabold text-royal mb-1">500+</div>
+            <div class="text-slate-500 text-sm">Expert CAs & CSs</div>
+          </div>
+          <div class="bg-white rounded-2xl p-6 border border-blue-50 text-center shadow-sm">
+            <div class="text-4xl font-extrabold text-royal mb-1">4.9★</div>
+            <div class="text-slate-500 text-sm">Average Rating</div>
+          </div>
+          <div class="bg-white rounded-2xl p-6 border border-blue-50 text-center shadow-sm mt-8">
+            <div class="text-4xl font-extrabold text-royal mb-1">24hr</div>
+            <div class="text-slate-500 text-sm">Avg. Turnaround</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== HOW IT WORKS ===== -->
+  <section class="section-padding bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12">
+        <div class="section-badge">How It Works</div>
+        <h2 class="text-3xl md:text-4xl font-bold text-navy mb-4">From Application to Approval in 3 Steps</h2>
+        <p class="text-slate-500 max-w-xl mx-auto">Our streamlined process gets your compliance done without the usual stress.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="text-center">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-royal to-blue-700 flex items-center justify-center mx-auto mb-5 shadow-lg">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+          </div>
+          <div class="text-4xl font-black text-blue-100 mb-3">01</div>
+          <h3 class="text-lg font-bold text-navy mb-2">Choose Your Service</h3>
+          <p class="text-slate-500 text-sm leading-relaxed">Browse our 50+ services, select the one you need, and fill a simple online form.</p>
+        </div>
+        <div class="text-center">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center mx-auto mb-5 shadow-lg">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0B1F4D" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div class="text-4xl font-black text-amber-100 mb-3">02</div>
+          <h3 class="text-lg font-bold text-navy mb-2">Expert Reviews & Files</h3>
+          <p class="text-slate-500 text-sm leading-relaxed">A dedicated CA or CS expert reviews your documents and files them with the relevant authority.</p>
+        </div>
+        <div class="text-center">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center mx-auto mb-5 shadow-lg">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="m9 12 2 2 4-4"/><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/></svg>
+          </div>
+          <div class="text-4xl font-black text-green-100 mb-3">03</div>
+          <h3 class="text-lg font-bold text-navy mb-2">Get Your Certificate</h3>
+          <p class="text-slate-500 text-sm leading-relaxed">Receive your official certificate/registration directly in your email. Stored securely in your dashboard.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TESTIMONIALS ===== -->
+  <section class="section-padding bg-slate-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12">
+        <div class="section-badge">Testimonials</div>
+        <h2 class="text-3xl md:text-4xl font-bold text-navy mb-4">What Our Clients Say</h2>
+        <p class="text-slate-500">2 Lakh+ satisfied businesses can't be wrong.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="testimonial-card">
+          <div class="quote-mark">"</div>
+          <div class="flex gap-1 mb-3 mt-6">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#F97316" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#F97316" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#F97316" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#F97316" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#F97316" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <p class="text-slate-600 text-sm leading-relaxed mb-4">VinnitaLegal registered my Private Limited Company in just 7 working days. The process was completely online, and my CA was responsive throughout. Couldn't have asked for better service!</p>
+          <div class="flex items-center gap-3">
+            <span class="w-10 h-10 rounded-full inline-flex items-center justify-center font-bold select-none text-sm" style="background:#1D4ED8;color:#fff" role="img" aria-label="Arjun Mehta">AM</span>
+            <div><div class="font-semibold text-navy text-sm">Arjun Mehta</div><div class="text-xs text-slate-400">Founder, TechVenture Pvt. Ltd., Ahmedabad</div></div>
+          </div>
+        </div>
+        <div class="testimonial-card border-royal/20 bg-gradient-to-b from-blue-50/50 to-white">
+          <div class="quote-mark" style="color: #DBEAFE;">"</div>
+          <div class="flex gap-1 mb-3 mt-6">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#F97316" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#F97316" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#F97316" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#F97316" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#F97316" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <p class="text-slate-600 text-sm leading-relaxed mb-4">Company documents and contracts handled end-to-end in Gujarat. Clear communication, quick turnaround, and everything filed correctly the first time.</p>
+          <div class="flex items-center gap-3">
+            <span class="w-10 h-10 rounded-full inline-flex items-center justify-center font-bold select-none text-sm" style="background:#EA580C;color:#fff" role="img" aria-label="Priya Sharma">PS</span>
+            <div><div class="font-semibold text-navy text-sm">Priya Sharma</div><div class="text-xs text-slate-400">Director, Sharma Exports, Ahmedabad</div></div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="quote-mark">"</div>
+          <div class="flex gap-1 mb-3 mt-6">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#F97316" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#F97316" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#F97316" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#F97316" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#F97316" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <p class="text-slate-600 text-sm leading-relaxed mb-4">Trademark registration for my brand was seamless. The team did a comprehensive search first, then filed promptly. I received the official certificate within the expected timeline. Highly recommend!</p>
+          <div class="flex items-center gap-3">
+            <span class="w-10 h-10 rounded-full inline-flex items-center justify-center font-bold select-none text-sm" style="background:#2563EB;color:#fff" role="img" aria-label="Kiran Patel">KP</span>
+            <div><div class="font-semibold text-navy text-sm">Kiran Patel</div><div class="text-xs text-slate-400">CEO, Kiran Designs, Ahmedabad</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOUNDER ===== -->
+  <section class="section-padding bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="grid lg:grid-cols-2 gap-10 items-center">
+        <div class="flex flex-col sm:flex-row gap-6 items-center sm:items-start">
+          <span class="w-32 h-32 rounded-3xl shadow-lg flex-shrink-0 inline-flex items-center justify-center font-bold select-none text-5xl" style="background:#0B1F4D;color:#F97316" role="img" aria-label="Vinnita Maheshwari, Founder and CEO of VinnitaLegal">VM</span>
+          <div>
+            <div class="section-badge mb-3">Leadership</div>
+            <h2 class="text-3xl font-bold text-navy mb-2">Vinnita Maheshwari</h2>
+            <p class="text-gold font-semibold mb-4">Founder &amp; CEO, VinnitaLegal</p>
+            <p class="text-slate-500 leading-relaxed mb-4">Vinnita Maheshwari is the Founder and Chief Executive Officer of VinnitaLegal. She built this portal to give Gujarat businesses and families one place for registration, trademark, contracts, MSME, marriage certificates and more — with transparent pricing and real expert support.</p>
+            <a href="{{ url_for('about') }}" class="text-royal font-semibold text-sm hover:underline">Read her story →</a>
+          </div>
+        </div>
+        <div class="bg-navy rounded-3xl p-8 md:p-10">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2" class="mb-4"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V21"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3"/></svg>
+          <p class="text-white/90 text-lg leading-relaxed italic mb-6">"Every Indian entrepreneur deserves world-class legal support. VinnitaLegal exists to make that a reality — simply, affordably, and with care."</p>
+          <div class="text-gold font-semibold">— Vinnita Maheshwari</div>
+          <div class="text-white/50 text-sm">Founder &amp; CEO</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA SECTION ===== -->
+  <section class="hero-gradient section-padding">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Ready to Get Started?</h2>
+      <p class="text-white/70 text-lg mb-8">Join 2 Lakh+ businesses that trust VinnitaLegal for their legal and compliance needs. First consultation is free.</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="{{ url_for('contact') }}" class="btn-primary text-base px-8 py-3.5">Get Free Consultation</a>
+        <a href="{{ url_for('pricing') }}" class="btn-secondary text-base px-8 py-3.5">View Pricing</a>
+      </div>
+    </div>
+  </section>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'console/base.html' %}
+{% block title %}Audit log{% endblock %}
+{% block content %}
+  <h1 class="text-xl font-extrabold">Audit log <span class="text-sm font-semibold text-slate-400">{{ page.paginator.count }}</span></h1>
+  <p class="text-xs text-slate-500 mb-2">Append-only record of sign-ins, uploads, payments and admin actions.</p>
+  {% with selects = [] %}{% include 'console/_filters.html' %}{% endwith %}
+  <div class="db-panel !p-0 overflow-hidden">
+    {% for a in page %}
+      <div class="flex flex-wrap items-center gap-x-3 gap-y-0 px-3 py-1.5 border-t border-slate-100 first:border-0 text-xs">
+        <span class="db-meta w-full sm:w-32 shrink-0">{{ a.created_at.strftime('%d %b %Y %H:%M') }}</span>
+        <b class="text-sm">{{ a.action }}</b>
+        <span class="text-slate-500 break-all">{{ a.user.email if a.user else 'anonymous' }}{% if a.ref %} · {{ a.ref }}{% endif %}{% if a.ip_address %} · {{ a.ip_address }}{% endif %}</span>
+      </div>
+    {% else %}<p class="p-4 text-sm text-slate-400">No entries.</p>{% endfor %}
+  </div>
+  {% include 'console/_pager.html' %}
+{% endblock %}

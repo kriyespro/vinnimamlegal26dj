@@ -1,0 +1,29 @@
+{% extends 'console/base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+  <a href="{{ url_for(back) }}" class="text-xs font-bold text-royal">← Back</a>
+  <h1 class="text-xl font-extrabold mt-1 mb-0.5">{{ title }}</h1>
+  {% if note %}<p class="text-xs text-slate-500 mb-3">{{ note }}</p>{% else %}<div class="mb-3"></div>{% endif %}
+  <form method="post" class="db-panel max-w-3xl" novalidate>{{ csrf_input }}
+    {% if form.non_field_errors() %}<div class="rounded-lg bg-red-50 text-red-700 text-sm px-3 py-2 mb-3">{{ form.non_field_errors() }}</div>{% endif %}
+    <div class="grid sm:grid-cols-2 gap-x-3 gap-y-3">
+      {% for field in form %}
+        <div class="{{ 'sm:col-span-2' if field.name in ('title', 'description', 'billing_note', 'staff', 'message', 'note') or field.widget_type == 'checkbox' else '' }}">
+          {% if field.widget_type == 'checkbox' %}
+            <label class="flex items-center gap-2 text-sm font-medium">{{ field }} {{ field.label }}</label>
+          {% else %}
+            <label for="{{ field.id_for_label }}" class="block text-[11px] font-bold uppercase tracking-wide text-slate-500 mb-1">{{ field.label }}{% if field.field.required %} *{% endif %}</label>{{ field }}
+          {% endif %}
+          {% if field.help_text %}<p class="db-meta mt-0.5">{{ field.help_text }}</p>{% endif %}
+          {% for err in field.errors %}<p class="text-xs text-red-600 mt-0.5">{{ err }}</p>{% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+    <div class="flex flex-wrap items-center gap-2 pt-4 mt-3 border-t border-slate-100">
+      <button type="submit" class="db-btn db-btn-orange">Save</button>
+      <a href="{{ url_for(back) }}" class="db-btn db-btn-ghost">Cancel</a>
+      {% if extra_action %}<span class="flex-1"></span><button type="submit" form="extra-form" class="db-btn db-btn-ghost">{{ extra_action[2] }}</button>{% endif %}
+    </div>
+  </form>
+  {% if extra_action %}<form id="extra-form" method="post" action="{{ url_for(extra_action[0], user_id=extra_action[1]) }}" class="hidden">{{ csrf_input }}</form>{% endif %}
+{% endblock %}

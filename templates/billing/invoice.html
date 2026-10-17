@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Invoice {{ invoice.invoice_no }} — VinnitaLegal</title>
+  <meta name="robots" content="noindex"/>
+  <link rel="preload" href="{{ url_for('static', filename='fonts/inter-latin-wght-normal.woff2') }}" as="font" type="font/woff2" crossorigin/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.min.css') }}"/>
+  <script defer src="{{ url_for('static', filename='js/alpine.min.js') }}"></script>
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}"/>
+</head>
+<body class="font-inter bg-slate-50 text-navy min-h-screen" {% if invoice.status == 'Pending' and payments_enabled %}x-data="invoicePay()"{% endif %}>
+  <header class="bg-navy text-white border-b border-white/10">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
+      <a href="{{ url_for('index') }}" class="font-bold text-lg">Vinnita<span class="text-gold">Legal</span></a>
+      <a href="{{ url_for('portal_dashboard') }}" class="text-xs text-white/70 hover:text-white">← Back to dashboard</a>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-4 sm:px-6 py-10">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="mb-4 rounded-xl px-4 py-3 text-sm font-medium {% if category == 'error' %}bg-red-50 text-red-700 border border-red-100{% else %}bg-green-50 text-green-700 border border-green-100{% endif %}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <div class="glass-card rounded-2xl p-7">
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <div class="text-xs text-slate-400 font-semibold uppercase">Invoice</div>
+          <h1 class="text-2xl font-extrabold">{{ invoice.invoice_no }}</h1>
+          <p class="text-sm text-slate-500 mt-1">{{ invoice.description or invoice.get_kind_display() }}{% if invoice.case %} · Case {{ invoice.case.case_no }}{% endif %}</p>
+        </div>
+        <div class="text-right">
+          <div class="text-3xl font-extrabold text-royal">₹{{ '{:,.2f}'.format(invoice.amount) }}</div>
+          <span class="text-xs font-semibold {% if invoice.status == 'Paid' %}text-green-600{% elif invoice.status == 'Refunded' %}text-slate-500{% else %}text-amber-600{% endif %}">{{ invoice.status }}{% if invoice.due_date and invoice.status == 'Pending' %} · due {{ invoice.due_date }}{% endif %}</span>
+        </div>
+      </div>
+
+      {% if invoice.status == 'Pending' %}
+        <div class="mt-7 pt-6 border-t border-slate-100">
+          {% if payments_enabled %}
+            <button type="button" @click="pay()" :disabled="busy" class="btn-primary justify-center px-8 py-3 disabled:opacity-60">
+              <span x-text="busy ? 'Opening secure checkout…' : 'Pay ₹{{ '{:,.2f}'.format(invoice.amount) }} securely'"></span>
+            </button>
+            <p class="text-xs text-slate-400 mt-3">Payments are processed by Razorpay (UPI, cards, netbanking, wallets). We never see your card details.</p>
+            <p class="text-sm text-red-600 mt-3" x-show="error" x-text="error" x-cloak></p>
+          {% else %}
+            <p class="text-sm text-slate-500">Online payment is not available yet. Please contact the office to pay this invoice.</p>
+          {% endif %}
+        </div>
+        <form id="verify-form" method="post" action="{{ url_for('billing_verify') }}" class="hidden">{{ csrf_input }}
+          <input type="hidden" name="razorpay_order_id"/><input type="hidden" name="razorpay_payment_id"/><input type="hidden" name="razorpay_signature"/>
+        </form>
+      {% endif %}
+
+      {% if payments %}
+        <div class="mt-7 pt-6 border-t border-slate-100">
+          <h2 class="font-bold text-sm mb-3">Payment history</h2>
+          <ul class="space-y-2 text-sm">
+            {% for p in payments %}
+              <li class="flex justify-between bg-slate-50 rounded-xl px-4 py-2.5">
+                <span>{{ p.created_at.strftime('%d %b %Y, %H:%M') }} · {{ p.get_status_display() }}</span>
+                <span class="text-slate-500">₹{{ '{:,.2f}'.format(p.amount_paise / 100) }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    </div>
+  </main>
+
+  {% if invoice.status == 'Pending' and payments_enabled %}
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script nonce="{{ request.csp_nonce }}">
+      function invoicePay() {
+        return {
+          busy: false,
+          error: '',
+          async pay() {
+            this.busy = true; this.error = '';
+            try {
+              const res = await fetch({{ url_for('billing_pay', invoice_id=invoice.id)|tojson }}, {
+                method: 'POST', headers: { 'X-CSRFToken': {{ csrf_token|string|tojson }}, 'Accept': 'application/json' }, credentials: 'same-origin'
+              });
+              const cfg = await res.json();
+              if (!res.ok) { this.error = cfg.error || 'Could not start payment.'; this.busy = false; return; }
+              const form = document.getElementById('verify-form');
+              const rzp = new Razorpay({
+                key: cfg.key, order_id: cfg.order_id, amount: cfg.amount, currency: cfg.currency,
+                name: cfg.name, description: cfg.description, prefill: cfg.prefill, theme: { color: '#1D4ED8' },
+                handler: (r) => {
+                  form.razorpay_order_id.value = r.razorpay_order_id;
+                  form.razorpay_payment_id.value = r.razorpay_payment_id;
+                  form.razorpay_signature.value = r.razorpay_signature;
+                  form.submit();
+                },
+                modal: { ondismiss: () => { this.busy = false; } }
+              });
+              rzp.on('payment.failed', (r) => { this.error = (r.error && r.error.description) || 'Payment failed. Please try again.'; this.busy = false; });
+              rzp.open();
+            } catch (e) { this.error = 'Network error. Please try again.'; this.busy = false; }
+          }
+        };
+      }
+    </script>
+  {% endif %}
+</body>
+</html>

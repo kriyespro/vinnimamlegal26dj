@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Founder / CEO Dashboard — LexAssist</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{navy:{DEFAULT:'#0A1628'},royal:{DEFAULT:'#1E40AF',light:'#3B82F6'},gold:{DEFAULT:'#F59E0B',dark:'#D97706'}}}}}</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body class="font-inter bg-slate-50 text-navy min-h-screen flex flex-col"
+      x-data="{ panel: '{{ active_panel }}' }">
+
+  <header class="bg-navy text-white sticky top-0 z-50 border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
+      <div class="flex items-center gap-3">
+        <a href="{{ url_for('index') }}" class="font-bold text-lg">Lex<span class="text-gold">Assist</span></a>
+        <span class="hidden sm:inline text-xs px-2.5 py-1 rounded-full bg-gold/20 text-gold">Founder / CEO</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="{{ url_for('index') }}" class="text-xs text-white/50 hover:text-white/80 hidden sm:inline">← Site</a>
+        <span class="text-xs text-white/60 hidden sm:inline">{{ user.name }}</span>
+        <form method="post" action="{{ url_for('portal_logout') }}">
+          <button type="submit" class="text-xs font-semibold bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg">Logout</button>
+        </form>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex gap-1 overflow-x-auto pb-2">
+      <button @click="panel='overview'" :class="panel==='overview'?'bg-gold text-navy':'text-white/70 hover:bg-white/10'" class="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold">Overview</button>
+      <button @click="panel='cases'" :class="panel==='cases'?'bg-gold text-navy':'text-white/70 hover:bg-white/10'" class="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold">Client progress</button>
+      <button @click="panel='team'" :class="panel==='team'?'bg-gold text-navy':'text-white/70 hover:bg-white/10'" class="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold">Partners &amp; staff</button>
+      <button @click="panel='revenue'" :class="panel==='revenue'?'bg-gold text-navy':'text-white/70 hover:bg-white/10'" class="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold">Revenue</button>
+      <button @click="panel='leads'" :class="panel==='leads'?'bg-gold text-navy':'text-white/70 hover:bg-white/10'" class="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold">Leads &amp; satisfaction</button>
+      <button @click="panel='activity'" :class="panel==='activity'?'bg-gold text-navy':'text-white/70 hover:bg-white/10'" class="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold">Activity</button>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="mb-6 space-y-2">
+          {% for category, message in messages %}
+            <div class="rounded-xl px-4 py-3 text-sm {% if category == 'error' %}bg-red-50 text-red-700{% else %}bg-green-50 text-green-700{% endif %}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="mb-8">
+      <h1 class="text-2xl md:text-3xl font-extrabold text-navy">Founder command centre</h1>
+      <p class="text-slate-500 text-sm mt-1">Org-wide view of clients, partners, office staff, revenue, and lead conversion.</p>
+    </div>
+
+    <!-- KPI strip always visible -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div class="glass-card rounded-2xl p-5">
+        <div class="text-xs text-slate-400 font-semibold uppercase">Revenue received</div>
+        <div class="text-2xl font-extrabold text-green-600 mt-1">₹{{ '%.0f'|format(m.revenue_paid) }}</div>
+        <div class="text-xs text-slate-400 mt-1">Outstanding ₹{{ '%.0f'|format(m.revenue_due) }}</div>
+      </div>
+      <div class="glass-card rounded-2xl p-5">
+        <div class="text-xs text-slate-400 font-semibold uppercase">Active matters</div>
+        <div class="text-2xl font-extrabold mt-1">{{ m.cases|length }}</div>
+        <div class="text-xs text-slate-400 mt-1">Avg progress {{ m.avg_progress }}%</div>
+      </div>
+      <div class="glass-card rounded-2xl p-5">
+        <div class="text-xs text-slate-400 font-semibold uppercase">People approached</div>
+        <div class="text-2xl font-extrabold text-royal mt-1">{{ m.lead_total }}</div>
+        <div class="text-xs text-slate-400 mt-1">{{ m.lead_new }} new · {{ m.lead_converted }} converted</div>
+      </div>
+      <div class="glass-card rounded-2xl p-5">
+        <div class="text-xs text-slate-400 font-semibold uppercase">Requirement satisfied</div>
+        <div class="text-2xl font-extrabold text-gold-dark mt-1">{{ m.satisfaction_rate }}%</div>
+        <div class="text-xs text-slate-400 mt-1">{{ m.lead_satisfied }} of {{ m.lead_total }} leads · convert {{ m.conversion_rate }}%</div>
+      </div>
+    </div>
+
+    <!-- OVERVIEW -->
+    <div x-show="panel==='overview'" class="space-y-6">
+      <div class="grid lg:grid-cols-2 gap-6">
+        <div class="glass-card rounded-2xl p-6">
+          <h2 class="font-bold text-navy mb-4">Case status mix</h2>
+          <canvas id="chartCaseStatus" height="200"></canvas>
+        </div>
+        <div class="glass-card rounded-2xl p-6">
+          <h2 class="font-bold text-navy mb-4">Revenue: received vs due</h2>
+          <canvas id="chartRevenue" height="200"></canvas>
+        </div>
+        <div class="glass-card rounded-2xl p-6">
+          <h2 class="font-bold text-navy mb-4">Lead funnel</h2>
+          <canvas id="chartLeads" height="200"></canvas>
+        </div>
+        <div class="glass-card rounded-2xl p-6">
+          <h2 class="font-bold text-navy mb-4">Enquiry sources</h2>
+          <canvas id="chartSources" height="200"></canvas>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-4 gap-4">
+        <div class="glass-card rounded-2xl p-4 text-center">
+          <div class="text-xs text-slate-400 uppercase font-semibold">Clients</div>
+          <div class="text-2xl font-extrabold">{{ m.role_counts.get('client', 0) }}</div>
+        </div>
+        <div class="glass-card rounded-2xl p-4 text-center">
+          <div class="text-xs text-slate-400 uppercase font-semibold">Partners</div>
+          <div class="text-2xl font-extrabold">{{ m.role_counts.get('partner', 0) }}</div>
+        </div>
+        <div class="glass-card rounded-2xl p-4 text-center">
+          <div class="text-xs text-slate-400 uppercase font-semibold">Office staff</div>
+          <div class="text-2xl font-extrabold">{{ m.role_counts.get('staff', 0) }}</div>
+        </div>
+        <div class="glass-card rounded-2xl p-4 text-center">
+          <div class="text-xs text-slate-400 uppercase font-semibold">Docs still needed</div>
+          <div class="text-2xl font-extrabold text-amber-600">{{ m.docs_needed }}</div>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-6">
+        <h2 class="font-bold text-navy mb-4">Latest client-facing updates</h2>
+        <ul class="space-y-3">
+          {% for u in m.recent_updates %}
+            <li class="border-l-2 border-royal/30 pl-4">
+              <div class="text-xs text-slate-400">{{ u.case_no }} · {{ u.author_name or 'Team' }} ({{ u.author_role }}) · {{ u.created_at }}</div>
+              <p class="text-sm text-navy mt-0.5">{{ u.body }}</p>
+            </li>
+          {% else %}
+            <li class="text-sm text-slate-500">No updates yet.</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <!-- CASES / CLIENT PROGRESS -->
+    <div x-show="panel==='cases'" x-cloak class="space-y-4">
+      <h2 class="text-xl font-extrabold">All client matters</h2>
+      {% for row in m.cases %}
+        {% set c = row.case %}
+        <div class="glass-card rounded-2xl p-5">
+          <div class="flex flex-wrap justify-between gap-3">
+            <div>
+              <div class="text-xs font-bold text-royal">{{ c.case_no }}</div>
+              <h3 class="font-bold text-navy">{{ c.title }}</h3>
+              <p class="text-xs text-slate-500 mt-1">
+                Client: {{ c.client_name }} · Partner: {{ c.partner_name }}
+                {% if row.staff_names %} · Staff: {{ row.staff_names|join(', ') }}{% endif %}
+              </p>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] font-semibold px-2 py-1 rounded-full
+                {% if c.status == 'Closed' %}bg-slate-100 text-slate-600
+                {% elif c.status == 'Awaiting Client' %}bg-amber-50 text-amber-700
+                {% else %}bg-green-50 text-green-700{% endif %}">{{ c.status }}</span>
+              <div class="text-2xl font-extrabold mt-1">{{ row.progress }}%</div>
+            </div>
+          </div>
+          <div class="mt-3 h-2 bg-slate-100 rounded-full overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-royal to-gold rounded-full" style="width:{{ row.progress }}%"></div>
+          </div>
+          <div class="flex gap-4 mt-3 text-xs text-slate-500">
+            <span>Paid: <strong class="text-green-600">₹{{ '%.0f'|format(row.paid) }}</strong></span>
+            <span>Due: <strong class="text-amber-600">₹{{ '%.0f'|format(row.due) }}</strong></span>
+          </div>
+        </div>
+      {% else %}
+        <p class="text-slate-500 text-sm">No cases in the system.</p>
+      {% endfor %}
+    </div>
+
+    <!-- TEAM -->
+    <div x-show="panel==='team'" x-cloak class="space-y-6">
+      <div class="glass-card rounded-2xl p-6">
+        <h2 class="font-bold text-navy mb-4">Partner workload &amp; billings</h2>
+        <canvas id="chartPartners" height="160" class="mb-6"></canvas>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="text-left text-xs text-slate-400">
+              <tr><th class="pb-2">Partner</th><th class="pb-2">Cases</th><th class="pb-2">Updates</th><th class="pb-2">Drafts pending</th><th class="pb-2">Revenue</th></tr>
+            </thead>
+            <tbody>
+              {% for p in m.partners %}
+                <tr class="border-t border-slate-100">
+                  <td class="py-3"><div class="font-semibold">{{ p.name }}</div><div class="text-xs text-slate-400">{{ p.email }}</div></td>
+                  <td class="py-3">{{ p.case_count }}</td>
+                  <td class="py-3">{{ p.updates_posted }}</td>
+                  <td class="py-3 {% if p.pending_drafts %}text-amber-600 font-semibold{% endif %}">{{ p.pending_drafts }}</td>
+                  <td class="py-3 font-semibold text-green-600">₹{{ '%.0f'|format(p.revenue) }}</td>
+                </tr>
+              {% else %}
+                <tr><td colspan="5" class="py-4 text-slate-400">No partners.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-6">
+        <h2 class="font-bold text-navy mb-4">Office staff activity</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="text-left text-xs text-slate-400">
+              <tr><th class="pb-2">Staff</th><th class="pb-2">Cases</th><th class="pb-2">WhatsApp outreach</th><th class="pb-2">Partner msgs</th><th class="pb-2">Client updates</th></tr>
+            </thead>
+            <tbody>
+              {% for s in m.staff %}
+                <tr class="border-t border-slate-100">
+                  <td class="py-3"><div class="font-semibold">{{ s.name }}</div><div class="text-xs text-slate-400">{{ s.email }}</div></td>
+                  <td class="py-3">{{ s.cases_assigned }}</td>
+                  <td class="py-3">{{ s.whatsapp_outreach }}</td>
+                  <td class="py-3">{{ s.partner_messages }}</td>
+                  <td class="py-3">{{ s.client_updates }}</td>
+                </tr>
+              {% else %}
+                <tr><td colspan="5" class="py-4 text-slate-400">No staff accounts.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <p class="text-xs text-slate-400 mt-4">Drafts awaiting partner approval: <strong>{{ m.drafts_pending }}</strong></p>
+      </div>
+    </div>
+
+    <!-- REVENUE -->
+    <div x-show="panel==='revenue'" x-cloak class="space-y-4">
+      <div class="grid md:grid-cols-2 gap-4 mb-2">
+        <div class="glass-card rounded-2xl p-6">
+          <div class="text-xs text-slate-400 uppercase font-semibold">Total received</div>
+          <div class="text-3xl font-extrabold text-green-600 mt-1">₹{{ '%.0f'|format(m.revenue_paid) }}</div>
+        </div>
+        <div class="glass-card rounded-2xl p-6">
+          <div class="text-xs text-slate-400 uppercase font-semibold">Outstanding</div>
+          <div class="text-3xl font-extrabold text-amber-600 mt-1">₹{{ '%.0f'|format(m.revenue_due) }}</div>
+        </div>
+      </div>
+      <div class="glass-card rounded-2xl overflow-hidden">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-50 text-left text-xs text-slate-500">
+            <tr>
+              <th class="p-4">Invoice</th>
+              <th class="p-4">Matter</th>
+              <th class="p-4">Client</th>
+              <th class="p-4">Amount</th>
+              <th class="p-4">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in m.invoices %}
+              <tr class="border-t border-slate-100">
+                <td class="p-4 font-medium">{{ i.invoice_no }}</td>
+                <td class="p-4 text-slate-500">{{ i.case_no }}</td>
+                <td class="p-4">{{ i.client_name }}</td>
+                <td class="p-4 font-semibold">₹{{ '%.0f'|format(i.amount) }}</td>
+                <td class="p-4"><span class="{% if i.status == 'Paid' %}text-green-600{% else %}text-amber-600{% endif %} font-semibold text-xs">{{ i.status }}</span></td>
+              </tr>
+            {% else %}
+              <tr><td colspan="5" class="p-4 text-slate-400">No invoices.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- LEADS -->
+    <div x-show="panel==='leads'" x-cloak class="space-y-6">
+      <div class="grid md:grid-cols-4 gap-4">
+        <div class="glass-card rounded-2xl p-4"><div class="text-xs text-slate-400">Approached</div><div class="text-2xl font-extrabold">{{ m.lead_total }}</div></div>
+        <div class="glass-card rounded-2xl p-4"><div class="text-xs text-slate-400">Converted</div><div class="text-2xl font-extrabold text-green-600">{{ m.lead_converted }}</div></div>
+        <div class="glass-card rounded-2xl p-4"><div class="text-xs text-slate-400">Conversion</div><div class="text-2xl font-extrabold text-royal">{{ m.conversion_rate }}%</div></div>
+        <div class="glass-card rounded-2xl p-4"><div class="text-xs text-slate-400">Satisfied*</div><div class="text-2xl font-extrabold text-gold-dark">{{ m.satisfaction_rate }}%</div></div>
+      </div>
+      <p class="text-xs text-slate-400">*Satisfied = converted + closed (requirement met or closed after handling).</p>
+
+      {% if m.consultations %}
+        <div class="glass-card rounded-2xl p-6">
+          <h2 class="font-bold mb-3">Consultation requests</h2>
+          {% for co in m.consultations %}
+            <div class="flex justify-between text-sm py-2 border-b border-slate-50">
+              <span>{{ co.client_name }} · {{ co.practice_area }} · {{ co.preferred_date }}</span>
+              <span class="font-semibold text-royal">{{ co.status }}</span>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <div class="space-y-3">
+        <h2 class="font-bold text-navy">Website enquiries</h2>
+        {% for eq in m.enquiries %}
+          <div class="glass-card rounded-xl p-4 flex flex-wrap justify-between gap-2">
+            <div>
+              <div class="font-semibold text-sm">{{ eq.name }} · {{ eq.phone }}</div>
+              <div class="text-xs text-slate-500">{{ eq.service or 'General' }} · {{ eq.city or '—' }} · from {{ eq.source_page }}</div>
+              {% if eq.message %}<p class="text-xs text-navy mt-1">{{ eq.message }}</p>{% endif %}
+            </div>
+            <span class="text-[10px] font-bold uppercase px-2 py-1 rounded-full h-fit
+              {% if eq.status == 'converted' %}bg-green-50 text-green-700
+              {% elif eq.status == 'new' %}bg-blue-50 text-royal
+              {% else %}bg-slate-100 text-slate-600{% endif %}">{{ eq.status.replace('_', ' ') }}</span>
+          </div>
+        {% else %}
+          <p class="text-sm text-slate-500">No enquiries yet.</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- ACTIVITY -->
+    <div x-show="panel==='activity'" x-cloak class="space-y-4">
+      <h2 class="font-bold text-navy">Audit trail (latest)</h2>
+      <ul class="space-y-2">
+        {% for a in m.recent_audit %}
+          <li class="bg-white border border-slate-100 rounded-xl px-4 py-3 text-sm flex justify-between gap-2">
+            <span>
+              <span class="text-xs text-slate-400">{{ a.user_name or 'system' }}{% if a.user_role %} ({{ a.user_role }}){% endif %}</span>
+              — {{ a.action }}{% if a.ref %} · {{ a.ref }}{% endif %}
+            </span>
+            <span class="text-xs text-slate-400 whitespace-nowrap">{{ a.created_at }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </main>
+
+  <footer class="border-t border-slate-200 py-4 text-center text-xs text-slate-400">
+    LexAssist Founder Portal · Read-only org intelligence · Actions remain with Partners &amp; Staff
+  </footer>
+
+  <script>
+    const charts = {{ charts_json|safe }};
+    const palette = ['#1E40AF', '#F59E0B', '#10B981', '#8B5CF6', '#F43F5E', '#0EA5E9'];
+
+    function makeChart(id, type, labels, data, label) {
+      const el = document.getElementById(id);
+      if (!el || typeof Chart === 'undefined') return;
+      new Chart(el, {
+        type,
+        data: {
+          labels,
+          datasets: [{
+            label: label || '',
+            data,
+            backgroundColor: type === 'line' ? 'rgba(30,64,175,0.15)' : palette,
+            borderColor: type === 'line' ? '#1E40AF' : palette,
+            borderWidth: type === 'line' ? 2 : 0,
+            tension: 0.3,
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: type === 'doughnut' || type === 'pie', position: 'bottom' } },
+          scales: (type === 'doughnut' || type === 'pie') ? {} : {
+            y: { beginAtZero: true, ticks: { precision: 0 } }
+          }
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      makeChart('chartCaseStatus', 'doughnut', charts.case_status.labels, charts.case_status.data);
+      makeChart('chartRevenue', 'bar', charts.revenue.labels, charts.revenue.data, '₹');
+      makeChart('chartLeads', 'bar', charts.leads.labels, charts.leads.data, 'Leads');
+      makeChart('chartSources', 'pie', charts.sources.labels, charts.sources.data);
+      makeChart('chartPartners', 'bar', charts.partners.labels, charts.partners.cases, 'Cases');
+    });
+  </script>
+</body>
+</html>

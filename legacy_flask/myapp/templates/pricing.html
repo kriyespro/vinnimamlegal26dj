@@ -1,0 +1,315 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pricing — Transparent Legal Services Pricing | LexAssist India</title>
+  <meta name="description" content="Honest, transparent pricing for all legal and compliance services. Business registration from ₹5,499. GST filing from ₹999/month. Trademark from ₹6,999. No hidden fees."/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{navy:{DEFAULT:'#0A1628'},royal:{DEFAULT:'#1E40AF',light:'#3B82F6'},gold:{DEFAULT:'#F59E0B',dark:'#D97706'}}}}}</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="font-inter bg-slate-50 text-navy" x-data="{ mobileOpen:false, scrolled:false, billing:'annual' }" @scroll.window="scrolled = window.scrollY > 60">
+
+  <!-- NAVBAR -->
+  <nav class="nav-sticky w-full transition-all duration-300" :class="scrolled ? 'nav-scrolled' : 'bg-navy/95 backdrop-blur-md border-b border-white/10'">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+      <a href="{{ url_for('index') }}" class="flex items-center gap-2.5"><div class="w-9 h-9 rounded-xl bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A1628" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span class="text-white font-bold text-xl">Lex<span class="text-gold">Assist</span></span></a>
+      <div class="hidden lg:flex items-center gap-1">
+        <a href="{{ url_for('index') }}" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">Home</a>
+        <a href="{{ url_for('services') }}" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">Services</a>
+        <a href="{{ url_for('pricing') }}" class="text-white px-3 py-2 rounded-lg text-sm bg-white/10">Pricing</a>
+        <a href="{{ url_for('about') }}" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">About</a>
+        <a href="{{ url_for('contact') }}" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">Contact</a>
+      </div>
+      {% include 'includes/nav_search_cta.html' %}
+      <button @click="mobileOpen = !mobileOpen" class="lg:hidden w-10 h-10 flex flex-col justify-center items-center gap-1.5 rounded-xl border border-white/20">
+        <span class="w-5 h-0.5 bg-white rounded"></span><span class="w-5 h-0.5 bg-white rounded"></span><span class="w-5 h-0.5 bg-white rounded"></span>
+      </button>
+    </div>
+    <div x-show="mobileOpen" x-cloak class="lg:hidden bg-navy border-t border-white/10 px-4 py-4 space-y-1">
+      <a href="{{ url_for('index') }}" class="block text-white/80 px-4 py-2.5 rounded-lg text-sm">Home</a>
+      <a href="{{ url_for('services') }}" class="block text-white/80 px-4 py-2.5 rounded-lg text-sm">Services</a>
+      <a href="{{ url_for('contact') }}" class="block btn-primary text-sm mt-3 justify-center">Get Started</a>
+      {% include 'includes/nav_mobile_portal.html' %}
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <section class="hero-gradient pt-20 pb-14">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+      <div class="section-badge" style="background:rgba(255,255,255,0.12);color:white;">Transparent Pricing</div>
+      <h1 class="text-4xl md:text-5xl font-extrabold text-white mt-4 mb-4">No Hidden Fees. Ever.</h1>
+      <p class="text-white/70 text-lg mb-8">What you see is what you pay. All prices are inclusive of our expert fees. Government fees shown separately where applicable.</p>
+      <!-- Toggle -->
+      <div class="flex items-center justify-center gap-3">
+        <span class="text-sm font-medium text-white/70" :class="billing==='monthly' ? 'text-white' : ''">Monthly</span>
+        <button @click="billing = billing==='monthly' ? 'annual' : 'monthly'" class="w-14 h-7 rounded-full transition-all duration-300 relative" :class="billing==='annual' ? 'bg-gold' : 'bg-white/30'">
+          <div class="w-5 h-5 bg-white rounded-full absolute top-1 transition-all duration-300 shadow" :class="billing==='annual' ? 'left-8' : 'left-1'"></div>
+        </button>
+        <span class="text-sm font-medium" :class="billing==='annual' ? 'text-white' : 'text-white/70'">Annual <span class="text-gold font-bold ml-1">Save 25%</span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPLIANCE PLANS -->
+  <section class="section-padding bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-10">
+        <div class="section-badge">Compliance Plans</div>
+        <h2 class="text-3xl font-bold text-navy mt-2 mb-3">Monthly Compliance Packages</h2>
+        <p class="text-slate-500">Everything you need to stay 100% compliant, month after month.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <!-- Starter -->
+        <div class="pricing-card">
+          <h3 class="font-bold text-navy text-xl mb-1">Starter</h3>
+          <p class="text-slate-500 text-sm mb-5">Perfect for new businesses & sole proprietors</p>
+          <div class="border-t border-b border-slate-100 py-5 mb-5">
+            <div class="text-4xl font-extrabold text-navy" x-text="billing==='monthly' ? '₹1,999' : '₹17,999'"></div>
+            <div class="text-slate-400 text-sm mt-1" x-text="billing==='monthly' ? 'per month' : 'per year · save ₹6,000'"></div>
+          </div>
+          <ul class="space-y-3 text-sm text-slate-600 mb-7">
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>GST return filing (GSTR-1 & 3B)</li>
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>ITR filing (once per year)</li>
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Compliance calendar & reminders</li>
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Dedicated CA support (Email)</li>
+            <li class="flex items-center gap-2 text-slate-300"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>ROC annual filing</li>
+            <li class="flex items-center gap-2 text-slate-300"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>TDS returns</li>
+          </ul>
+          <a href="{{ url_for('contact') }}" class="btn-blue w-full justify-center py-3 text-base">Get Started</a>
+        </div>
+
+        <!-- Professional -->
+        <div class="pricing-card featured relative">
+          <div class="pricing-badge">Best Value</div>
+          <h3 class="font-bold text-white text-xl mb-1">Professional</h3>
+          <p class="text-white/60 text-sm mb-5">For Private Limited Companies & growing businesses</p>
+          <div class="border-t border-b border-white/20 py-5 mb-5">
+            <div class="text-4xl font-extrabold text-white" x-text="billing==='monthly' ? '₹3,999' : '₹35,999'"></div>
+            <div class="text-white/50 text-sm mt-1" x-text="billing==='monthly' ? 'per month' : 'per year · save ₹12,000'"></div>
+          </div>
+          <ul class="space-y-3 text-sm text-white/80 mb-7">
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Everything in Starter</li>
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Annual ROC filing (MGT-7, AOC-4)</li>
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Director KYC filing</li>
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Quarterly TDS return filing</li>
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>ITC reconciliation monthly</li>
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Priority support (Phone + Email)</li>
+          </ul>
+          <a href="{{ url_for('contact') }}" class="btn-primary w-full justify-center py-3 text-base">Get Started</a>
+        </div>
+
+        <!-- Enterprise -->
+        <div class="pricing-card">
+          <h3 class="font-bold text-navy text-xl mb-1">Enterprise</h3>
+          <p class="text-slate-500 text-sm mb-5">For large companies, groups & high-volume businesses</p>
+          <div class="border-t border-b border-slate-100 py-5 mb-5">
+            <div class="text-4xl font-extrabold text-navy" x-text="billing==='monthly' ? '₹8,999' : '₹79,999'"></div>
+            <div class="text-slate-400 text-sm mt-1" x-text="billing==='monthly' ? 'per month' : 'per year · save ₹28,000'"></div>
+          </div>
+          <ul class="space-y-3 text-sm text-slate-600 mb-7">
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Everything in Professional</li>
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Dedicated account manager</li>
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Unlimited invoices & transactions</li>
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>GST notice handling (included)</li>
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>GSTR-9C audit certificate</li>
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>24/7 WhatsApp support</li>
+          </ul>
+          <a href="{{ url_for('contact') }}" class="btn-blue w-full justify-center py-3 text-base">Contact Sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ONE-TIME SERVICES PRICING -->
+  <section class="section-padding bg-slate-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-10">
+        <div class="section-badge">One-Time Services</div>
+        <h2 class="text-3xl font-bold text-navy mt-2 mb-3">Pay Per Service Pricing</h2>
+        <p class="text-slate-500">No subscription needed for one-time registrations and filings.</p>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm">
+          <thead class="bg-navy text-white">
+            <tr>
+              <th class="text-left p-4 text-sm font-semibold">Service</th>
+              <th class="text-left p-4 text-sm font-semibold">Description</th>
+              <th class="text-center p-4 text-sm font-semibold">Our Fee</th>
+              <th class="text-center p-4 text-sm font-semibold">Govt. Fee</th>
+              <th class="text-center p-4 text-sm font-semibold">Timeline</th>
+              <th class="text-center p-4 text-sm font-semibold"></th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr class="hover:bg-slate-50 transition-colors">
+              <td class="p-4 font-semibold text-navy text-sm">Private Limited Company</td>
+              <td class="p-4 text-slate-500 text-sm">Full incorporation with DIN, DSC, PAN, TAN</td>
+              <td class="p-4 text-center font-bold text-emerald-600">₹6,999</td>
+              <td class="p-4 text-center text-slate-500 text-sm">~₹3,000</td>
+              <td class="p-4 text-center text-sm text-slate-500">7–10 days</td>
+              <td class="p-4 text-center"><a href="{{ url_for('contact') }}" class="btn-blue text-xs py-2 px-4">Apply</a></td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition-colors">
+              <td class="p-4 font-semibold text-navy text-sm">LLP Registration</td>
+              <td class="p-4 text-slate-500 text-sm">Complete LLP incorporation with DPIN, LLP agreement</td>
+              <td class="p-4 text-center font-bold text-emerald-600">₹5,499</td>
+              <td class="p-4 text-center text-slate-500 text-sm">~₹2,000</td>
+              <td class="p-4 text-center text-sm text-slate-500">10–14 days</td>
+              <td class="p-4 text-center"><a href="{{ url_for('contact') }}" class="btn-blue text-xs py-2 px-4">Apply</a></td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition-colors">
+              <td class="p-4 font-semibold text-navy text-sm">GST Registration</td>
+              <td class="p-4 text-slate-500 text-sm">GSTIN with ARN within 3-5 working days</td>
+              <td class="p-4 text-center font-bold text-emerald-600">₹1,499</td>
+              <td class="p-4 text-center text-slate-500 text-sm">₹0</td>
+              <td class="p-4 text-center text-sm text-slate-500">3–5 days</td>
+              <td class="p-4 text-center"><a href="{{ url_for('contact') }}" class="btn-blue text-xs py-2 px-4">Apply</a></td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition-colors">
+              <td class="p-4 font-semibold text-navy text-sm">Trademark Registration</td>
+              <td class="p-4 text-slate-500 text-sm">TM filing with comprehensive search + objection handling</td>
+              <td class="p-4 text-center font-bold text-emerald-600">₹6,999</td>
+              <td class="p-4 text-center text-slate-500 text-sm">₹4,500</td>
+              <td class="p-4 text-center text-sm text-slate-500">12–18 months</td>
+              <td class="p-4 text-center"><a href="{{ url_for('contact') }}" class="btn-blue text-xs py-2 px-4">Apply</a></td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition-colors">
+              <td class="p-4 font-semibold text-navy text-sm">Copyright Registration</td>
+              <td class="p-4 text-slate-500 text-sm">Protection for creative works — books, software, artwork</td>
+              <td class="p-4 text-center font-bold text-emerald-600">₹3,999</td>
+              <td class="p-4 text-center text-slate-500 text-sm">₹500</td>
+              <td class="p-4 text-center text-sm text-slate-500">3–6 months</td>
+              <td class="p-4 text-center"><a href="{{ url_for('contact') }}" class="btn-blue text-xs py-2 px-4">Apply</a></td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition-colors">
+              <td class="p-4 font-semibold text-navy text-sm">MSME/Udyam Registration</td>
+              <td class="p-4 text-slate-500 text-sm">Udyam certificate for MSME benefits</td>
+              <td class="p-4 text-center font-bold text-emerald-600">₹999</td>
+              <td class="p-4 text-center text-slate-500 text-sm">₹0</td>
+              <td class="p-4 text-center text-sm text-slate-500">1–2 days</td>
+              <td class="p-4 text-center"><a href="{{ url_for('contact') }}" class="btn-blue text-xs py-2 px-4">Apply</a></td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition-colors">
+              <td class="p-4 font-semibold text-navy text-sm">ITR Filing (Individual)</td>
+              <td class="p-4 text-slate-500 text-sm">Income tax return for salaried, freelancers & self-employed</td>
+              <td class="p-4 text-center font-bold text-emerald-600">₹999</td>
+              <td class="p-4 text-center text-slate-500 text-sm">₹0</td>
+              <td class="p-4 text-center text-sm text-slate-500">Same day</td>
+              <td class="p-4 text-center"><a href="{{ url_for('contact') }}" class="btn-blue text-xs py-2 px-4">Apply</a></td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition-colors">
+              <td class="p-4 font-semibold text-navy text-sm">Digital Signature (DSC)</td>
+              <td class="p-4 text-slate-500 text-sm">Class 3 DSC for company filing, GST, and MCA portal</td>
+              <td class="p-4 text-center font-bold text-emerald-600">₹1,499</td>
+              <td class="p-4 text-center text-slate-500 text-sm">₹0</td>
+              <td class="p-4 text-center text-sm text-slate-500">1–2 days</td>
+              <td class="p-4 text-center"><a href="{{ url_for('contact') }}" class="btn-blue text-xs py-2 px-4">Apply</a></td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition-colors">
+              <td class="p-4 font-semibold text-navy text-sm">Partnership Firm</td>
+              <td class="p-4 text-slate-500 text-sm">Deed drafting + Registrar filing</td>
+              <td class="p-4 text-center font-bold text-emerald-600">₹2,999</td>
+              <td class="p-4 text-center text-slate-500 text-sm">Stamp ₹200–₹5,000*</td>
+              <td class="p-4 text-center text-sm text-slate-500">5–15 days</td>
+              <td class="p-4 text-center"><a href="partnership.html#stamp-paper" class="btn-blue text-xs py-2 px-4">Apply</a></td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition-colors">
+              <td class="p-4 font-semibold text-navy text-sm">NDA / Contracts</td>
+              <td class="p-4 text-slate-500 text-sm">Lawyer-drafted agreements on stamp paper</td>
+              <td class="p-4 text-center font-bold text-emerald-600">₹2,499+</td>
+              <td class="p-4 text-center text-slate-500 text-sm">Stamp ₹100–₹500*</td>
+              <td class="p-4 text-center text-sm text-slate-500">2–5 days</td>
+              <td class="p-4 text-center"><a href="contracts.html#stamp-paper" class="btn-blue text-xs py-2 px-4">Apply</a></td>
+            </tr>
+            <tr class="hover:bg-slate-50 transition-colors">
+              <td class="p-4 font-semibold text-navy text-sm">Marriage Certificate</td>
+              <td class="p-4 text-slate-500 text-sm">Registration assistance + affidavits</td>
+              <td class="p-4 text-center font-bold text-emerald-600">₹4,999</td>
+              <td class="p-4 text-center text-slate-500 text-sm">Stamp ₹10–₹100*</td>
+              <td class="p-4 text-center text-sm text-slate-500">7–30 days</td>
+              <td class="p-4 text-center"><a href="marriage-certificate.html#stamp-paper" class="btn-blue text-xs py-2 px-4">Apply</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-center text-slate-400 text-sm mt-4">All prices in INR. GST applicable on our fees. Government fees &amp; stamp paper are at actuals. *Stamp duty varies by state — <a href="contracts.html#stamp-paper" class="text-royal hover:underline">see full stamp paper price list</a>.</p>
+    </div>
+  </section>
+
+  <!-- STAMP PAPER GUIDE -->
+  <section class="section-padding bg-slate-50" id="stamp-paper">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-8">
+        <div class="section-badge">Stamp Paper</div>
+        <h2 class="text-3xl font-bold text-navy mt-2 mb-3">Stamp Paper Price at a Glance</h2>
+        <p class="text-slate-500">Indicative non-judicial stamp / e-stamp values (paid to the state, not LexAssist).</p>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 text-center">
+          <div class="text-xs font-bold text-slate-400 uppercase mb-2">Affidavits</div>
+          <div class="text-2xl font-extrabold text-navy">₹10–₹100</div>
+          <p class="text-xs text-slate-500 mt-2">Marriage, witness, general</p>
+        </div>
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 text-center">
+          <div class="text-xs font-bold text-slate-400 uppercase mb-2">NDA / Employment</div>
+          <div class="text-2xl font-extrabold text-navy">₹100–₹500</div>
+          <p class="text-xs text-slate-500 mt-2">Most commercial agreements</p>
+        </div>
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 text-center">
+          <div class="text-xs font-bold text-slate-400 uppercase mb-2">Partnership Deed</div>
+          <div class="text-2xl font-extrabold text-navy">₹200–₹5,000</div>
+          <p class="text-xs text-slate-500 mt-2">State &amp; capital based</p>
+        </div>
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 text-center">
+          <div class="text-xs font-bold text-slate-400 uppercase mb-2">Rental (&lt;1 yr)</div>
+          <div class="text-2xl font-extrabold text-navy">₹100–₹500</div>
+          <p class="text-xs text-slate-500 mt-2">Longer leases = % of rent</p>
+        </div>
+      </div>
+      <p class="text-center text-sm text-slate-500 mt-6">We arrange SHCIL e-stamp / stamp paper at actual cost for your state. <a href="{{ url_for('contact') }}" class="text-royal font-semibold">Ask for exact quote →</a></p>
+    </div>
+  </section>
+
+  <!-- GUARANTEE -->
+  <section class="section-padding bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="text-center p-6">
+          <div class="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center mx-auto mb-4"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1E40AF" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <h3 class="font-bold text-navy text-lg mb-2">100% Money Back</h3>
+          <p class="text-slate-500 text-sm">If we fail to deliver your service on time, get a full refund — no questions asked.</p>
+        </div>
+        <div class="text-center p-6">
+          <div class="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center mx-auto mb-4"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+          <h3 class="font-bold text-navy text-lg mb-2">Zero Hidden Fees</h3>
+          <p class="text-slate-500 text-sm">Our pricing is completely transparent. You'll know every rupee you're spending, upfront.</p>
+        </div>
+        <div class="text-center p-6">
+          <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center mx-auto mb-4"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.44 2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.37a16 16 0 0 0 5.72 5.72l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+          <h3 class="font-bold text-navy text-lg mb-2">Free Expert Call</h3>
+          <p class="text-slate-500 text-sm">Every plan includes a free initial consultation with a CA or CS to assess your specific needs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="hero-gradient section-padding">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Not Sure Which Plan is Right?</h2>
+      <p class="text-white/70 text-lg mb-8">Book a free 30-minute consultation with our legal experts. We'll recommend the perfect plan for your business stage and budget.</p>
+      <div class="flex gap-4 justify-center flex-wrap">
+        <a href="{{ url_for('contact') }}" class="btn-primary text-base px-8 py-3.5">Get Free Consultation</a>
+        <a href="{{ url_for('faq') }}" class="btn-secondary text-base px-8 py-3.5">Read FAQ</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer-gradient text-white"><div class="max-w-7xl mx-auto px-4 sm:px-6 py-10"><div class="flex flex-col md:flex-row justify-between items-center gap-4"><a href="{{ url_for('index') }}" class="flex items-center gap-2.5"><div class="w-8 h-8 rounded-lg bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0A1628" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span class="font-bold text-lg">Lex<span class="text-gold">Assist</span></span></a><div class="flex gap-6 text-sm text-white/60"><a href="{{ url_for('index') }}" class="hover:text-white">Home</a><a href="{{ url_for('services') }}" class="hover:text-white">Services</a><a href="{{ url_for('about') }}" class="hover:text-white">About</a><a href="{{ url_for('contact') }}" class="hover:text-white">Contact</a><a href="{{ url_for('faq') }}" class="hover:text-white">FAQ</a></div><span class="text-white/40 text-sm">© 2025 LexAssist. All rights reserved.</span></div></div></footer>
+  <a href="https://wa.me/919876543210" target="_blank" class="whatsapp-float"><svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg></a>
+</body>
+</html>

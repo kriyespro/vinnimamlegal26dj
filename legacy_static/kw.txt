@@ -1,0 +1,73 @@
+LexAssist — Portal Usage Policy (source notes)
+=============================================
+Clean published page: portal-usage-policy.html
+Working portal UI: portal.html
+
+1. PURPOSE & SCOPE
+Governs use of the Firm's legal services portal by:
+- Office / Back-End Staff
+- Partners / Advocates
+- Clients / Customers
+
+Laws: DPDP Act 2023, IT Act 2000, Bar Council of India Rules.
+Access is conditional on accepting this policy.
+
+2. OFFICE / BACK-END STAFF
+2.1 Access & Confidentiality
+- Access only assigned case files / client data
+- Never share client info outside Firm without written authorization
+- Credentials personal — never share
+- Revoke access immediately on transfer/exit
+
+2.2 Conduct
+- Document all client communication (calls, emails, meetings) in the case file
+
+2.3 Data Handling
+- No downloads to personal devices / email / cloud
+- All uploads/edits/deletes logged (user ID, timestamp, action)
+- Report breach/phishing/unauthorised access to Compliance/IT immediately
+
+2.4 Escalation
+- Legal advice / opinion / settlement → escalate to Partner; staff must not answer
+
+3. PARTNERS / ADVOCATES
+3.1 Case Ownership
+- Partner responsible for assigned cases; timely portal status updates
+- Major docs reviewed & approved by Partner before client share
+
+3.2 Confidentiality & Conflict
+- Disclose conflicts before accepting new case/client
+- Need-to-know sharing between Partners
+- Follow BCI Rules on confidentiality & ethics
+
+3.3 Portal Usage
+- Update case status, hearing dates, billing regularly
+- Review staff drafts within 24–48 hours
+
+3.4 Financial
+- Transparent fees consistent with client communication
+- Fee changes via writing/portal before they take effect
+
+4. CLIENTS / CUSTOMERS
+4.1 Access
+- View-only / limited to own cases; never other clients' data
+- OTP or secure login before sensitive documents
+
+4.2 Communication
+- Formal instructions/queries via portal (not only WhatsApp/calls)
+- Response times within business days
+
+4.3 Document Submission
+- Requested formats only (PDF, JPEG), within size limits
+- Client responsible for accuracy & authenticity
+
+4.4 Fees & Payments
+- Payment terms & late fees stated on portal
+- Refund/cancellation disclosed at onboarding
+
+5. GENERAL
+- Data retention per DPDP + limitation periods, then archive/delete
+- Grievance: support@lexassist.in / +91 98765 43210
+- Full audit trail on every action
+- Compliance with DPDP, IT Act, BCI Rules
+- Amendments notified via portal

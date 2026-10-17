@@ -1,0 +1,13 @@
+# Runtime dependencies (direct). Transitive packages are resolved by pip.
+Django==5.2.17
+Jinja2==3.1.6
+django-htmx==1.29.0
+django-axes==8.3.1
+razorpay==2.0.1
+psycopg[binary]==3.3.6
+whitenoise==6.12.0
+brotli==1.2.0            # lets WhiteNoise pre-compress static files with Brotli
+gunicorn==26.2.0
+python-dotenv==1.2.3
+argon2-cffi==25.1.0      # password hashing
+redis==8.1.0             # cache / sessions / rate limits (optional at runtime: set REDIS_URL)

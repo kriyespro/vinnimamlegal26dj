@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Client &amp; Staff Portal Login — LexAssist</title>
+  <meta name="description" content="Secure LexAssist portal for clients, partners/advocates and office staff. Role-based access, case tracking, documents and audit-logged actions under our Portal Usage Policy."/>
+  <link rel="stylesheet" href="styles.css"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{navy:{DEFAULT:'#0A1628'},royal:{DEFAULT:'#1E40AF',light:'#3B82F6'},gold:{DEFAULT:'#F59E0B',dark:'#D97706'}}}}}</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="font-inter bg-slate-50 text-navy" x-data="portalApp()" x-cloak>
+
+  <!-- ===== LOGIN ===== -->
+  <div x-show="!loggedIn" class="min-h-screen flex flex-col">
+    <nav class="bg-navy/95 border-b border-white/10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+        <a href="index.html" class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A1628" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <span class="text-white font-bold text-xl">Lex<span class="text-gold">Assist</span></span>
+        </a>
+        <a href="portal-usage-policy.html" class="text-white/70 hover:text-white text-sm">Portal Usage Policy</a>
+      </div>
+    </nav>
+
+    <div class="flex-1 hero-gradient flex items-center justify-center px-4 py-16">
+      <div class="w-full max-w-md">
+        <div class="text-center mb-8">
+          <h1 class="text-3xl font-extrabold text-white mb-2">Portal Login</h1>
+          <p class="text-white/65 text-sm">Secure access for Clients, Partners &amp; Staff. All actions are audited.</p>
+        </div>
+
+        <div class="glass-card rounded-3xl p-7 shadow-2xl">
+          <div class="grid grid-cols-3 gap-2 mb-6">
+            <button type="button" @click="role='client'" :class="role==='client'?'bg-navy text-white':'bg-slate-100 text-slate-600'" class="py-2.5 rounded-xl text-xs font-bold transition-colors">Client</button>
+            <button type="button" @click="role='partner'" :class="role==='partner'?'bg-navy text-white':'bg-slate-100 text-slate-600'" class="py-2.5 rounded-xl text-xs font-bold transition-colors">Partner</button>
+            <button type="button" @click="role='staff'" :class="role==='staff'?'bg-navy text-white':'bg-slate-100 text-slate-600'" class="py-2.5 rounded-xl text-xs font-bold transition-colors">Staff</button>
+          </div>
+
+          <form @submit.prevent="login()" class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-500 mb-1.5">Email</label>
+              <input type="email" x-model="email" required placeholder="you@example.com" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-royal/30 focus:border-royal"/>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-500 mb-1.5">Password</label>
+              <input type="password" x-model="password" required placeholder="••••••••" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-royal/30 focus:border-royal"/>
+            </div>
+
+            <!-- Client OTP verification (Policy 4.1) -->
+            <div x-show="role==='client'" class="space-y-3">
+              <div class="bg-blue-50 border border-blue-100 rounded-xl p-3 text-xs text-slate-600">
+                Per Portal Policy §4.1, clients must verify identity (OTP) before accessing sensitive documents.
+              </div>
+              <div class="flex gap-2" x-show="!otpSent">
+                <button type="button" @click="sendOtp()" class="flex-1 rounded-xl border border-royal text-royal text-sm font-semibold py-2.5 hover:bg-blue-50">Send OTP</button>
+              </div>
+              <div x-show="otpSent" class="space-y-2">
+                <label class="block text-xs font-semibold text-slate-500">Enter OTP</label>
+                <input type="text" x-model="otp" maxlength="6" placeholder="6-digit OTP" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm tracking-widest focus:outline-none focus:ring-2 focus:ring-royal/30"/>
+                <p class="text-xs text-green-600" x-show="otpHint" x-text="otpHint"></p>
+              </div>
+            </div>
+
+            <label class="flex items-start gap-2.5 cursor-pointer">
+              <input type="checkbox" x-model="acceptedPolicy" required class="mt-1 rounded border-slate-300 text-royal focus:ring-royal"/>
+              <span class="text-xs text-slate-500 leading-relaxed">I have read and agree to the <a href="portal-usage-policy.html" class="text-royal font-semibold underline" target="_blank">Portal Usage Policy</a> (condition of access).</span>
+            </label>
+
+            <button type="submit" class="btn-primary w-full justify-center py-3" :disabled="role==='client' && (!otpSent || otp.length < 4)">
+              Sign In as <span x-text="roleLabel()"></span>
+            </button>
+          </form>
+
+          <p class="text-center text-xs text-slate-400 mt-5">Demo mode — any email/password works. Client OTP: use <strong>123456</strong>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DASHBOARD SHELL ===== -->
+  <div x-show="loggedIn" class="min-h-screen flex flex-col bg-slate-50">
+    <header class="bg-navy text-white sticky top-0 z-50 border-b border-white/10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
+        <div class="flex items-center gap-3">
+          <a href="index.html" class="font-bold text-lg">Lex<span class="text-gold">Assist</span></a>
+          <span class="hidden sm:inline text-xs px-2.5 py-1 rounded-full bg-white/10 text-white/80" x-text="roleBadge()"></span>
+        </div>
+        <div class="flex items-center gap-3">
+          <a href="portal-usage-policy.html" class="hidden sm:inline text-xs text-white/60 hover:text-white">Policy</a>
+          <span class="text-xs text-white/50 truncate max-w-[140px]" x-text="email"></span>
+          <button @click="logout()" class="text-xs font-semibold bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg">Logout</button>
+        </div>
+      </div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 flex gap-1 overflow-x-auto pb-2">
+        <template x-for="t in tabsForRole()" :key="t.id">
+          <button @click="view=t.id" :class="view===t.id?'bg-gold text-navy':'text-white/70 hover:text-white hover:bg-white/10'" class="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors" x-text="t.label"></button>
+        </template>
+      </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8">
+
+      <!-- ===== CLIENT DASHBOARD (Policy §4) ===== -->
+      <div x-show="role==='client'">
+        <div x-show="view==='overview'" class="space-y-6">
+          <div>
+            <h1 class="text-2xl font-bold text-navy">My Cases</h1>
+            <p class="text-sm text-slate-500 mt-1">View-only access to your own matters (§4.1). Other clients’ data is never shown.</p>
+          </div>
+          <div class="grid md:grid-cols-3 gap-4">
+            <div class="glass-card rounded-2xl p-5"><div class="text-xs text-slate-400 font-semibold uppercase">Active</div><div class="text-3xl font-extrabold text-navy mt-1">2</div></div>
+            <div class="glass-card rounded-2xl p-5"><div class="text-xs text-slate-400 font-semibold uppercase">Pending docs</div><div class="text-3xl font-extrabold text-gold mt-1">1</div></div>
+            <div class="glass-card rounded-2xl p-5"><div class="text-xs text-slate-400 font-semibold uppercase">Invoices due</div><div class="text-3xl font-extrabold text-royal mt-1">₹12,500</div></div>
+          </div>
+          <div class="space-y-3">
+            <div class="glass-card rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <div class="text-xs font-bold text-royal">LA-2026-0142</div>
+                <h3 class="font-bold text-navy">Pvt Ltd Incorporation — TechStart</h3>
+                <p class="text-xs text-slate-500 mt-1">Status: SPICe+ filed · Partner: Adv. Vikram Malhotra</p>
+              </div>
+              <span class="text-xs font-semibold bg-green-50 text-green-700 px-3 py-1 rounded-full">In Progress</span>
+            </div>
+            <div class="glass-card rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <div class="text-xs font-bold text-royal">LA-2026-0188</div>
+                <h3 class="font-bold text-navy">Trademark Class 9 — Brand Protection</h3>
+                <p class="text-xs text-slate-500 mt-1">Status: Awaiting document upload · Partner: Adv. Ananya Shah</p>
+              </div>
+              <span class="text-xs font-semibold bg-amber-50 text-amber-700 px-3 py-1 rounded-full">Action Needed</span>
+            </div>
+          </div>
+        </div>
+
+        <div x-show="view==='messages'" class="space-y-6">
+          <div>
+            <h1 class="text-2xl font-bold text-navy">Formal Queries</h1>
+            <p class="text-sm text-slate-500 mt-1">Route instructions through the portal for record-keeping (§4.2). Response within business days.</p>
+          </div>
+          <div class="glass-card rounded-2xl p-5 space-y-4">
+            <textarea x-model="clientQuery" rows="3" placeholder="Type your formal instruction or query…" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-royal/30"></textarea>
+            <button @click="submitQuery()" class="btn-primary text-sm" :disabled="!clientQuery.trim()">Submit via Portal</button>
+            <p class="text-xs text-green-600" x-show="queryMsg" x-text="queryMsg"></p>
+          </div>
+          <div class="space-y-2">
+            <div class="bg-white border border-slate-100 rounded-xl p-4 text-sm">
+              <div class="flex justify-between text-xs text-slate-400 mb-1"><span>You · 12 Jul 2026</span><span>Logged</span></div>
+              <p class="text-slate-600">Please confirm MCA name approval timeline for TechStart.</p>
+            </div>
+          </div>
+        </div>
+
+        <div x-show="view==='documents'" class="space-y-6">
+          <div>
+            <h1 class="text-2xl font-bold text-navy">Upload Documents</h1>
+            <p class="text-sm text-slate-500 mt-1">PDF / JPEG only, max 10 MB. You are responsible for accuracy (§4.3).</p>
+          </div>
+          <div class="glass-card rounded-2xl p-6 border-2 border-dashed border-slate-200 text-center">
+            <input type="file" @change="handleClientUpload($event)" accept=".pdf,.jpg,.jpeg,.png" class="text-sm"/>
+            <p class="text-xs text-slate-400 mt-3">Accepted: PDF, JPEG · Max 10 MB per file</p>
+            <p class="text-xs text-green-600 mt-2" x-show="uploadMsg" x-text="uploadMsg"></p>
+            <p class="text-xs text-red-600 mt-2" x-show="uploadErr" x-text="uploadErr"></p>
+          </div>
+          <ul class="space-y-2 text-sm">
+            <li class="flex justify-between bg-white rounded-xl border border-slate-100 px-4 py-3"><span>PAN_Card.pdf</span><span class="text-slate-400 text-xs">Uploaded · audited</span></li>
+            <li class="flex justify-between bg-white rounded-xl border border-slate-100 px-4 py-3"><span>Address_Proof.pdf</span><span class="text-slate-400 text-xs">Uploaded · audited</span></li>
+          </ul>
+        </div>
+
+        <div x-show="view==='billing'" class="space-y-6">
+          <div>
+            <h1 class="text-2xl font-bold text-navy">Fees &amp; Payments</h1>
+            <p class="text-sm text-slate-500 mt-1">Terms stated clearly on portal (§4.4). Fee changes are notified here before they take effect.</p>
+          </div>
+          <div class="glass-card rounded-2xl overflow-hidden">
+            <table class="w-full text-sm">
+              <thead class="bg-slate-50 text-left text-xs text-slate-500"><tr><th class="p-4">Invoice</th><th class="p-4">Matter</th><th class="p-4">Amount</th><th class="p-4">Status</th></tr></thead>
+              <tbody>
+                <tr class="border-t border-slate-100"><td class="p-4 font-medium">INV-8821</td><td class="p-4 text-slate-500">Incorporation</td><td class="p-4">₹7,999</td><td class="p-4"><span class="text-green-600 font-semibold text-xs">Paid</span></td></tr>
+                <tr class="border-t border-slate-100"><td class="p-4 font-medium">INV-8910</td><td class="p-4 text-slate-500">Trademark</td><td class="p-4">₹12,500</td><td class="p-4"><span class="text-amber-600 font-semibold text-xs">Due in 7 days</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-xs text-slate-500">Refund / cancellation terms were disclosed at onboarding. Late fee: none currently applicable.</p>
+        </div>
+      </div>
+
+      <!-- ===== PARTNER DASHBOARD (Policy §3) ===== -->
+      <div x-show="role==='partner'">
+        <div x-show="view==='overview'" class="space-y-6">
+          <div>
+            <h1 class="text-2xl font-bold text-navy">My Case Book</h1>
+            <p class="text-sm text-slate-500 mt-1">You own assigned matters — keep status, hearings &amp; billing current (§3.1, §3.3).</p>
+          </div>
+          <div class="grid md:grid-cols-4 gap-4">
+            <div class="glass-card rounded-2xl p-4"><div class="text-xs text-slate-400">Assigned</div><div class="text-2xl font-extrabold">8</div></div>
+            <div class="glass-card rounded-2xl p-4"><div class="text-xs text-slate-400">Drafts pending</div><div class="text-2xl font-extrabold text-amber-600">3</div></div>
+            <div class="glass-card rounded-2xl p-4"><div class="text-xs text-slate-400">Hearings (7d)</div><div class="text-2xl font-extrabold text-royal">2</div></div>
+            <div class="glass-card rounded-2xl p-4"><div class="text-xs text-slate-400">SLA &lt; 48h</div><div class="text-2xl font-extrabold text-green-600">OK</div></div>
+          </div>
+          <div class="space-y-3">
+            <div class="glass-card rounded-2xl p-5">
+              <div class="flex flex-wrap justify-between gap-2 mb-3">
+                <div><span class="text-xs font-bold text-royal">LA-2026-0142</span><h3 class="font-bold">TechStart — Incorporation</h3></div>
+                <select class="text-xs border border-slate-200 rounded-lg px-2 py-1" @change="logAction('status_update', 'LA-2026-0142')">
+                  <option>In Progress</option><option>Awaiting Client</option><option>Closed</option>
+                </select>
+              </div>
+              <div class="flex flex-wrap gap-2 text-xs">
+                <input type="date" class="border border-slate-200 rounded-lg px-2 py-1" title="Hearing / milestone date"/>
+                <button @click="logAction('billing_update', 'LA-2026-0142')" class="bg-slate-100 px-3 py-1 rounded-lg font-semibold">Update billing</button>
+              </div>
+            </div>
+            <div class="glass-card rounded-2xl p-5">
+              <div class="flex flex-wrap justify-between gap-2">
+                <div><span class="text-xs font-bold text-royal">LA-2026-0188</span><h3 class="font-bold">Trademark Class 9</h3></div>
+                <span class="text-xs bg-amber-50 text-amber-700 px-2 py-1 rounded-full font-semibold">Draft awaiting your review</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div x-show="view==='approvals'" class="space-y-6">
+          <div>
+            <h1 class="text-2xl font-bold text-navy">Draft Approvals</h1>
+            <p class="text-sm text-slate-500 mt-1">Major documents must be approved before client share. Review within 24–48 hours (§3.1, §3.3).</p>
+          </div>
+          <div class="glass-card rounded-2xl p-5 flex flex-col sm:flex-row justify-between gap-4 items-start sm:items-center">
+            <div>
+              <h3 class="font-bold text-navy">NDA — Vendor Agreement draft</h3>
+              <p class="text-xs text-slate-500 mt-1">Submitted by Staff · 6 hours ago · Case LA-2026-0201</p>
+            </div>
+            <div class="flex gap-2">
+              <button @click="approveDraft('NDA draft')" class="bg-green-600 text-white text-xs font-bold px-4 py-2 rounded-lg">Approve</button>
+              <button @click="rejectDraft('NDA draft')" class="bg-red-50 text-red-600 text-xs font-bold px-4 py-2 rounded-lg">Reject</button>
+            </div>
+          </div>
+          <p class="text-sm text-green-600" x-show="approvalMsg" x-text="approvalMsg"></p>
+        </div>
+
+        <div x-show="view==='conflict'" class="space-y-6">
+          <div>
+            <h1 class="text-2xl font-bold text-navy">Conflict Disclosure</h1>
+            <p class="text-sm text-slate-500 mt-1">Disclose potential conflicts before accepting a new case (§3.2). Need-to-know sharing only.</p>
+          </div>
+          <form @submit.prevent="submitConflict()" class="glass-card rounded-2xl p-6 space-y-4">
+            <input type="text" x-model="conflict.client" required placeholder="Prospective client / matter" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm"/>
+            <textarea x-model="conflict.note" required rows="3" placeholder="Describe potential conflict…" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm"></textarea>
+            <button type="submit" class="btn-primary text-sm">Submit Disclosure</button>
+            <p class="text-xs text-green-600" x-show="conflictMsg" x-text="conflictMsg"></p>
+          </form>
+        </div>
+
+        <div x-show="view==='audit'" class="space-y-4">
+          <h1 class="text-2xl font-bold text-navy">My Activity Log</h1>
+          <p class="text-sm text-slate-500">Uploads, edits, approvals logged with user ID &amp; timestamp (§5).</p>
+          <ul class="space-y-2">
+            <template x-for="(a,i) in auditLog" :key="i">
+              <li class="bg-white border border-slate-100 rounded-xl px-4 py-3 text-sm flex justify-between gap-2">
+                <span x-text="a.action"></span>
+                <span class="text-xs text-slate-400 whitespace-nowrap" x-text="a.time"></span>
+              </li>
+            </template>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ===== STAFF DASHBOARD (Policy §2) ===== -->
+      <div x-show="role==='staff'">
+        <div x-show="view==='overview'" class="space-y-6">
+          <div>
+            <h1 class="text-2xl font-bold text-navy">Assigned Work Queue</h1>
+            <p class="text-sm text-slate-500 mt-1">Access limited to cases assigned to you (§2.1). Credentials are personal — never share.</p>
+          </div>
+          <div class="bg-amber-50 border border-amber-100 rounded-2xl p-4 text-sm text-amber-900">
+            <strong>Escalation rule (§2.4):</strong> Do not give legal advice, opinions or settlement decisions. Escalate to the assigned Partner.
+          </div>
+          <div class="space-y-3">
+            <div class="glass-card rounded-2xl p-5">
+              <div class="flex justify-between gap-2 flex-wrap">
+                <div>
+                  <span class="text-xs font-bold text-royal">LA-2026-0142</span>
+                  <h3 class="font-bold">TechStart — Doc checklist</h3>
+                  <p class="text-xs text-slate-500">Partner: Adv. Vikram · Your task: collect DSC docs</p>
+                </div>
+                <button @click="view='comms'" class="text-xs font-semibold text-royal">Log communication →</button>
+              </div>
+            </div>
+            <div class="glass-card rounded-2xl p-5">
+              <span class="text-xs font-bold text-royal">LA-2026-0188</span>
+              <h3 class="font-bold">Trademark — draft TM-A</h3>
+              <p class="text-xs text-slate-500">Submit draft for Partner approval (do not share with client)</p>
+            </div>
+          </div>
+        </div>
+
+        <div x-show="view==='comms'" class="space-y-6">
+          <div>
+            <h1 class="text-2xl font-bold text-navy">Document Client Communication</h1>
+            <p class="text-sm text-slate-500 mt-1">Calls, emails and meetings must be logged in the case file (§2.2).</p>
+          </div>
+          <form @submit.prevent="logComms()" class="glass-card rounded-2xl p-6 space-y-4">
+            <select x-model="comms.caseId" required class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm">
+              <option value="">Select case…</option>
+              <option>LA-2026-0142</option>
+              <option>LA-2026-0188</option>
+            </select>
+            <select x-model="comms.type" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm">
+              <option>Call</option><option>Email</option><option>Meeting</option>
+            </select>
+            <textarea x-model="comms.note" required rows="3" placeholder="Summary of communication…" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm"></textarea>
+            <button type="submit" class="btn-primary text-sm">Log to Case File</button>
+            <p class="text-xs text-green-600" x-show="commsMsg" x-text="commsMsg"></p>
+          </form>
+        </div>
+
+        <div x-show="view==='data'" class="space-y-6">
+          <div>
+            <h1 class="text-2xl font-bold text-navy">Data Handling</h1>
+            <p class="text-sm text-slate-500 mt-1">Do not download client docs to personal devices, email or cloud (§2.3).</p>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div class="glass-card rounded-2xl p-5">
+              <h3 class="font-bold text-navy mb-2">Report Breach / Phishing</h3>
+              <p class="text-xs text-slate-500 mb-3">Report immediately to Compliance / IT Officer.</p>
+              <button @click="reportBreach()" class="bg-red-600 text-white text-xs font-bold px-4 py-2.5 rounded-lg">Report Incident</button>
+              <p class="text-xs text-green-600 mt-2" x-show="breachMsg" x-text="breachMsg"></p>
+            </div>
+            <div class="glass-card rounded-2xl p-5">
+              <h3 class="font-bold text-navy mb-2">Escalate Legal Query</h3>
+              <p class="text-xs text-slate-500 mb-3">Client asked for advice? Forward to Partner — do not answer (§2.4).</p>
+              <button @click="escalate()" class="bg-navy text-white text-xs font-bold px-4 py-2.5 rounded-lg">Escalate to Partner</button>
+              <p class="text-xs text-green-600 mt-2" x-show="escalateMsg" x-text="escalateMsg"></p>
+            </div>
+          </div>
+        </div>
+
+        <div x-show="view==='audit'" class="space-y-4">
+          <h1 class="text-2xl font-bold text-navy">Audit Trail</h1>
+          <p class="text-sm text-slate-500">Uploads, edits and deletions are logged and auditable (§2.3, §5).</p>
+          <ul class="space-y-2">
+            <template x-for="(a,i) in auditLog" :key="i">
+              <li class="bg-white border border-slate-100 rounded-xl px-4 py-3 text-sm flex justify-between gap-2">
+                <span><span class="font-mono text-xs text-slate-400" x-text="email"></span> — <span x-text="a.action"></span></span>
+                <span class="text-xs text-slate-400 whitespace-nowrap" x-text="a.time"></span>
+              </li>
+            </template>
+          </ul>
+        </div>
+      </div>
+
+    </main>
+
+    <footer class="border-t border-slate-200 py-4 text-center text-xs text-slate-400">
+      LexAssist Portal · Compliant with DPDP Act 2023 &amp; IT Act 2000 ·
+      <a href="portal-usage-policy.html" class="text-royal">Usage Policy</a> ·
+      Grievance: support@lexassist.in
+    </footer>
+  </div>
+
+  <script>
+    function portalApp() {
+      return {
+        loggedIn: false,
+        role: 'client',
+        email: '',
+        password: '',
+        acceptedPolicy: false,
+        otpSent: false,
+        otp: '',
+        otpHint: '',
+        view: 'overview',
+        clientQuery: '',
+        queryMsg: '',
+        uploadMsg: '',
+        uploadErr: '',
+        approvalMsg: '',
+        conflict: { client: '', note: '' },
+        conflictMsg: '',
+        comms: { caseId: '', type: 'Call', note: '' },
+        commsMsg: '',
+        breachMsg: '',
+        escalateMsg: '',
+        auditLog: [
+          { action: 'Login session started', time: new Date().toLocaleString() }
+        ],
+        roleLabel() {
+          return this.role === 'client' ? 'Client' : this.role === 'partner' ? 'Partner' : 'Staff';
+        },
+        roleBadge() {
+          return this.role === 'client' ? 'Client · limited access' : this.role === 'partner' ? 'Partner / Advocate' : 'Office Staff';
+        },
+        tabsForRole() {
+          if (this.role === 'client') return [
+            { id: 'overview', label: 'My Cases' },
+            { id: 'messages', label: 'Queries' },
+            { id: 'documents', label: 'Documents' },
+            { id: 'billing', label: 'Billing' }
+          ];
+          if (this.role === 'partner') return [
+            { id: 'overview', label: 'Cases' },
+            { id: 'approvals', label: 'Approvals' },
+            { id: 'conflict', label: 'Conflicts' },
+            { id: 'audit', label: 'Audit Log' }
+          ];
+          return [
+            { id: 'overview', label: 'Queue' },
+            { id: 'comms', label: 'Comms Log' },
+            { id: 'data', label: 'Data & Escalate' },
+            { id: 'audit', label: 'Audit Trail' }
+          ];
+        },
+        sendOtp() {
+          this.otpSent = true;
+          this.otpHint = 'Demo OTP sent. Enter 123456 to continue.';
+        },
+        login() {
+          if (!this.acceptedPolicy) return;
+          if (this.role === 'client') {
+            if (!this.otpSent || this.otp !== '123456') {
+              this.otpHint = 'Invalid OTP. Use 123456 for demo.';
+              return;
+            }
+          }
+          this.loggedIn = true;
+          this.view = 'overview';
+          this.logAction('login', this.role);
+        },
+        logout() {
+          this.loggedIn = false;
+          this.password = '';
+          this.otp = '';
+          this.otpSent = false;
+          this.otpHint = '';
+          this.acceptedPolicy = false;
+        },
+        logAction(type, ref) {
+          this.auditLog.unshift({
+            action: type + (ref ? ' · ' + ref : ''),
+            time: new Date().toLocaleString()
+          });
+        },
+        submitQuery() {
+          if (!this.clientQuery.trim()) return;
+          this.queryMsg = 'Query logged on portal. You will receive a response within business days.';
+          this.logAction('client_query_submitted', 'formal');
+          this.clientQuery = '';
+        },
+        handleClientUpload(e) {
+          this.uploadMsg = '';
+          this.uploadErr = '';
+          const f = e.target.files && e.target.files[0];
+          if (!f) return;
+          const ok = /\.(pdf|jpe?g|png)$/i.test(f.name);
+          const max = 10 * 1024 * 1024;
+          if (!ok) { this.uploadErr = 'Format not allowed. Use PDF or JPEG only.'; return; }
+          if (f.size > max) { this.uploadErr = 'File exceeds 10 MB limit.'; return; }
+          this.uploadMsg = f.name + ' uploaded. Action logged for audit.';
+          this.logAction('document_upload', f.name);
+        },
+        approveDraft(name) {
+          this.approvalMsg = 'Approved: ' + name + ' may now be shared with client.';
+          this.logAction('draft_approved', name);
+        },
+        rejectDraft(name) {
+          this.approvalMsg = 'Rejected: ' + name + ' returned to staff.';
+          this.logAction('draft_rejected', name);
+        },
+        submitConflict() {
+          this.conflictMsg = 'Conflict disclosure recorded for Compliance review.';
+          this.logAction('conflict_disclosure', this.conflict.client);
+          this.conflict = { client: '', note: '' };
+        },
+        logComms() {
+          this.commsMsg = this.comms.type + ' logged on case ' + this.comms.caseId + '.';
+          this.logAction('comms_logged', this.comms.caseId + ' / ' + this.comms.type);
+          this.comms.note = '';
+        },
+        reportBreach() {
+          this.breachMsg = 'Incident reported to Compliance / IT Officer.';
+          this.logAction('breach_report', 'escalated');
+        },
+        escalate() {
+          this.escalateMsg = 'Query escalated to assigned Partner. Do not advise the client directly.';
+          this.logAction('escalation_to_partner', 'legal_advice_request');
+        }
+      };
+    }
+  </script>
+</body>
+</html>

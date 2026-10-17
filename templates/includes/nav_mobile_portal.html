@@ -1,0 +1,12 @@
+{# Search + portal links for mobile menus #}
+<div class="pt-2 pb-1 space-y-2">
+  <form action="{{ url_for('site_search') }}" method="get" class="flex gap-2">
+    <input type="search" name="q" placeholder="Search portal, services…"
+           class="flex-1 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-navy placeholder:text-slate-400 focus:outline-none focus:border-royal"/>
+    <button type="submit" class="rounded-xl bg-navy px-4 text-white text-xs font-semibold">Go</button>
+  </form>
+  <a href="{{ url_for('portal') }}"
+     class="block text-center text-sm font-bold text-royal border border-royal/30 bg-white px-4 py-3 rounded-xl">
+    Client Portal — Login
+  </a>
+</div>

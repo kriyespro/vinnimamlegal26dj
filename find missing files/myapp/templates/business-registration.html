@@ -1,0 +1,302 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Business Registration India — Private Limited, LLP, OPC | Vinnita Legal Consultancy</title>
+  <meta name="description" content="Register your business in India with Vinnita Legal Consultancy. Private Limited Company, LLP, OPC, Partnership Firm — online registration with expert CA support. Starting ₹5,499."/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{navy:{DEFAULT:'#0A1628'},royal:{DEFAULT:'#1E40AF',light:'#3B82F6'},gold:{DEFAULT:'#F59E0B',dark:'#D97706'}}}}}</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="font-inter bg-slate-50 text-navy" x-data="{ mobileOpen: false, scrolled: false, activeType: 'pvt', openFaq: null }" @scroll.window="scrolled = window.scrollY > 60">
+
+  <!-- NAVBAR -->
+  <nav class="nav-sticky w-full transition-all duration-300" :class="scrolled ? 'nav-scrolled' : 'bg-navy/95 backdrop-blur-md border-b border-white/10'">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+      <a href="{{ url_for('index') }}" class="flex items-center gap-2.5"><div class="w-9 h-9 rounded-xl bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A1628" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span class="text-white font-bold text-xl">Vinnita <span class="text-gold">Legal</span></span></a>
+      <div class="hidden lg:flex items-center gap-1">
+        <a href="{{ url_for('index') }}" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">Home</a>
+        <a href="{{ url_for('services') }}" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">All Services</a>
+        <a href="{{ url_for('pricing') }}" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">Pricing</a>
+        <a href="{{ url_for('about') }}" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">About</a>
+        <a href="{{ url_for('contact') }}" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">Contact</a>
+      </div>
+      {% include 'includes/nav_search_cta.html' %}
+      <button @click="mobileOpen = !mobileOpen" class="lg:hidden w-10 h-10 flex flex-col justify-center items-center gap-1.5 rounded-xl border border-white/20">
+        <span class="w-5 h-0.5 bg-white rounded"></span><span class="w-5 h-0.5 bg-white rounded"></span><span class="w-5 h-0.5 bg-white rounded"></span>
+      </button>
+    </div>
+    <div x-show="mobileOpen" x-cloak class="lg:hidden bg-navy border-t border-white/10 px-4 py-4 space-y-1">
+      <a href="{{ url_for('index') }}" class="block text-white/80 px-4 py-2.5 rounded-lg text-sm">Home</a>
+      <a href="{{ url_for('services') }}" class="block text-white/80 px-4 py-2.5 rounded-lg text-sm">All Services</a>
+      <a href="{{ url_for('pricing') }}" class="block text-white/80 px-4 py-2.5 rounded-lg text-sm">Pricing</a>
+      <a href="{{ url_for('contact') }}" class="block btn-primary text-sm mt-3 justify-center">Get Started</a>
+      {% include 'includes/nav_mobile_portal.html' %}
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero-gradient pt-20 pb-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <div class="section-badge" style="background:rgba(255,255,255,0.12);color:white;border:1px solid rgba(255,255,255,0.2);">Business Registration</div>
+          <h1 class="text-4xl md:text-5xl font-extrabold text-white mt-4 mb-5 leading-tight">Register Your Business<br/><span class="gradient-text">The Right Way</span></h1>
+          <p class="text-white/70 text-lg mb-6 leading-relaxed">From Private Limited to LLP, OPC to Partnership — we handle every type of business registration in India. 100% online, expert-managed, government-approved.</p>
+          <div class="flex gap-4 flex-wrap mb-8">
+            <a href="{{ url_for('contact') }}" class="btn-primary text-base px-7 py-3">Start Registration</a>
+            <a href="{{ url_for('contact') }}" class="btn-secondary text-base px-7 py-3">Free Consultation</a>
+          </div>
+          <div class="flex flex-wrap gap-4">
+            <div class="trust-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>100% Online Process</div>
+            <div class="trust-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>7–14 Days Delivery</div>
+            <div class="trust-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>MCA Approved Partner</div>
+          </div>
+        </div>
+        <div class="glass rounded-3xl p-6">
+          <h3 class="text-white font-bold text-lg mb-4">Quick Registration Enquiry</h3>
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+              <div class="mb-3 rounded-xl px-3 py-2 text-xs {% if category == 'error' %}bg-red-500/20 text-red-100{% else %}bg-green-500/20 text-green-100{% endif %}">{{ message }}</div>
+            {% endfor %}
+          {% endwith %}
+          <form method="post" action="{{ url_for('enquire') }}" class="space-y-3">
+            <input type="hidden" name="source" value="business-registration"/>
+            <input type="hidden" name="next" value="{{ url_for('business-registration') }}"/>
+            <input type="hidden" name="service" value="Business Registration"/>
+            <div><label class="form-label text-white/80 text-sm">Full Name *</label><input required name="name" type="text" placeholder="Your full name" class="form-input"/></div>
+            <div><label class="form-label text-white/80 text-sm">Phone Number *</label><input required name="phone" type="tel" placeholder="+91 98765 43210" class="form-input"/></div>
+            <div><label class="form-label text-white/80 text-sm">Business Type</label>
+              <select name="extra" class="form-input"><option>Private Limited Company</option><option>LLP</option><option>OPC</option><option>Partnership Firm</option><option>Sole Proprietorship</option></select>
+            </div>
+            <div><label class="form-label text-white/80 text-sm">City</label><input name="city" type="text" placeholder="Your city" class="form-input"/></div>
+            <button type="submit" class="btn-primary w-full justify-center text-base py-3">Get Free Callback</button>
+          </form>
+          <p class="text-white/50 text-xs text-center mt-3">Our expert will call within 30 minutes</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TYPES TABS -->
+  <section class="section-padding bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-10">
+        <div class="section-badge">Registration Types</div>
+        <h2 class="text-3xl md:text-4xl font-bold text-navy mt-2 mb-3">Choose Your Business Structure</h2>
+        <p class="text-slate-500 max-w-xl mx-auto">Not sure which structure suits you? Our experts provide a free 30-min consultation to help you decide.</p>
+      </div>
+
+      <!-- Tab Buttons -->
+      <div class="flex flex-wrap gap-2 justify-center mb-8">
+        <button @click="activeType='pvt'" :class="activeType==='pvt' ? 'bg-navy text-white' : 'bg-slate-100 text-slate-600'" class="px-5 py-2.5 rounded-full text-sm font-semibold transition-all">Private Limited</button>
+        <button @click="activeType='llp'" :class="activeType==='llp' ? 'bg-navy text-white' : 'bg-slate-100 text-slate-600'" class="px-5 py-2.5 rounded-full text-sm font-semibold transition-all">LLP</button>
+        <button @click="activeType='opc'" :class="activeType==='opc' ? 'bg-navy text-white' : 'bg-slate-100 text-slate-600'" class="px-5 py-2.5 rounded-full text-sm font-semibold transition-all">OPC</button>
+        <button @click="activeType='partnership'" :class="activeType==='partnership' ? 'bg-navy text-white' : 'bg-slate-100 text-slate-600'" class="px-5 py-2.5 rounded-full text-sm font-semibold transition-all">Partnership</button>
+        <button @click="activeType='sole'" :class="activeType==='sole' ? 'bg-navy text-white' : 'bg-slate-100 text-slate-600'" class="px-5 py-2.5 rounded-full text-sm font-semibold transition-all">Proprietorship</button>
+      </div>
+
+      <!-- Private Limited -->
+      <div x-show="activeType==='pvt'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
+        <div class="grid lg:grid-cols-2 gap-8 items-center">
+          <div>
+            <div class="inline-flex items-center gap-2 bg-blue-50 text-royal px-3 py-1 rounded-full text-sm font-semibold mb-4">Most Popular Choice</div>
+            <h3 class="text-2xl font-bold text-navy mb-3">Private Limited Company</h3>
+            <p class="text-slate-500 mb-5 leading-relaxed">The most preferred business structure for startups and growing businesses. Offers limited liability, separate legal entity status, easy fundraising, and high credibility.</p>
+            <div class="space-y-3 mb-6">
+              <div class="check-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">Minimum 2 Directors, 2 Shareholders</span></div>
+              <div class="check-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">Minimum ₹1 Lakh authorized capital</span></div>
+              <div class="check-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">Eligible for VC/Angel investment</span></div>
+              <div class="check-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">Deliverable in 7–10 working days</span></div>
+            </div>
+            <div class="bg-slate-50 rounded-2xl p-5 mb-6">
+              <div class="text-sm text-slate-500 mb-1">Starting from</div>
+              <div class="text-3xl font-extrabold text-navy">₹6,999 <span class="text-base font-normal text-slate-400">+ Govt. fees</span></div>
+              <div class="text-xs text-slate-400 mt-1">All-inclusive: DIN, DSC, Name Approval, MoA, AoA & Incorporation Certificate</div>
+            </div>
+            <a href="{{ url_for('contact') }}" class="btn-blue text-base px-7 py-3">Register Private Limited Company</a>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-blue-50 rounded-2xl p-5"><div class="text-2xl font-bold text-royal mb-1">1,20,000+</div><div class="text-sm text-slate-600">Pvt Ltd registered by us</div></div>
+            <div class="bg-green-50 rounded-2xl p-5"><div class="text-2xl font-bold text-emerald-600 mb-1">7 Days</div><div class="text-sm text-slate-600">Average delivery time</div></div>
+            <div class="bg-purple-50 rounded-2xl p-5"><div class="text-2xl font-bold text-purple-600 mb-1">100%</div><div class="text-sm text-slate-600">Online process</div></div>
+            <div class="bg-amber-50 rounded-2xl p-5"><div class="text-2xl font-bold text-amber-600 mb-1">4.9★</div><div class="text-sm text-slate-600">Client satisfaction</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LLP -->
+      <div x-show="activeType==='llp'" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
+        <div class="grid lg:grid-cols-2 gap-8 items-center">
+          <div>
+            <div class="inline-flex items-center gap-2 bg-purple-50 text-purple-600 px-3 py-1 rounded-full text-sm font-semibold mb-4">Great for Professionals</div>
+            <h3 class="text-2xl font-bold text-navy mb-3">Limited Liability Partnership</h3>
+            <p class="text-slate-500 mb-5 leading-relaxed">Best suited for professional services firms like CA practices, law firms, and consultancy businesses. Combines partnership flexibility with corporate limited liability.</p>
+            <div class="space-y-3 mb-6">
+              <div class="check-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">Minimum 2 Designated Partners required</span></div>
+              <div class="check-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">No minimum capital requirement</span></div>
+              <div class="check-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">Lower compliance requirements vs Pvt Ltd</span></div>
+              <div class="check-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">Deliverable in 10–14 working days</span></div>
+            </div>
+            <div class="bg-slate-50 rounded-2xl p-5 mb-6">
+              <div class="text-sm text-slate-500 mb-1">Starting from</div>
+              <div class="text-3xl font-extrabold text-navy">₹5,499 <span class="text-base font-normal text-slate-400">+ Govt. fees</span></div>
+            </div>
+            <a href="{{ url_for('contact') }}" class="btn-blue text-base px-7 py-3">Register an LLP</a>
+          </div>
+          <img src="https://images.unsplash.com/photo-1521737852567-6949f3f9f2b5?w=600&q=80&fit=crop" alt="LLP Registration" class="rounded-3xl w-full h-72 object-cover shadow-xl"/>
+        </div>
+      </div>
+
+      <!-- OPC -->
+      <div x-show="activeType==='opc'" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
+        <div class="grid lg:grid-cols-2 gap-8 items-center">
+          <div>
+            <div class="inline-flex items-center gap-2 bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-sm font-semibold mb-4">Solo Entrepreneurs</div>
+            <h3 class="text-2xl font-bold text-navy mb-3">One Person Company (OPC)</h3>
+            <p class="text-slate-500 mb-5 leading-relaxed">Designed for sole founders who want the benefits of a company without needing a co-founder. Single director, single shareholder, full company advantages.</p>
+            <div class="space-y-3 mb-6">
+              <div class="check-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">Only 1 Director + 1 Nominee Director needed</span></div>
+              <div class="check-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">Limited personal liability for sole founder</span></div>
+              <div class="check-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">Fewer compliance requirements than Pvt Ltd</span></div>
+            </div>
+            <div class="bg-slate-50 rounded-2xl p-5 mb-6">
+              <div class="text-sm text-slate-500 mb-1">Starting from</div>
+              <div class="text-3xl font-extrabold text-navy">₹5,999 <span class="text-base font-normal text-slate-400">+ Govt. fees</span></div>
+            </div>
+            <a href="{{ url_for('contact') }}" class="btn-blue text-base px-7 py-3">Register OPC</a>
+          </div>
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80&fit=crop" alt="OPC Registration" class="rounded-3xl w-full h-72 object-cover shadow-xl"/>
+        </div>
+      </div>
+
+      <!-- Partnership -->
+      <div x-show="activeType==='partnership'" x-cloak>
+        <div class="grid lg:grid-cols-2 gap-8 items-center">
+          <div>
+            <h3 class="text-2xl font-bold text-navy mb-3">Partnership Firm Registration</h3>
+            <p class="text-slate-500 mb-5">Best for 2–20 partners operating a traditional business together. Simple structure with shared profits and responsibilities.</p>
+            <div class="bg-slate-50 rounded-2xl p-5 mb-6"><div class="text-sm text-slate-500 mb-1">Starting from</div><div class="text-3xl font-extrabold text-navy">₹2,999 <span class="text-base font-normal text-slate-400">+ Govt. fees</span></div></div>
+            <a href="{{ url_for('contact') }}" class="btn-blue text-base px-7 py-3">Register Partnership</a>
+          </div>
+          <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&q=80&fit=crop" alt="Partnership" class="rounded-3xl w-full h-72 object-cover shadow-xl"/>
+        </div>
+      </div>
+
+      <!-- Proprietorship -->
+      <div x-show="activeType==='sole'" x-cloak>
+        <div class="grid lg:grid-cols-2 gap-8 items-center">
+          <div>
+            <h3 class="text-2xl font-bold text-navy mb-3">Sole Proprietorship</h3>
+            <p class="text-slate-500 mb-5">The simplest business structure for individual traders, freelancers and small businesses. No formal registration required — just GST/Shop Act registrations.</p>
+            <div class="bg-slate-50 rounded-2xl p-5 mb-6"><div class="text-sm text-slate-500 mb-1">Starting from</div><div class="text-3xl font-extrabold text-navy">₹1,499 <span class="text-base font-normal text-slate-400">all inclusive</span></div></div>
+            <a href="{{ url_for('contact') }}" class="btn-blue text-base px-7 py-3">Setup Proprietorship</a>
+          </div>
+          <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80&fit=crop" alt="Proprietorship" class="rounded-3xl w-full h-72 object-cover shadow-xl"/>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS STEPS -->
+  <section class="section-padding bg-slate-50">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-10">
+        <div class="section-badge">Process</div>
+        <h2 class="text-3xl font-bold text-navy mt-2 mb-3">How We Register Your Business</h2>
+      </div>
+      <div class="grid md:grid-cols-5 gap-4">
+        <div class="text-center" x-data="{}">
+          <div class="w-12 h-12 rounded-full bg-royal text-white font-bold text-lg flex items-center justify-center mx-auto mb-3">1</div>
+          <h4 class="font-semibold text-navy text-sm mb-1">Consultation</h4>
+          <p class="text-slate-500 text-xs">Free expert call to decide the right structure</p>
+        </div>
+        <div class="hidden md:flex items-center justify-center text-slate-300 text-2xl pb-8">→</div>
+        <div class="text-center">
+          <div class="w-12 h-12 rounded-full bg-royal text-white font-bold text-lg flex items-center justify-center mx-auto mb-3">2</div>
+          <h4 class="font-semibold text-navy text-sm mb-1">Document Collection</h4>
+          <p class="text-slate-500 text-xs">Upload PAN, Aadhaar, address proof — all digital</p>
+        </div>
+        <div class="hidden md:flex items-center justify-center text-slate-300 text-2xl pb-8">→</div>
+        <div class="text-center">
+          <div class="w-12 h-12 rounded-full bg-royal text-white font-bold text-lg flex items-center justify-center mx-auto mb-3">3</div>
+          <h4 class="font-semibold text-navy text-sm mb-1">Name Approval</h4>
+          <p class="text-slate-500 text-xs">MCA name availability check and reservation</p>
+        </div>
+      </div>
+      <div class="grid md:grid-cols-5 gap-4 mt-4">
+        <div class="text-center">
+          <div class="w-12 h-12 rounded-full bg-gold text-navy font-bold text-lg flex items-center justify-center mx-auto mb-3">4</div>
+          <h4 class="font-semibold text-navy text-sm mb-1">Filing & Submission</h4>
+          <p class="text-slate-500 text-xs">Expert files SPICe+, DSC, DIN on MCA portal</p>
+        </div>
+        <div class="hidden md:flex items-center justify-center text-slate-300 text-2xl pb-8">→</div>
+        <div class="text-center">
+          <div class="w-12 h-12 rounded-full bg-emerald-500 text-white font-bold text-lg flex items-center justify-center mx-auto mb-3">5</div>
+          <h4 class="font-semibold text-navy text-sm mb-1">Certificate Delivered</h4>
+          <p class="text-slate-500 text-xs">Official COI, PAN, TAN delivered to your email</p>
+        </div>
+        <div></div><div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section-padding bg-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-10">
+        <div class="section-badge">FAQ</div>
+        <h2 class="text-3xl font-bold text-navy mt-2 mb-3">Common Questions</h2>
+      </div>
+      <div class="space-y-2">
+        <div class="faq-item" x-data="{ open: false }">
+          <button class="faq-question" @click="open = !open">How long does company registration take in India?<svg class="faq-icon" :class="open ? 'rotate-45' : ''" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+          <div class="faq-answer" x-show="open" x-collapse>A Private Limited Company typically takes 7–10 working days after document submission. LLP takes 10–14 days. Timeline depends on MCA approval speed, which can vary.</div>
+        </div>
+        <div class="faq-item" x-data="{ open: false }">
+          <button class="faq-question" @click="open = !open">What documents are needed for company registration?<svg class="faq-icon" :class="open ? 'rotate-45' : ''" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+          <div class="faq-answer" x-show="open" x-collapse>You'll need: PAN card, Aadhaar card, passport-size photo, address proof (electricity bill/bank statement), and registered office address proof for all directors. Our team guides you through the entire document process.</div>
+        </div>
+        <div class="faq-item" x-data="{ open: false }">
+          <button class="faq-question" @click="open = !open">Can I register a company with just 1 person?<svg class="faq-icon" :class="open ? 'rotate-45' : ''" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+          <div class="faq-answer" x-show="open" x-collapse>Yes! An OPC (One Person Company) is designed exactly for this purpose. You act as both the sole Director and Shareholder. You'll need to nominate another person as a nominee director in case of your inability to act.</div>
+        </div>
+        <div class="faq-item" x-data="{ open: false }">
+          <button class="faq-question" @click="open = !open">What is the minimum capital required to start a company?<svg class="faq-icon" :class="open ? 'rotate-45' : ''" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+          <div class="faq-answer" x-show="open" x-collapse>There is no minimum paid-up capital requirement for a Private Limited Company since 2015. The authorized capital (at least ₹1 lakh) is the amount mentioned in your MOA. You don't need to deposit this amount upfront.</div>
+        </div>
+        <div class="faq-item" x-data="{ open: false }">
+          <button class="faq-question" @click="open = !open">Is a physical office address required for registration?<svg class="faq-icon" :class="open ? 'rotate-45' : ''" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+          <div class="faq-answer" x-show="open" x-collapse>Yes, a registered office address is mandatory. This can be a residential address, a co-working space, or a commercial office. You'll need an address proof document like an electricity bill and NOC from the property owner if it's rented.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="hero-gradient section-padding">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Ready to Register Your Business?</h2>
+      <p class="text-white/70 text-lg mb-8">Get expert guidance for free. Our specialists will help you choose the right structure and handle the entire process.</p>
+      <div class="flex gap-4 justify-center flex-wrap">
+        <a href="{{ url_for('contact') }}" class="btn-primary text-base px-8 py-3.5">Start Registration Now</a>
+        <a href="{{ url_for('pricing') }}" class="btn-secondary text-base px-8 py-3.5">View Pricing</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer-gradient text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+        <a href="{{ url_for('index') }}" class="flex items-center gap-2.5"><div class="w-8 h-8 rounded-lg bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0A1628" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span class="font-bold text-lg">Vinnita <span class="text-gold">Legal</span></span></a>
+        <div class="flex gap-6 text-sm text-white/60"><a href="{{ url_for('index') }}" class="hover:text-white">Home</a><a href="{{ url_for('services') }}" class="hover:text-white">Services</a><a href="{{ url_for('about') }}" class="hover:text-white">About</a><a href="{{ url_for('contact') }}" class="hover:text-white">Contact</a><a href="{{ url_for('faq') }}" class="hover:text-white">FAQ</a></div>
+        <span class="text-white/40 text-sm">© 2025 Vinnita Legal Consultancy. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+  <a href="https://wa.me/919876543210" target="_blank" class="whatsapp-float"><svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg></a>
+</body>
+</html>

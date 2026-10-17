@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% block title %}Legal Services | VinnitaLegal{% endblock %}
+{% block description %}Browse VinnitaLegal's legal and compliance services: business registration, trademark, partnership deeds, contracts, MSME, marriage registration and more.{% endblock %}
+{% block xdata %}, activeTab: 'all'{% endblock %}
+{% block content %}
+
+  <!-- PAGE HEADER -->
+  <section class="hero-gradient pt-20 pb-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+      <div class="section-badge" style="background:rgba(255,255,255,0.12);color:white;border:1px solid rgba(255,255,255,0.2);">50+ Services</div>
+      <h1 class="text-4xl md:text-5xl font-extrabold text-white mt-4 mb-4">All Legal Services</h1>
+      <p class="text-white/70 text-lg max-w-2xl mx-auto">Everything your business needs — from incorporation to IP protection, compliance to contracts. All under one roof.</p>
+    </div>
+  </section>
+
+  <!-- FILTER TABS -->
+  <section class="bg-white border-b border-slate-100 sticky top-16 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="flex gap-1 overflow-x-auto py-3 scrollbar-hide">
+        <button @click="activeTab='all'" :class="activeTab==='all' ? 'bg-navy text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-all">All Services</button>
+        <button @click="activeTab='registration'" :class="activeTab==='registration' ? 'bg-navy text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-all">Business Registration</button>
+        <button @click="activeTab='ip'" :class="activeTab==='ip' ? 'bg-navy text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-all">IP Protection</button>
+        <button @click="activeTab='compliance'" :class="activeTab==='compliance' ? 'bg-navy text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-all">Compliance</button>
+        <button @click="activeTab='legal'" :class="activeTab==='legal' ? 'bg-navy text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-all">Legal Drafting</button>
+        <button @click="activeTab='personal'" :class="activeTab==='personal' ? 'bg-navy text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-all">Personal Legal</button>
+        <button @click="activeTab='tools'" :class="activeTab==='tools' ? 'bg-navy text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-all">Tools & Experts</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES GRID -->
+  <section class="section-padding">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+
+      <!-- Business Registration -->
+      <div x-show="activeTab==='all' || activeTab==='registration'" class="mb-16">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
+          <h2 class="text-xl font-bold text-navy">Business Registration</h2>
+        </div>
+        <div class="services-grid">
+          <a href="{{ url_for('business-registration') }}" class="service-card">
+            <h3 class="font-bold text-navy mb-1">Private Limited Company</h3>
+            <p class="text-slate-500 text-sm mb-3">Most popular structure for startups. Full liability protection & investment-ready.</p>
+            <div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">From ₹6,999</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div>
+          </a>
+          <a href="{{ url_for('business-registration') }}" class="service-card">
+            <h3 class="font-bold text-navy mb-1">Limited Liability Partnership (LLP)</h3>
+            <p class="text-slate-500 text-sm mb-3">Flexible partnership with limited liability — ideal for professionals.</p>
+            <div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">From ₹5,499</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div>
+          </a>
+          <a href="{{ url_for('business-registration') }}" class="service-card">
+            <h3 class="font-bold text-navy mb-1">One Person Company (OPC)</h3>
+            <p class="text-slate-500 text-sm mb-3">Perfect for solo entrepreneurs who want company benefits.</p>
+            <div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">From ₹5,999</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div>
+          </a>
+          <a href="{{ url_for('business-registration') }}" class="service-card">
+            <h3 class="font-bold text-navy mb-1">Section 8 Company (NGO)</h3>
+            <p class="text-slate-500 text-sm mb-3">Registered non-profit company for social, charitable & educational purposes.</p>
+            <div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">From ₹8,999</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div>
+          </a>
+          <a href="{{ url_for('partnership') }}" class="service-card">
+            <h3 class="font-bold text-navy mb-1">Partnership Firm</h3>
+            <p class="text-slate-500 text-sm mb-3">Deed drafting + Registrar of Firms filing — bank & tender ready.</p>
+            <div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">From ₹2,999</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div>
+          </a>
+          <a href="{{ url_for('business-registration') }}" class="service-card">
+            <h3 class="font-bold text-navy mb-1">Sole Proprietorship</h3>
+            <p class="text-slate-500 text-sm mb-3">Simplest form of business for individual traders and freelancers.</p>
+            <div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">From ₹1,499</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div>
+          </a>
+        </div>
+      </div>
+
+      <!-- IP Protection -->
+      <div x-show="activeTab==='all' || activeTab==='ip'" class="mb-16">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></svg></div>
+          <h2 class="text-xl font-bold text-navy">IP Protection</h2>
+        </div>
+        <div class="services-grid">
+          <a href="{{ url_for('trademark') }}" class="service-card"><h3 class="font-bold text-navy mb-1">Trademark Registration</h3><p class="text-slate-500 text-sm mb-3">Protect your brand name, logo, and slogan across all 45 classes.</p><div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">From ₹6,999</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></a>
+          <a href="{{ url_for('trademark') }}" class="service-card"><h3 class="font-bold text-navy mb-1">Trademark Objection Reply</h3><p class="text-slate-500 text-sm mb-3">Expert legal response to trademark examination reports and objections.</p><div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">From ₹4,999</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></a>
+          <a href="{{ url_for('trademark') }}" class="service-card"><h3 class="font-bold text-navy mb-1">Trademark Renewal</h3><p class="text-slate-500 text-sm mb-3">Renew your registered trademark every 10 years to maintain protection.</p><div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">From ₹4,499</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></a>
+          <a href="{{ url_for('trademark') }}" class="service-card"><h3 class="font-bold text-navy mb-1">Copyright Registration</h3><p class="text-slate-500 text-sm mb-3">Protect your creative works — books, software, music, artwork and more.</p><div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">From ₹3,999</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></a>
+          <a href="{{ url_for('trademark') }}" class="service-card"><h3 class="font-bold text-navy mb-1">Patent Registration</h3><p class="text-slate-500 text-sm mb-3">Secure exclusive rights to your invention in India for 20 years.</p><div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">From ₹14,999</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></a>
+          <a href="{{ url_for('trademark') }}" class="service-card"><h3 class="font-bold text-navy mb-1">Design Registration</h3><p class="text-slate-500 text-sm mb-3">Protect the unique visual appearance of your product from copycats.</p><div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">From ₹5,999</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></a>
+        </div>
+      </div>
+
+      <!-- Compliance -->
+      <div x-show="activeTab==='all' || activeTab==='compliance'" class="mb-16">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-10 h-10 rounded-xl bg-sky-100 flex items-center justify-center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2"><path d="M10 18v-7"/><path d="M11.12 2.198a2 2 0 0 1 1.76.006l7.866 3.847c.476.233.31.949-.22.949H3.474c-.53 0-.695-.716-.22-.949z"/><path d="M14 18v-7"/><path d="M18 18v-7"/><path d="M3 22h18"/><path d="M6 18v-7"/></svg></div>
+          <h2 class="text-xl font-bold text-navy">Annual Compliance</h2>
+        </div>
+        <div class="services-grid">
+          <a href="{{ url_for('contact') }}" class="service-card"><h3 class="font-bold text-navy mb-1">Annual ROC Compliance</h3><p class="text-slate-500 text-sm mb-3">MGT-7, AOC-4 and other ROC filings done on time with expert oversight.</p><div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">From ₹4,999</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></a>
+          <a href="{{ url_for('deadlines') }}" class="service-card"><h3 class="font-bold text-navy mb-1">Director KYC (DIR-3)</h3><p class="text-slate-500 text-sm mb-3">Annual Director KYC filing to keep your DIN active. Due by September 30.</p><div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">From ₹1,499</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></a>
+          <a href="{{ url_for('contact') }}" class="service-card"><h3 class="font-bold text-navy mb-1">PF & ESI Registration</h3><p class="text-slate-500 text-sm mb-3">Employee provident fund and ESIC registration for businesses with 20+ employees.</p><div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">From ₹3,499</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></a>
+          <a href="{{ url_for('contact') }}" class="service-card"><h3 class="font-bold text-navy mb-1">FSSAI License</h3><p class="text-slate-500 text-sm mb-3">Food Safety and Standards Authority of India license for food businesses.</p><div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">From ₹2,999</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></a>
+          <a href="{{ url_for('contact') }}" class="service-card"><h3 class="font-bold text-navy mb-1">IEC Registration</h3><p class="text-slate-500 text-sm mb-3">Import Export Code registration for businesses looking to trade internationally.</p><div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">From ₹1,999</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></a>
+          <a href="{{ url_for('msme') }}" class="service-card"><h3 class="font-bold text-navy mb-1">MSME / Udyam Registration</h3><p class="text-slate-500 text-sm mb-3">Udyam certificate for MSMEs to access government benefits & priority lending.</p><div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">From ₹999</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></a>
+        </div>
+      </div>
+
+      <!-- Legal Drafting -->
+      <div x-show="activeTab==='all' || activeTab==='legal'" class="mb-16">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-10 h-10 rounded-xl bg-rose-100 flex items-center justify-center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <h2 class="text-xl font-bold text-navy">Legal Drafting</h2>
+        </div>
+        <div class="services-grid">
+          <a href="{{ url_for('contracts') }}" class="service-card"><h3 class="font-bold text-navy mb-1">NDA / Confidentiality Agreement</h3><p class="text-slate-500 text-sm mb-3">Protect confidential business information with a legally binding NDA.</p><div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">From ₹2,499</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></a>
+          <a href="{{ url_for('contracts') }}" class="service-card"><h3 class="font-bold text-navy mb-1">Employment Agreement</h3><p class="text-slate-500 text-sm mb-3">Comprehensive offer letters and employment contracts with IP clauses.</p><div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">From ₹3,999</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></a>
+          <a href="{{ url_for('contracts') }}" class="service-card"><h3 class="font-bold text-navy mb-1">Shareholder Agreement</h3><p class="text-slate-500 text-sm mb-3">Define rights, duties and exit rights of each shareholder clearly and legally.</p><div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">From ₹9,999</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></a>
+          <a href="{{ url_for('contracts') }}" class="service-card"><h3 class="font-bold text-navy mb-1">MoU Drafting</h3><p class="text-slate-500 text-sm mb-3">Memorandum of Understanding for business partnerships, JVs and collaborations.</p><div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">From ₹4,999</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></a>
+          <a href="{{ url_for('contracts') }}" class="service-card"><h3 class="font-bold text-navy mb-1">Vendor / Client Agreement</h3><p class="text-slate-500 text-sm mb-3">Service agreements and vendor contracts tailored to your business needs.</p><div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">From ₹3,499</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></a>
+          <a href="{{ url_for('contracts') }}" class="service-card"><h3 class="font-bold text-navy mb-1">Franchise Agreement</h3><p class="text-slate-500 text-sm mb-3">Comprehensive franchise agreements protecting both franchisor and franchisee.</p><div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">From ₹12,999</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></a>
+          <a href="{{ url_for('contracts') }}" class="service-card"><h3 class="font-bold text-navy mb-1">All Contracts Catalog</h3><p class="text-slate-500 text-sm mb-3">Browse NDAs, founders agreements, rentals, loans, IP assignment and more.</p><div class="flex items-center justify-between"><span class="text-xs text-royal bg-blue-50 px-2.5 py-1 rounded-full font-semibold">View all</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Open <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></a>
+        </div>
+      </div>
+
+      <!-- Personal Legal -->
+      <div x-show="activeTab==='all' || activeTab==='personal'" class="mb-16">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-10 h-10 rounded-xl bg-pink-100 flex items-center justify-center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FB923C" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <h2 class="text-xl font-bold text-navy">Personal Legal</h2>
+        </div>
+        <div class="services-grid">
+          <a href="{{ url_for('marriage-certificate') }}" class="service-card"><h3 class="font-bold text-navy mb-1">Marriage Certificate</h3><p class="text-slate-500 text-sm mb-3">Hindu Marriage Act &amp; Special Marriage Act registration support.</p><div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">From ₹4,999</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></a>
+          <a href="{{ url_for('adoption') }}" class="service-card"><h3 class="font-bold text-navy mb-1">Adoption Assistance</h3><p class="text-slate-500 text-sm mb-3">HAMA / JJ Act documentation, deeds and court petition guidance.</p><div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">Consult first</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Start <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></a>
+          <a href="{{ url_for('expert-portal') }}" class="service-card"><h3 class="font-bold text-navy mb-1">Family Lawyer Consult</h3><p class="text-slate-500 text-sm mb-3">Book a verified family-law expert via our Expert Portal.</p><div class="flex items-center justify-between"><span class="text-xs text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full font-semibold">From ₹999</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Book <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></a>
+        </div>
+      </div>
+
+      <!-- Tools & Experts -->
+      <div x-show="activeTab==='all' || activeTab==='tools'" class="mb-16">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+          <h2 class="text-xl font-bold text-navy">Tools &amp; Experts</h2>
+        </div>
+        <div class="services-grid">
+          <a href="{{ url_for('expert-portal') }}" class="service-card"><h3 class="font-bold text-navy mb-1">Expert Portal</h3><p class="text-slate-500 text-sm mb-3">Hire verified CAs, CSs and lawyers for any legal matter.</p><div class="flex items-center justify-between"><span class="text-xs text-royal bg-blue-50 px-2.5 py-1 rounded-full font-semibold">Free match</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Open <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></a>
+          <a href="{{ url_for('deadlines') }}" class="service-card"><h3 class="font-bold text-navy mb-1">Deadline Calendar</h3><p class="text-slate-500 text-sm mb-3">GST, ROC, TDS &amp; ITR due dates with reminder signup.</p><div class="flex items-center justify-between"><span class="text-xs text-royal bg-blue-50 px-2.5 py-1 rounded-full font-semibold">Free tool</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Open <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></a>
+          <a href="{{ url_for('legal-glossary') }}" class="service-card"><h3 class="font-bold text-navy mb-1">Legal Glossary</h3><p class="text-slate-500 text-sm mb-3">Plain-English meanings of DIN, GSTIN, Udyam, SPICe+ and more.</p><div class="flex items-center justify-between"><span class="text-xs text-royal bg-blue-50 px-2.5 py-1 rounded-full font-semibold">Free</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Open <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></a>
+          <a href="{{ url_for('blog') }}" class="service-card"><h3 class="font-bold text-navy mb-1">Guides &amp; Blog</h3><p class="text-slate-500 text-sm mb-3">How-to articles on registration, MSME, marriage and contracts.</p><div class="flex items-center justify-between"><span class="text-xs text-royal bg-blue-50 px-2.5 py-1 rounded-full font-semibold">Read</span><span class="text-royal text-sm font-semibold flex items-center gap-1">Open <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></a>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="hero-gradient rounded-3xl p-10 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-white mb-3">Don't See What You Need?</h2>
+        <p class="text-white/70 mb-6">Our experts handle 50+ services. Speak with a specialist and we'll find the perfect solution for you.</p>
+        <a href="{{ url_for('contact') }}" class="btn-primary text-base px-8 py-3.5">Talk to an Expert</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+{% endblock %}

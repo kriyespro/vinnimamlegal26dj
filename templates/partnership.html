@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+{% block title %}Partnership Firm Registration | VinnitaLegal{% endblock %}
+{% block description %}Partnership deed drafting, stamp duty guidance and Registrar of Firms filing for partnership firms across India, handled end to end.{% endblock %}
+{% block xdata %}, openFaq:null{% endblock %}
+{% block content %}
+
+  <section class="hero-gradient pt-20 pb-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <div class="section-badge" style="background:rgba(255,255,255,0.12);color:white;border:1px solid rgba(255,255,255,0.2);">Partnership Firm</div>
+          <h1 class="text-4xl md:text-5xl font-extrabold text-white mt-4 mb-5 leading-tight">Partnership Firm<br/><span class="gradient-text">Registration Online</span></h1>
+          <p class="text-white/70 text-lg mb-6 leading-relaxed">Deed drafting in 3 days, Registrar of Firms filing across all states, and bank-ready documents — managed through one transparent, end-to-end workflow.</p>
+          <div class="flex gap-4 flex-wrap mb-8">
+            <a href="{{ url_for('contact') }}" class="btn-primary text-base px-7 py-3">Start Registration</a>
+            <a href="{{ url_for('msme') }}" class="btn-secondary text-base px-7 py-3">Also Get MSME</a>
+          </div>
+          <div class="flex flex-wrap gap-4">
+            <div class="trust-badge">From ₹2,999</div>
+            <div class="trust-badge">Deed in 3 Days</div>
+            <div class="trust-badge">All 28 States</div>
+          </div>
+        </div>
+        <div class="glass rounded-3xl p-6">
+          <h3 class="text-white font-bold text-lg mb-4">Partnership Enquiry</h3>
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+              <div class="mb-3 rounded-xl px-3 py-2 text-xs {% if category == 'error' %}bg-red-500/20 text-red-100{% else %}bg-green-500/20 text-green-100{% endif %}">{{ message }}</div>
+            {% endfor %}
+          {% endwith %}
+          <form method="post" action="{{ url_for('enquire') }}" class="space-y-3">{{ csrf_input }}
+            <input type="hidden" name="source" value="partnership"/>
+            <input type="hidden" name="next" value="{{ url_for('partnership') }}"/>
+            <input type="hidden" name="service" value="Partnership Firm"/>
+            <div><label class="form-label text-white/80 text-sm">Full Name *</label><input required name="name" type="text" class="form-input" placeholder="Your full name"/></div>
+            <div><label class="form-label text-white/80 text-sm">Phone *</label><input required name="phone" type="tel" class="form-input" placeholder="{{ site.phone }}"/></div>
+            <div><label class="form-label text-white/80 text-sm">Number of Partners</label>
+              <select name="extra" class="form-input"><option>2 Partners</option><option>3 Partners</option><option>4 Partners</option><option>5+ Partners</option></select>
+            </div>
+            <div><label class="form-label text-white/80 text-sm">State</label><input name="city" type="text" class="form-input" placeholder="State of registration"/></div>
+            <button type="submit" class="btn-primary w-full justify-center text-base py-3">Get Free Callback</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-padding bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12">
+        <div class="section-badge">What's Included</div>
+        <h2 class="text-3xl font-bold text-navy mt-2 mb-3">Complete Partnership Package</h2>
+        <p class="text-slate-500 max-w-xl mx-auto">From deed to registration certificate — handled by our legal team.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="glass-card rounded-2xl p-6">
+          <div class="text-gold font-bold text-sm mb-2">STEP 1</div>
+          <h3 class="font-bold text-navy mb-2">Deed Drafting</h3>
+          <p class="text-slate-500 text-sm">Custom partnership deed covering profit share, capital, duties, admission/retirement and dispute clauses — on stamp paper of correct state value.</p>
+        </div>
+        <div class="glass-card rounded-2xl p-6">
+          <div class="text-gold font-bold text-sm mb-2">STEP 2</div>
+          <h3 class="font-bold text-navy mb-2">Document Prep</h3>
+          <p class="text-slate-500 text-sm">PAN/Aadhaar of partners, address proof, photos, affidavit and Form-I / state-specific application ready for filing.</p>
+        </div>
+        <div class="glass-card rounded-2xl p-6">
+          <div class="text-gold font-bold text-sm mb-2">STEP 3</div>
+          <h3 class="font-bold text-navy mb-2">Registrar Filing</h3>
+          <p class="text-slate-500 text-sm">We submit to the Registrar of Firms in your state (online or offline) and deliver the registration certificate.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-padding">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="grid lg:grid-cols-2 gap-10 items-start">
+        <div>
+          <h2 class="text-3xl font-bold text-navy mb-4">Why Register a Partnership?</h2>
+          <p class="text-slate-500 mb-6">Registration under the Indian Partnership Act, 1932 is optional — but banks, tenders, GST and MSME almost always require a registered deed.</p>
+          <div class="space-y-3">
+            <div class="check-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">Open current account in firm name</span></div>
+            <div class="check-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">Apply for GST, MSME &amp; licences</span></div>
+            <div class="check-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">Sue third parties in firm name</span></div>
+            <div class="check-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="text-sm">Clear rights &amp; profit-sharing on record</span></div>
+          </div>
+        </div>
+        <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
+          <div class="text-sm text-slate-500 mb-1">Starting from</div>
+          <div class="text-4xl font-extrabold text-navy mb-1">₹2,999 <span class="text-base font-normal text-slate-400">+ stamp duty</span></div>
+          <p class="text-xs text-slate-400 mb-6">Stamp duty varies by state (typically ₹200–₹2,000+)</p>
+          <ul class="space-y-2.5 text-sm text-slate-600 mb-6">
+            <li class="flex gap-2"><span class="text-green-500">✓</span> Expert-assisted deed drafting</li>
+            <li class="flex gap-2"><span class="text-green-500">✓</span> Deed submission to Registrar</li>
+            <li class="flex gap-2"><span class="text-green-500">✓</span> PAN application guidance</li>
+            <li class="flex gap-2"><span class="text-green-500">✓</span> Dedicated relationship manager</li>
+          </ul>
+          <a href="{{ url_for('contact') }}" class="btn-primary w-full justify-center">Get Started</a>
+          <p class="text-center text-xs text-slate-400 mt-3">Add-on: GST + MSME combo packages available</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAMP PAPER PRICES -->
+  <section class="section-padding bg-slate-50" id="stamp-paper">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-10">
+        <div class="section-badge">Stamp Paper Price</div>
+        <h2 class="text-3xl font-bold text-navy mt-2 mb-3">Partnership Deed — Stamp Duty by State</h2>
+        <p class="text-slate-500 max-w-2xl mx-auto">Your deed must be executed on non-judicial stamp paper / e-stamp of the correct value. Indicative rates (actual may depend on capital contribution):</p>
+      </div>
+      <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+        <table class="w-full text-sm text-left">
+          <thead class="bg-navy text-white">
+            <tr>
+              <th class="px-5 py-3.5 font-semibold">State</th>
+              <th class="px-5 py-3.5 font-semibold">Stamp Paper / Duty</th>
+              <th class="px-5 py-3.5 font-semibold">Notes</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-slate-600">
+            <tr><td class="px-5 py-3 font-medium text-navy">Delhi</td><td class="px-5 py-3">₹200 – ₹1,000</td><td class="px-5 py-3 text-xs">Often per partner caps; depends on capital</td></tr>
+            <tr class="bg-slate-50"><td class="px-5 py-3 font-medium text-navy">Maharashtra</td><td class="px-5 py-3">₹500 – ₹1,000+</td><td class="px-5 py-3 text-xs">Varies with capital &amp; clauses</td></tr>
+            <tr><td class="px-5 py-3 font-medium text-navy">Karnataka</td><td class="px-5 py-3">₹500 – ₹5,000</td><td class="px-5 py-3 text-xs">Higher flat rates in some cases</td></tr>
+            <tr class="bg-slate-50"><td class="px-5 py-3 font-medium text-navy">Tamil Nadu</td><td class="px-5 py-3">₹200 – ₹1,000</td><td class="px-5 py-3 text-xs">Capital slab based</td></tr>
+            <tr><td class="px-5 py-3 font-medium text-navy">Gujarat / Rajasthan / UP</td><td class="px-5 py-3">₹200 – ₹500</td><td class="px-5 py-3 text-xs">Common fixed / slab rates</td></tr>
+            <tr class="bg-slate-50"><td class="px-5 py-3 font-medium text-navy">Telangana</td><td class="px-5 py-3">≈ ₹2,000</td><td class="px-5 py-3 text-xs">Typical flat for partnership instrument</td></tr>
+            <tr><td class="px-5 py-3 font-medium text-navy">West Bengal &amp; others</td><td class="px-5 py-3">₹200 – ₹500</td><td class="px-5 py-3 text-xs">Confirm on state e-stamp portal</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-xs text-slate-400 text-center mt-4 mb-6">VinnitaLegal professional fee (from ₹2,999) is separate. Stamp duty is paid at actual cost to the state — we arrange e-stamp / stamp paper for you.</p>
+      <div class="text-center"><a href="{{ url_for('contact') }}" class="btn-primary text-sm">Confirm Stamp Cost for My State</a></div>
+    </div>
+  </section>
+
+  <section class="section-padding bg-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+      <h2 class="text-3xl font-bold text-navy text-center mb-8">FAQs</h2>
+      <div class="space-y-3">
+        <div class="border border-slate-200 rounded-xl overflow-hidden">
+          <button @click="openFaq = openFaq===1?null:1" class="w-full flex justify-between items-center p-5 text-left font-semibold text-navy"><span>Is partnership registration mandatory?</span><span x-text="openFaq===1?'−':'+'"></span></button>
+          <div x-show="openFaq===1" x-cloak class="px-5 pb-5 text-slate-500 text-sm">No — but registration is strongly recommended for banking, tenders, GST and MSME. Unregistered firms face limits under the Partnership Act.</div>
+        </div>
+        <div class="border border-slate-200 rounded-xl overflow-hidden">
+          <button @click="openFaq = openFaq===2?null:2" class="w-full flex justify-between items-center p-5 text-left font-semibold text-navy"><span>How long does it take?</span><span x-text="openFaq===2?'−':'+'"></span></button>
+          <div x-show="openFaq===2" x-cloak class="px-5 pb-5 text-slate-500 text-sm">Deed drafting: ~3 days. Registrar filing: 5–15 working days depending on whether your state supports online filing.</div>
+        </div>
+        <div class="border border-slate-200 rounded-xl overflow-hidden">
+          <button @click="openFaq = openFaq===3?null:3" class="w-full flex justify-between items-center p-5 text-left font-semibold text-navy"><span>Partnership vs LLP?</span><span x-text="openFaq===3?'−':'+'"></span></button>
+          <div x-show="openFaq===3" x-cloak class="px-5 pb-5 text-slate-500 text-sm">Partnership has unlimited personal liability; LLP gives limited liability with more compliance. Choose LLP if you want stronger asset protection — <a href="{{ url_for('business-registration') }}" class="text-royal">see LLP registration</a>.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero-gradient section-padding">
+    <div class="max-w-3xl mx-auto px-4 text-center">
+      <h2 class="text-3xl font-bold text-white mb-4">Ready to Register Your Partnership?</h2>
+      <p class="text-white/70 mb-6">Free consultation. Transparent pricing. All-India coverage.</p>
+      <a href="{{ url_for('contact') }}" class="btn-primary text-base px-8 py-3.5">Talk to an Expert</a>
+    </div>
+  </section>
+{% endblock %}

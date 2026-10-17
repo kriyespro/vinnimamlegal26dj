@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  {% set page_title %}{% block title %}VinnitaLegal | Legal Services in Gujarat{% endblock %}{% endset %}
+  {% set page_desc %}{% block description %}Business registration, trademark, contracts, MSME and marriage certificate services in Gujarat — expert-reviewed filings, clear prices and live case tracking.{% endblock %}{% endset %}
+  {% set canonical = request.build_absolute_uri(request.path) %}
+  <title>{{ page_title|trim }}</title>
+  <meta name="description" content="{{ page_desc|trim }}"/>
+  <meta name="robots" content="{% block robots %}index,follow,max-image-preview:large{% endblock %}"/>
+  <meta name="theme-color" content="#1D4ED8"/>
+  <link rel="canonical" href="{{ canonical }}"/>
+  <link rel="alternate" hreflang="en-IN" href="{{ canonical }}"/>
+  <link rel="alternate" hreflang="x-default" href="{{ canonical }}"/>
+  <meta property="og:site_name" content="VinnitaLegal"/>
+  <meta property="og:locale" content="en_IN"/>
+  <meta property="og:type" content="{% block og_type %}website{% endblock %}"/>
+  <meta property="og:title" content="{{ page_title|trim }}"/>
+  <meta property="og:description" content="{{ page_desc|trim }}"/>
+  <meta property="og:url" content="{{ canonical }}"/>
+  <meta property="og:image" content="{{ request.build_absolute_uri(static('img/og-default.jpg')) }}"/>
+  <meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/>
+  <meta property="og:image:alt" content="VinnitaLegal — legal and compliance services in Gujarat"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="{{ page_title|trim }}"/>
+  <meta name="twitter:description" content="{{ page_desc|trim }}"/>
+  <meta name="twitter:image" content="{{ request.build_absolute_uri(static('img/og-default.jpg')) }}"/>
+  {% block meta %}{% endblock %}
+  <link rel="preload" href="{{ url_for('static', filename='fonts/inter-latin-wght-normal.woff2') }}" as="font" type="font/woff2" crossorigin/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.min.css') }}"/>
+  <style>[x-cloak]{display:none!important}</style>
+  <script defer src="{{ url_for('static', filename='js/alpine.min.js') }}"></script>
+  {% block head_extra %}{% endblock %}
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}"/>
+  <link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='img/icon-192.png') }}"/>
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}"/>
+  <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}"/>
+  {% block jsonld %}
+    {% if request.path != '/' %}<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":{{ request.build_absolute_uri('/')|tojson }}},{"@type":"ListItem","position":2,"name":{{ page_title.split(' | ')[0]|trim|tojson }},"item":{{ canonical|tojson }}}]}</script>{% endif %}
+    {% for doc in jsonld or [] %}<script type="application/ld+json">{{ doc|safe }}</script>{% endfor %}
+  {% endblock %}
+</head>
+<body class="font-inter bg-slate-50 text-navy" x-data="{ mobileOpen: false, scrolled: false{% block xdata %}{% endblock %} }" @scroll.window="scrolled = window.scrollY > 60">
+
+  <a href="#main" class="skip-link">Skip to main content</a>
+  {% include 'components/nav.html' %}
+<main id="main">{% block content %}{% endblock %}</main>
+  {% include 'components/footer.html' %}
+{% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Legal Services by State — Delhi, Mumbai, Gujarat, UP, Bihar | LexAssist</title>
+  <meta name="description" content="Company registration, GST, trademark and partnership services in Delhi, Mumbai, Gujarat, Uttar Pradesh, Bihar, Karnataka and 15+ Indian states."/>
+  <link rel="stylesheet" href="styles.css"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{navy:{DEFAULT:'#0A1628'},royal:{DEFAULT:'#1E40AF'},gold:{DEFAULT:'#F59E0B'}}}}}</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="font-inter bg-slate-50 text-navy" x-data="statePage()" x-init="init()">
+
+  <nav class="nav-sticky w-full bg-navy/95 backdrop-blur-md border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+      <a href="index.html" class="text-white font-bold text-xl">Lex<span class="text-gold">Assist</span></a>
+      <div class="hidden md:flex gap-4 text-sm">
+        <a href="services.html" class="text-white/80 hover:text-white">All Services</a>
+        <a href="services-by-state.html" class="text-white bg-white/10 px-3 py-1.5 rounded-lg">By State</a>
+        <a href="contact.html" class="btn-primary text-sm py-2 px-4">Get Started</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero-gradient pt-24 pb-14 text-center px-4">
+    <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4" x-text="active ? 'Legal Services in ' + active.name : 'Services by State'"></h1>
+    <p class="text-white/70 max-w-2xl mx-auto" x-text="active ? active.cities : 'Pick your state — company registration, GST, trademark & more with local filing support.'"></p>
+  </section>
+
+  <section class="bg-white border-b sticky top-16 z-40">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex gap-2 overflow-x-auto">
+      <template x-for="r in regions" :key="r">
+        <button type="button" @click="region=r" :class="region===r?'bg-navy text-white':'bg-slate-100 text-slate-600'" class="px-4 py-2 rounded-full text-xs font-bold flex-shrink-0" x-text="r"></button>
+      </template>
+    </div>
+  </section>
+
+  <section class="section-padding max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="grid lg:grid-cols-12 gap-8">
+      <aside class="lg:col-span-4 space-y-2">
+        <h2 class="font-bold mb-3">Select state</h2>
+        <template x-for="st in filteredStates()" :key="st.slug">
+          <button type="button" @click="select(st.slug)" :id="st.slug"
+                  class="w-full text-left glass-card rounded-xl p-4 border-2 transition-colors"
+                  :class="active && active.slug===st.slug ? 'border-royal' : 'border-transparent hover:border-slate-200'">
+            <div class="font-bold text-sm" x-text="st.name"></div>
+            <div class="text-xs text-slate-500 mt-1" x-text="st.cities"></div>
+          </button>
+        </template>
+      </aside>
+      <div class="lg:col-span-8">
+        <template x-if="active">
+          <div>
+            <div class="grid sm:grid-cols-2 gap-4">
+              <template x-for="svc in services" :key="svc.href">
+                <a :href="svc.href + '?state=' + active.slug" class="glass-card rounded-2xl p-5 hover:border-royal border-2 border-transparent block">
+                  <div class="text-xs font-bold text-royal uppercase mb-1" x-text="active.name"></div>
+                  <h3 class="font-bold text-navy" x-text="svc.name"></h3>
+                  <p class="text-sm text-slate-500 mt-1" x-text="svc.desc"></p>
+                  <span class="inline-block mt-3 text-xs font-semibold text-royal">Get started →</span>
+                </a>
+              </template>
+            </div>
+            <div class="mt-8 glass-card rounded-2xl p-6 text-center">
+              <p class="text-slate-600 mb-4">Need an expert in <span x-text="active.name"></span>?</p>
+              <a href="contact.html" class="btn-primary">Request callback</a>
+            </div>
+          </div>
+        </template>
+        <template x-if="!active">
+          <div class="glass-card rounded-2xl p-8 text-center text-slate-500">Select a state from the list</div>
+        </template>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    function statePage() {
+      const states = [
+        {slug:'delhi',name:'Delhi NCR',region:'North',cities:'New Delhi · Noida · Gurgaon · Faridabad'},
+        {slug:'mumbai',name:'Mumbai & Maharashtra',region:'West',cities:'Mumbai · Pune · Nagpur · Thane'},
+        {slug:'gujarat',name:'Gujarat',region:'West',cities:'Ahmedabad · Surat · Vadodara · Rajkot'},
+        {slug:'uttar-pradesh',name:'Uttar Pradesh',region:'North',cities:'Lucknow · Noida · Kanpur · Varanasi'},
+        {slug:'bihar',name:'Bihar',region:'East',cities:'Patna · Gaya · Muzaffarpur · Bhagalpur'},
+        {slug:'karnataka',name:'Karnataka',region:'South',cities:'Bangalore · Mysore · Mangalore'},
+        {slug:'tamil-nadu',name:'Tamil Nadu',region:'South',cities:'Chennai · Coimbatore · Madurai'},
+        {slug:'west-bengal',name:'West Bengal',region:'East',cities:'Kolkata · Howrah · Siliguri'},
+        {slug:'rajasthan',name:'Rajasthan',region:'North',cities:'Jaipur · Jodhpur · Udaipur'},
+        {slug:'telangana',name:'Telangana',region:'South',cities:'Hyderabad · Warangal'},
+        {slug:'punjab',name:'Punjab',region:'North',cities:'Chandigarh · Ludhiana · Amritsar'},
+        {slug:'haryana',name:'Haryana',region:'North',cities:'Gurgaon · Faridabad · Panipat'},
+        {slug:'madhya-pradesh',name:'Madhya Pradesh',region:'Central',cities:'Bhopal · Indore · Gwalior'},
+        {slug:'kerala',name:'Kerala',region:'South',cities:'Kochi · Thiruvananthapuram · Kozhikode'},
+        {slug:'andhra-pradesh',name:'Andhra Pradesh',region:'South',cities:'Visakhapatnam · Vijayawada'},
+        {slug:'odisha',name:'Odisha',region:'East',cities:'Bhubaneswar · Cuttack · Rourkesh'},
+        {slug:'jharkhand',name:'Jharkhand',region:'East',cities:'Ranchi · Jamshedpur · Dhanbad'},
+        {slug:'assam',name:'Assam & North-East',region:'East',cities:'Guwahati · Shillong · Imphal'},
+        {slug:'chhattisgarh',name:'Chhattisgarh',region:'Central',cities:'Raipur · Bilaspur · Durg'}
+      ];
+      const services = [
+        {name:'Company Registration',desc:'Pvt Ltd, LLP, OPC',href:'business-registration.html'},
+        {name:'Partnership Firm',desc:'Deed & Registrar filing',href:'partnership.html'},
+        {name:'MSME / Udyam',desc:'Udyam certificate',href:'msme.html'},
+        {name:'GST Registration',desc:'GSTIN & returns',href:'gst-compliance.html'},
+        {name:'Trademark',desc:'Search & register brand',href:'trademark.html'},
+        {name:'Legal Contracts',desc:'NDA, SHA & agreements',href:'contracts.html'},
+        {name:'Marriage Certificate',desc:'Registration assistance',href:'marriage-certificate.html'},
+        {name:'Compliance Deadlines',desc:'ROC & GST reminders',href:'deadlines.html'}
+      ];
+      return {
+        states, services, regions:['All','North','West','South','East','Central'],
+        region:'All', active:null,
+        init() {
+          const hash = location.hash.replace('#','');
+          this.select(hash || 'delhi');
+        },
+        select(slug) {
+          this.active = this.states.find(s => s.slug === slug) || this.states[0];
+          history.replaceState(null,'','#' + this.active.slug);
+        },
+        filteredStates() {
+          return this.region === 'All' ? this.states : this.states.filter(s => s.region === this.region);
+        }
+      };
+    }
+  </script>
+</body>
+</html>

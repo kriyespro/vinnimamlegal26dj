@@ -1,0 +1,25 @@
+{# Shared dashboard macros. Import with context: {% from 'portal/_ui.html' import pill, kpi with context %} #}
+{% macro tone(status) -%}
+{%- set m = {
+  'In Progress':'blue','Awaiting Client':'orange','Under Review':'blue','On Hold':'slate','Completed':'green',
+  'pending':'orange','needed':'orange','uploaded':'blue','verified':'green','in_progress':'blue','done':'green',
+  'approved':'green','rejected':'red','Pending':'orange','Paid':'green','Refunded':'slate',
+  'Requested':'orange','Confirmed':'green','Cancelled':'red',
+  'new':'orange','whatsapp_sent':'blue','converted':'green','closed':'slate',
+  'action_needed':'orange','upcoming':'blue','completed':'green'} -%}
+{{- m.get(status, 'slate') -}}
+{%- endmacro %}
+
+{% macro pill(text, status=None) -%}
+<span class="pill pill-{{ tone(status or text) }}">{{ text }}</span>
+{%- endmacro %}
+
+{% macro kpi(label, value, color='text-navy', sub='', href='', click='') -%}
+{% if href %}<a href="{{ href }}" class="db-kpi">
+{% elif click %}<button type="button" @click="{{ click }}" class="db-kpi text-left w-full">
+{% else %}<div class="db-kpi">{% endif %}
+  <div class="l">{{ label }}</div><div class="v {{ color }}">{{ value }}</div>{% if sub %}<div class="s">{{ sub }}</div>{% endif %}
+{% if href %}</a>{% elif click %}</button>{% else %}</div>{% endif %}
+{%- endmacro %}
+
+{% macro money(v) -%}₹{{ '{:,.0f}'.format(v) }}{%- endmacro %}

@@ -1,0 +1,5 @@
+-r requirements.txt
+fonttools==4.*           # font subsetting (pyftsubset)
+pip-audit
+ruff
+bandit

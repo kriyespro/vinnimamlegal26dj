@@ -1,0 +1,24 @@
+{% extends 'console/base.html' %}
+{% from 'portal/_ui.html' import pill with context %}
+{% block title %}Users{% endblock %}
+{% block content %}
+  <div class="flex items-center justify-between gap-2 mb-2"><h1 class="text-xl font-extrabold">Users <span class="text-sm font-semibold text-slate-400">{{ page.paginator.count }}</span></h1><a href="{{ url_for('console_user_create') }}" class="db-btn db-btn-orange">+ Add user</a></div>
+  {% with selects = [('role', role, roles, 'All roles'), ('active', active, [('1','Active'),('0','Inactive')], 'Any status')] %}{% include 'console/_filters.html' %}{% endwith %}
+  <div class="db-panel !p-0 overflow-hidden">
+    {% for u in page %}
+      <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5 px-3 py-2 border-t border-slate-100 first:border-0 text-sm {{ 'opacity-60' if not u.is_active }}">
+        <div class="min-w-0 flex-1 basis-52"><div class="font-semibold truncate">{{ u.name }}{% if not u.is_active %} <span class="pill pill-red">inactive</span>{% endif %}</div><div class="db-meta truncate">{{ u.email }} · joined {{ u.date_joined.strftime('%d %b %Y') }}</div></div>
+        <form method="post" action="{{ url_for('console_user_quick', user_id=u.id) }}" class="flex items-center gap-1.5">{{ csrf_input }}
+          <input type="hidden" name="back" value="{{ request.get_full_path() }}"/>
+          <select name="role" aria-label="Role" class="db-in w-auto" @change="$el.form.submit()">{% for value, label in roles %}<option value="{{ value }}" {% if u.role == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select>
+        </form>
+        <div class="flex items-center gap-1.5">
+          <a href="{{ url_for('console_user_edit', user_id=u.id) }}" class="db-btn db-btn-ghost">Edit</a>
+          <form method="post" action="{{ url_for('console_user_quick', user_id=u.id) }}">{{ csrf_input }}<input type="hidden" name="back" value="{{ request.get_full_path() }}"/><input type="hidden" name="is_active" value="{{ '0' if u.is_active else '1' }}"/><button class="db-btn {{ 'db-btn-red' if u.is_active else 'db-btn-blue' }}">{{ 'Deactivate' if u.is_active else 'Activate' }}</button></form>
+          {% if u.is_active %}<form method="post" action="{{ url_for('console_user_reset', user_id=u.id) }}">{{ csrf_input }}<button class="db-btn db-btn-ghost" title="Email a password-reset link">Reset link</button></form>{% endif %}
+        </div>
+      </div>
+    {% else %}<p class="p-4 text-sm text-slate-400">No users match.</p>{% endfor %}
+  </div>
+  {% include 'console/_pager.html' %}
+{% endblock %}

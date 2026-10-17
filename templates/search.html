@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}{% if q %}Search: {{ q }} | VinnitaLegal{% else %}Search | VinnitaLegal{% endif %}{% endblock %}
+{% block description %}Search VinnitaLegal services and open the client portal quickly.{% endblock %}
+{% block robots %}noindex,follow{% endblock %}
+{% block content %}
+
+  <section class="hero-gradient pt-16 pb-12">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 text-center">
+      <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-3">Search VinnitaLegal</h1>
+      <p class="text-white/70 text-sm mb-6">Find services — or jump straight to the <a href="{{ url_for('portal') }}" class="text-gold font-semibold underline">Client Portal</a>.</p>
+      <form action="{{ url_for('site_search') }}" method="get" class="flex gap-2">
+        <input type="search" name="q" value="{{ q }}" autofocus
+               placeholder="Try “portal”, “login”, “trademark”…"
+               class="flex-1 rounded-2xl px-4 py-3 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-gold"/>
+        <button type="submit" class="btn-primary px-6">Search</button>
+      </form>
+    </div>
+  </section>
+
+  <main class="max-w-2xl mx-auto px-4 sm:px-6 py-10">
+    {% if not results %}
+      <p class="text-slate-500 text-center">No results. Try another term, or open the
+        <a href="{{ url_for('portal') }}" class="text-royal font-semibold">Client Portal</a>.</p>
+    {% else %}
+      <div class="space-y-2">
+        {% for item in results %}
+          <a href="{{ item.url }}"
+             class="block glass-card rounded-2xl p-4 hover:border-royal/30 transition-colors {% if item.portal %}border-amber-200 bg-amber-50/40{% endif %}">
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                <div class="font-bold text-navy">
+                  {{ item.title }}
+                  {% if item.portal %}<span class="ml-2 text-[10px] font-bold uppercase text-gold-dark bg-gold/15 px-1.5 py-0.5 rounded">Portal</span>{% endif %}
+                </div>
+                <div class="text-sm text-slate-500 mt-0.5">{{ item.blurb }}</div>
+              </div>
+              <svg class="w-4 h-4 text-slate-300 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="mt-10 text-center">
+      <a href="{{ url_for('portal') }}" class="btn-primary">Open Client Portal</a>
+    </div>
+  </main>
+{% endblock %}

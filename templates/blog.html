@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Legal Guides &amp; Resources | VinnitaLegal{% endblock %}
+{% block description %}Practical guides on company registration, MSME, partnership deeds, trademark, marriage registration and compliance deadlines.{% endblock %}
+{% block content %}
+
+  <section class="hero-gradient pt-20 pb-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+      <div class="section-badge" style="background:rgba(255,255,255,0.12);color:white;border:1px solid rgba(255,255,255,0.2);">Resources</div>
+      <h1 class="text-4xl md:text-5xl font-extrabold text-white mt-4 mb-4">Guides &amp; Insights</h1>
+      <p class="text-white/70 text-lg max-w-2xl mx-auto">Practical legal explainers for founders, MSMEs and families.</p>
+    </div>
+  </section>
+
+  <section class="section-padding">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <a href="{{ url_for('partnership') }}" class="glass-card rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+          <div class="h-36 bg-gradient-to-br from-blue-600 to-navy"></div>
+          <div class="p-5"><span class="text-xs font-bold text-royal">REGISTRATION</span><h3 class="font-bold text-navy mt-1 mb-2">Partnership Firm Registration — Fees &amp; Process</h3><p class="text-slate-500 text-sm">Deed drafting, stamp duty and Registrar of Firms filing explained.</p></div>
+        </a>
+        <a href="{{ url_for('msme') }}" class="glass-card rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+          <div class="h-36 bg-gradient-to-br from-emerald-500 to-navy"></div>
+          <div class="p-5"><span class="text-xs font-bold text-emerald-600">MSME</span><h3 class="font-bold text-navy mt-1 mb-2">Udyam Registration Benefits for MSMEs</h3><p class="text-slate-500 text-sm">Priority lending, tenders and how classification works.</p></div>
+        </a>
+        <a href="{{ url_for('deadlines') }}" class="glass-card rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+          <div class="h-36 bg-gradient-to-br from-amber-500 to-navy"></div>
+          <div class="p-5"><span class="text-xs font-bold text-amber-600">COMPLIANCE</span><h3 class="font-bold text-navy mt-1 mb-2">2026 Compliance Deadline Calendar</h3><p class="text-slate-500 text-sm">GST, ROC, TDS and ITR dates you should not miss.</p></div>
+        </a>
+        <a href="{{ url_for('marriage-certificate') }}" class="glass-card rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+          <div class="h-36 bg-gradient-to-br from-rose-500 to-navy"></div>
+          <div class="p-5"><span class="text-xs font-bold text-rose-600">PERSONAL</span><h3 class="font-bold text-navy mt-1 mb-2">Marriage Registration Online &amp; Offline</h3><p class="text-slate-500 text-sm">Hindu Marriage Act vs Special Marriage Act guide.</p></div>
+        </a>
+        <a href="{{ url_for('contracts') }}" class="glass-card rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+          <div class="h-36 bg-gradient-to-br from-violet-500 to-navy"></div>
+          <div class="p-5"><span class="text-xs font-bold text-violet-600">CONTRACTS</span><h3 class="font-bold text-navy mt-1 mb-2">Must-Have Contracts for Startups</h3><p class="text-slate-500 text-sm">NDA, founders agreement, employment and SHA basics.</p></div>
+        </a>
+        <a href="{{ url_for('legal-glossary') }}" class="glass-card rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+          <div class="h-36 bg-gradient-to-br from-sky-500 to-navy"></div>
+          <div class="p-5"><span class="text-xs font-bold text-sky-600">GLOSSARY</span><h3 class="font-bold text-navy mt-1 mb-2">Legal Terms Every Founder Should Know</h3><p class="text-slate-500 text-sm">DIN, DSC, GSTIN, SPICe+, Udyam and more — demystified.</p></div>
+        </a>
+      </div>
+    </div>
+  </section>
+{% endblock %}

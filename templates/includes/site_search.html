@@ -1,0 +1,120 @@
+{# Shared navbar search — prioritizes Client Portal for easy access.
+   Expects: site_search_items (from context processor)
+#}
+<div class="relative" x-data='siteNavSearch({{ site_search_items|tojson }})' @click.outside="open=false">
+  <div class="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-2.5 py-1.5 focus-within:border-royal focus-within:bg-white transition-colors">
+    <svg class="w-3.5 h-3.5 text-slate-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+    </svg>
+    <input type="search"
+           x-model="q"
+           @focus="open=true"
+           @input="open=true"
+           @keydown.escape="open=false; q=''"
+           @keydown.enter.prevent="goFirst()"
+           placeholder="Search portal, services…"
+           class="w-28 xl:w-40 bg-transparent text-navy text-xs placeholder:text-slate-400 focus:outline-none"
+           autocomplete="off"
+           aria-label="Search site"/>
+  </div>
+
+  <div x-show="open && (q.trim() || true)" x-cloak
+       x-transition:enter="transition ease-out duration-150"
+       x-transition:enter-start="opacity-0 translate-y-1"
+       x-transition:enter-end="opacity-100 translate-y-0"
+       class="absolute right-0 top-full mt-2 w-80 max-h-80 overflow-y-auto dd-solid rounded-2xl shadow-2xl z-[1100] p-2">
+    {# Always surface portal first when idle or matching #}
+    <template x-if="!q.trim()">
+      <div>
+        <div class="px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-wide text-slate-400">Quick links</div>
+        <a :href="portalUrl"
+           class="flex items-start gap-3 rounded-xl px-2.5 py-2.5 hover:bg-amber-50 transition-colors border border-amber-100 bg-amber-50/50 mb-1">
+          <div class="w-8 h-8 rounded-lg bg-gold/20 flex items-center justify-center shrink-0 mt-0.5">
+            <svg class="w-4 h-4 text-gold-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/>
+            </svg>
+          </div>
+          <div class="min-w-0">
+            <div class="text-sm font-bold text-navy">Client Portal</div>
+            <div class="text-xs text-slate-500">Login · track cases · upload documents</div>
+          </div>
+        </a>
+        <template x-for="item in featured" :key="item.url">
+          <a :href="item.url" class="flex items-start gap-2 rounded-xl px-2.5 py-2 hover:bg-slate-50 transition-colors">
+            <div class="min-w-0">
+              <div class="text-sm font-semibold text-navy" x-text="item.title"></div>
+              <div class="text-xs text-slate-400" x-text="item.blurb"></div>
+            </div>
+          </a>
+        </template>
+      </div>
+    </template>
+
+    <template x-if="q.trim()">
+      <div>
+        <div class="px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-wide text-slate-400">
+          Results <span x-text="results.length ? '('+results.length+')' : ''"></span>
+        </div>
+        <template x-if="!results.length">
+          <div class="px-2.5 py-3 text-xs text-slate-500">
+            No matches. Try “portal”, “login”, “trademark”, or “contact”.
+          </div>
+        </template>
+        <template x-for="item in results" :key="item.url">
+          <a :href="item.url"
+             class="flex items-start gap-2 rounded-xl px-2.5 py-2 hover:bg-blue-50 transition-colors"
+             :class="item.portal ? 'border border-amber-100 bg-amber-50/40' : ''">
+            <div class="min-w-0">
+              <div class="text-sm font-semibold text-navy flex items-center gap-1.5">
+                <span x-text="item.title"></span>
+                <span x-show="item.portal" class="text-[10px] font-bold uppercase tracking-wide text-gold-dark bg-gold/15 px-1.5 py-0.5 rounded">Portal</span>
+              </div>
+              <div class="text-xs text-slate-400" x-text="item.blurb"></div>
+            </div>
+          </a>
+        </template>
+      </div>
+    </template>
+  </div>
+</div>
+
+<script nonce="{{ request.csp_nonce }}">
+  function siteNavSearch(items) {
+    const list = Array.isArray(items) ? items : [];
+    const portal = list.find(i => i.portal) || list.find(i => /portal|login/i.test(i.title + ' ' + (i.keywords||'')));
+    return {
+      q: '',
+      open: false,
+      items: list,
+      get portalUrl() {
+        return portal ? portal.url : '/portal';
+      },
+      get featured() {
+        return list.filter(i => !i.portal).slice(0, 5);
+      },
+      get results() {
+        const q = this.q.trim().toLowerCase();
+        if (!q) return [];
+        const scored = this.items.map(item => {
+          const hay = (item.title + ' ' + (item.blurb||'') + ' ' + (item.keywords||'')).toLowerCase();
+          let score = 0;
+          if (item.portal && (q.includes('portal') || q.includes('login') || q.includes('dashboard') || q.includes('client') || q === 'sign' || q.includes('sign in'))) {
+            score += 100;
+          }
+          if (hay.startsWith(q)) score += 50;
+          if (item.title.toLowerCase().includes(q)) score += 30;
+          if (hay.includes(q)) score += 10;
+          // multi-word tokens
+          q.split(/\s+/).forEach(t => { if (t && hay.includes(t)) score += 5; });
+          return { item, score };
+        }).filter(x => x.score > 0)
+          .sort((a, b) => b.score - a.score || (b.item.portal ? 1 : 0) - (a.item.portal ? 1 : 0));
+        return scored.map(x => x.item).slice(0, 8);
+      },
+      goFirst() {
+        const target = this.q.trim() ? this.results[0] : (portal || null);
+        if (target) window.location.href = target.url;
+      }
+    };
+  }
+</script>

@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+db.sqlite3
+media/
+staticfiles/
+node_modules/
+legacy_flask/myapp/uploads/
+legacy_flask/myapp/*.db
+private_media/
+test_users.txt
+assets/tailwind.out.css
+*.log
+dump.rdb

@@ -1,0 +1,11 @@
+{# expects: q, selects (list of (name, current, choices, all_label)); hide_search optional #}
+<form method="get" class="mb-2 flex flex-wrap gap-2">
+  {% if not hide_search %}<input type="search" name="q" value="{{ q }}" aria-label="Search" placeholder="Search…" class="db-in flex-1 min-w-[10rem]"/>{% endif %}
+  {% for name, current, choices, all_label in selects %}
+    <select name="{{ name }}" aria-label="{{ all_label }}" class="db-in w-auto" @change="$el.form.submit()">
+      <option value="">{{ all_label }}</option>
+      {% for value, label in choices %}<option value="{{ value }}" {% if current == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
+    </select>
+  {% endfor %}
+  <button type="submit" class="db-btn db-btn-navy">Filter</button>
+</form>

@@ -1,0 +1,19 @@
+{% extends 'console/base.html' %}
+{% from 'portal/_ui.html' import pill with context %}
+{% block title %}Leads{% endblock %}
+{% block content %}
+  <h1 class="text-xl font-extrabold mb-2">Leads &amp; enquiries <span class="text-sm font-semibold text-slate-400">{{ page.paginator.count }}</span></h1>
+  {% with selects = [('status', status, statuses, 'All statuses')] %}{% include 'console/_filters.html' %}{% endwith %}
+  <div class="db-panel !p-0 overflow-hidden">
+    {% for l in page %}
+      <div class="flex flex-wrap items-center gap-x-3 gap-y-1 px-3 py-2 border-t border-slate-100 first:border-0 text-sm">
+        <div class="min-w-0 flex-1 basis-56"><div class="font-semibold truncate">{{ l.name }} <span class="db-meta font-normal">· {{ l.created_at.strftime('%d %b %H:%M') }}</span></div>
+          <div class="db-meta truncate"><a class="text-royal font-semibold" href="tel:{{ l.phone }}">{{ l.phone }}</a>{% if l.email %} · {{ l.email }}{% endif %}{% if l.city %} · {{ l.city }}{% endif %}</div></div>
+        <div class="db-meta basis-48 flex-1 min-w-0 truncate" title="{{ l.message }}"><b class="text-navy">{{ l.service or '—' }}</b> · {{ l.source_page }}{% if l.message %}<br>“{{ l.message }}”{% endif %}</div>
+        <form method="post" action="{{ url_for('console_lead_status', enquiry_id=l.id) }}">{{ csrf_input }}
+          <select name="status" aria-label="Lead status" class="db-in w-auto" @change="$el.form.submit()">{% for value, label in statuses %}<option value="{{ value }}" {% if l.status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></form>
+      </div>
+    {% else %}<p class="p-4 text-sm text-slate-400">No leads match.</p>{% endfor %}
+  </div>
+  {% include 'console/_pager.html' %}
+{% endblock %}

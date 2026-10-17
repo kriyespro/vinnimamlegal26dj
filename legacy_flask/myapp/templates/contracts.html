@@ -1,0 +1,171 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Legal Contracts &amp; Agreement Drafting India — NDA, Employment, MoU | LexAssist</title>
+  <meta name="description" content="Lawyer-drafted contracts for Indian businesses: NDA, employment agreement, shareholder agreement, MoU, vendor contracts, franchise & more. Custom drafting from ₹2,499."/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{navy:{DEFAULT:'#0A1628'},royal:{DEFAULT:'#1E40AF',light:'#3B82F6'},gold:{DEFAULT:'#F59E0B',dark:'#D97706'}}}}}</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="font-inter bg-slate-50 text-navy" x-data="{ mobileOpen:false, scrolled:false, filter:'all' }" @scroll.window="scrolled = window.scrollY > 60">
+
+  <nav class="nav-sticky w-full transition-all duration-300" :class="scrolled ? 'nav-scrolled' : 'bg-navy/95 backdrop-blur-md border-b border-white/10'">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+      <a href="{{ url_for('index') }}" class="flex items-center gap-2.5"><div class="w-9 h-9 rounded-xl bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A1628" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span class="text-white font-bold text-xl">Lex<span class="text-gold">Assist</span></span></a>
+      <div class="hidden lg:flex items-center gap-1">
+        <a href="{{ url_for('index') }}" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">Home</a>
+        <a href="{{ url_for('services') }}" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">Services</a>
+        <a href="{{ url_for('expert-portal') }}" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">Experts</a>
+        <a href="{{ url_for('contact') }}" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">Contact</a>
+      </div>
+      {% include 'includes/nav_search_cta.html' %}
+      <a href="{{ url_for('contact') }}" class="hidden lg:flex btn-primary text-sm py-2.5 px-5">Draft a Contract</a>
+      <button @click="mobileOpen = !mobileOpen" class="lg:hidden w-10 h-10 flex flex-col justify-center items-center gap-1.5 rounded-xl border border-white/20"><span class="w-5 h-0.5 bg-white rounded"></span><span class="w-5 h-0.5 bg-white rounded"></span><span class="w-5 h-0.5 bg-white rounded"></span></button>
+    </div>
+    <div x-show="mobileOpen" x-cloak class="lg:hidden bg-navy border-t border-white/10 px-4 py-4 space-y-1"><a href="{{ url_for('services') }}" class="block text-white/80 px-4 py-2.5 rounded-lg text-sm">Services</a><a href="{{ url_for('contact') }}" class="block btn-primary text-sm mt-3 justify-center">Draft a Contract</a></div>
+  </nav>
+
+  <section class="hero-gradient pt-20 pb-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+      <div class="section-badge" style="background:rgba(255,255,255,0.12);color:white;border:1px solid rgba(255,255,255,0.2);">Legal Drafting</div>
+      <h1 class="text-4xl md:text-5xl font-extrabold text-white mt-4 mb-4">Contracts That Protect<br/><span class="gradient-text">Your Business</span></h1>
+      <p class="text-white/70 text-lg max-w-2xl mx-auto">NDAs, employment agreements, shareholder deals, MoUs, vendor &amp; franchise contracts — drafted by Indian lawyers, tailored to your industry.</p>
+      <div class="mt-8 flex gap-4 justify-center flex-wrap">
+        <a href="{{ url_for('contact') }}" class="btn-primary text-base px-7 py-3">Request Drafting</a>
+        <a href="{{ url_for('expert-portal') }}" class="btn-secondary text-base px-7 py-3">Talk to a Lawyer</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white border-b border-slate-100 sticky top-16 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex gap-2 overflow-x-auto py-3">
+      <button @click="filter='all'" :class="filter==='all'?'bg-navy text-white':'bg-slate-100 text-slate-600'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold">All</button>
+      <button @click="filter='business'" :class="filter==='business'?'bg-navy text-white':'bg-slate-100 text-slate-600'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold">Business</button>
+      <button @click="filter='hr'" :class="filter==='hr'?'bg-navy text-white':'bg-slate-100 text-slate-600'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold">HR &amp; Employment</button>
+      <button @click="filter='ip'" :class="filter==='ip'?'bg-navy text-white':'bg-slate-100 text-slate-600'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold">IP &amp; Confidentiality</button>
+      <button @click="filter='property'" :class="filter==='property'?'bg-navy text-white':'bg-slate-100 text-slate-600'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold">Property</button>
+    </div>
+  </section>
+
+  <section class="section-padding">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="services-grid">
+        <a href="{{ url_for('contact') }}" x-show="filter==='all'||filter==='ip'" class="service-card">
+          <h3 class="font-bold text-navy mb-1">NDA / Confidentiality</h3>
+          <p class="text-slate-500 text-sm mb-3">Mutual or one-way NDA for founders, vendors, employees and investors.</p>
+          <span class="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-semibold">From ₹2,499</span>
+        </a>
+        <a href="{{ url_for('contact') }}" x-show="filter==='all'||filter==='hr'" class="service-card">
+          <h3 class="font-bold text-navy mb-1">Employment Agreement</h3>
+          <p class="text-slate-500 text-sm mb-3">Offer letters with IP assignment, non-compete and notice clauses.</p>
+          <span class="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-semibold">From ₹3,999</span>
+        </a>
+        <a href="{{ url_for('contact') }}" x-show="filter==='all'||filter==='business'" class="service-card">
+          <h3 class="font-bold text-navy mb-1">Shareholder Agreement</h3>
+          <p class="text-slate-500 text-sm mb-3">Voting rights, vesting, drag/tag, exit &amp; dispute resolution.</p>
+          <span class="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-semibold">From ₹9,999</span>
+        </a>
+        <a href="{{ url_for('contact') }}" x-show="filter==='all'||filter==='business'" class="service-card">
+          <h3 class="font-bold text-navy mb-1">MoU / JV Agreement</h3>
+          <p class="text-slate-500 text-sm mb-3">Memorandum of Understanding and joint venture frameworks.</p>
+          <span class="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-semibold">From ₹4,999</span>
+        </a>
+        <a href="{{ url_for('contact') }}" x-show="filter==='all'||filter==='business'" class="service-card">
+          <h3 class="font-bold text-navy mb-1">Vendor / Client Agreement</h3>
+          <p class="text-slate-500 text-sm mb-3">Service SOWs, SLAs, payment terms and liability caps.</p>
+          <span class="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-semibold">From ₹3,499</span>
+        </a>
+        <a href="{{ url_for('contact') }}" x-show="filter==='all'||filter==='business'" class="service-card">
+          <h3 class="font-bold text-navy mb-1">Franchise Agreement</h3>
+          <p class="text-slate-500 text-sm mb-3">Territory, royalties, brand use and termination rights.</p>
+          <span class="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-semibold">From ₹12,999</span>
+        </a>
+        <a href="{{ url_for('contact') }}" x-show="filter==='all'||filter==='business'" class="service-card">
+          <h3 class="font-bold text-navy mb-1">Partnership Deed</h3>
+          <p class="text-slate-500 text-sm mb-3">Full deed for firm registration — linked to our partnership service.</p>
+          <span class="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-semibold">From ₹2,999</span>
+        </a>
+        <a href="{{ url_for('contact') }}" x-show="filter==='all'||filter==='hr'" class="service-card">
+          <h3 class="font-bold text-navy mb-1">Consultant / Freelancer Agreement</h3>
+          <p class="text-slate-500 text-sm mb-3">Independent contractor terms with deliverables and IP ownership.</p>
+          <span class="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-semibold">From ₹2,999</span>
+        </a>
+        <a href="{{ url_for('contact') }}" x-show="filter==='all'||filter==='property'" class="service-card">
+          <h3 class="font-bold text-navy mb-1">Rental / Lease Agreement</h3>
+          <p class="text-slate-500 text-sm mb-3">Residential &amp; commercial rent agreements, e-stamp ready.</p>
+          <span class="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-semibold">From ₹1,999</span>
+        </a>
+        <a href="{{ url_for('contact') }}" x-show="filter==='all'||filter==='business'" class="service-card">
+          <h3 class="font-bold text-navy mb-1">Loan Agreement</h3>
+          <p class="text-slate-500 text-sm mb-3">Inter-company or founder loans with interest and repayment schedule.</p>
+          <span class="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-semibold">From ₹3,499</span>
+        </a>
+        <a href="{{ url_for('contact') }}" x-show="filter==='all'||filter==='ip'" class="service-card">
+          <h3 class="font-bold text-navy mb-1">IP Assignment Deed</h3>
+          <p class="text-slate-500 text-sm mb-3">Transfer of trademark, copyright or patent rights.</p>
+          <span class="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-semibold">From ₹4,499</span>
+        </a>
+        <a href="{{ url_for('contact') }}" x-show="filter==='all'||filter==='business'" class="service-card">
+          <h3 class="font-bold text-navy mb-1">Founders Agreement</h3>
+          <p class="text-slate-500 text-sm mb-3">Equity split, roles, vesting and founder exit terms.</p>
+          <span class="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-semibold">From ₹7,999</span>
+        </a>
+      </div>
+
+      <!-- STAMP PAPER PRICES -->
+      <div class="mt-16" id="stamp-paper">
+        <div class="text-center mb-8">
+          <div class="section-badge">Stamp Paper Price</div>
+          <h2 class="text-3xl font-bold text-navy mt-2 mb-3">Stamp Paper Cost for Contracts</h2>
+          <p class="text-slate-500 max-w-xl mx-auto">Drafting fee is listed on each card. Stamp paper / e-stamp is extra and paid at state rates:</p>
+        </div>
+        <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white mb-6">
+          <table class="w-full text-sm text-left">
+            <thead class="bg-navy text-white">
+              <tr>
+                <th class="px-5 py-3.5 font-semibold">Document</th>
+                <th class="px-5 py-3.5 font-semibold">Typical Stamp Paper</th>
+                <th class="px-5 py-3.5 font-semibold">LexAssist Drafting</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-600">
+              <tr><td class="px-5 py-3 font-medium text-navy">NDA / Confidentiality</td><td class="px-5 py-3">₹100 – ₹500</td><td class="px-5 py-3">From ₹2,499</td></tr>
+              <tr class="bg-slate-50"><td class="px-5 py-3 font-medium text-navy">Employment Agreement</td><td class="px-5 py-3">₹100 – ₹200</td><td class="px-5 py-3">From ₹3,999</td></tr>
+              <tr><td class="px-5 py-3 font-medium text-navy">Consultant / Freelancer</td><td class="px-5 py-3">₹100 – ₹500</td><td class="px-5 py-3">From ₹2,999</td></tr>
+              <tr class="bg-slate-50"><td class="px-5 py-3 font-medium text-navy">Service / Vendor Agreement</td><td class="px-5 py-3">₹100 – ₹500</td><td class="px-5 py-3">From ₹3,499</td></tr>
+              <tr><td class="px-5 py-3 font-medium text-navy">MoU / JV</td><td class="px-5 py-3">₹100 – ₹500</td><td class="px-5 py-3">From ₹4,999</td></tr>
+              <tr class="bg-slate-50"><td class="px-5 py-3 font-medium text-navy">Shareholder / Founders Agreement</td><td class="px-5 py-3">₹200 – ₹1,000+</td><td class="px-5 py-3">From ₹7,999</td></tr>
+              <tr><td class="px-5 py-3 font-medium text-navy">Partnership Deed</td><td class="px-5 py-3">₹200 – ₹5,000 (by state)</td><td class="px-5 py-3">From ₹2,999</td></tr>
+              <tr class="bg-slate-50"><td class="px-5 py-3 font-medium text-navy">Rental / Lease (&lt; 1 year)</td><td class="px-5 py-3">₹100 – ₹500</td><td class="px-5 py-3">From ₹1,999</td></tr>
+              <tr><td class="px-5 py-3 font-medium text-navy">Loan Agreement</td><td class="px-5 py-3">0.1% – 0.5% of amount*</td><td class="px-5 py-3">From ₹3,499</td></tr>
+              <tr class="bg-slate-50"><td class="px-5 py-3 font-medium text-navy">Power of Attorney (general)</td><td class="px-5 py-3">₹100 – ₹500</td><td class="px-5 py-3">On request</td></tr>
+              <tr><td class="px-5 py-3 font-medium text-navy">Adoption Deed</td><td class="px-5 py-3">₹25 – ₹500 (state-wise)</td><td class="px-5 py-3"><a href="{{ url_for('adoption') }}" class="text-royal">See adoption</a></td></tr>
+              <tr class="bg-slate-50"><td class="px-5 py-3 font-medium text-navy">Marriage affidavits</td><td class="px-5 py-3">₹10 – ₹100 each</td><td class="px-5 py-3"><a href="marriage-certificate.html#stamp-paper" class="text-royal">See marriage</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-xs text-slate-400 text-center mb-6">*Ad valorem rates apply in many states for loans and long leases. Property sale deeds attract much higher % stamp duty (typically 3–8%) — ask us for a quote. We use SHCIL e-stamping where available.</p>
+        <div class="text-center"><a href="{{ url_for('contact') }}" class="btn-primary">Get Stamp + Drafting Quote</a></div>
+      </div>
+
+      <div class="mt-14 hero-gradient rounded-3xl p-10 text-center">
+        <h2 class="text-2xl font-bold text-white mb-3">Need a Custom Contract?</h2>
+        <p class="text-white/70 mb-6">Describe your deal — our lawyers draft from scratch or review what you already have.</p>
+        <a href="{{ url_for('contact') }}" class="btn-primary">Get a Quote</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer-gradient text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 flex flex-col md:flex-row justify-between items-center gap-4">
+      <a href="{{ url_for('index') }}" class="font-bold text-lg">Lex<span class="text-gold">Assist</span></a>
+      <div class="flex gap-5 text-sm text-white/60"><a href="{{ url_for('marriage-certificate') }}" class="hover:text-white">Marriage Certificate</a><a href="{{ url_for('adoption') }}" class="hover:text-white">Adoption</a><a href="{{ url_for('contact') }}" class="hover:text-white">Contact</a></div>
+      <span class="text-white/40 text-sm">© 2025 LexAssist</span>
+    </div>
+  </footer>
+  <a href="https://wa.me/919876543210" target="_blank" class="whatsapp-float" aria-label="WhatsApp"><svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg></a>
+</body>
+</html>

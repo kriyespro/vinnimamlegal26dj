@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Client Dashboard — Vinnita Legal Consultancy</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{navy:{DEFAULT:'#0A1628'},royal:{DEFAULT:'#1E40AF',light:'#3B82F6'},gold:{DEFAULT:'#F59E0B',dark:'#D97706'}}}}}</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="font-inter bg-slate-50 text-navy min-h-screen flex flex-col"
+      x-data="{ openJob: {{ (jobs[0].case.id if jobs else 'null') }}, tab: 'progress' }">
+
+  <header class="bg-navy text-white sticky top-0 z-50 border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
+      <div class="flex items-center gap-3">
+        <a href="{{ url_for('index') }}" class="font-bold text-lg">Vinnita <span class="text-gold">Legal</span></a>
+        <span class="hidden sm:inline text-xs px-2.5 py-1 rounded-full bg-white/10 text-white/80">Client Dashboard</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="{{ url_for('index') }}" class="text-xs text-white/50 hover:text-white/80 hidden sm:inline">← Site</a>
+        <span class="text-xs text-white/60 hidden sm:inline">{{ user.name }}</span>
+        <span class="text-xs text-white/40 truncate max-w-[120px]">{{ user.email }}</span>
+        <form method="post" action="{{ url_for('portal_logout') }}">
+          <button type="submit" class="text-xs font-semibold bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg">Logout</button>
+        </form>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="mb-6 space-y-2">
+          {% for category, message in messages %}
+            <div class="rounded-xl px-4 py-3 text-sm {% if category == 'error' %}bg-red-50 text-red-700 border border-red-100{% else %}bg-green-50 text-green-700 border border-green-100{% endif %}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="mb-8">
+      <h1 class="text-2xl md:text-3xl font-extrabold text-navy">My Jobs</h1>
+      <p class="text-slate-500 text-sm mt-1">Track progress, see your assigned team, upload documents, and message the firm — all in one place.</p>
+    </div>
+
+    {% if not jobs %}
+      <div class="glass-card rounded-2xl p-10 text-center max-w-lg mx-auto">
+        <div class="w-16 h-16 rounded-2xl bg-royal/10 flex items-center justify-center mx-auto mb-5">
+          <svg class="w-8 h-8 text-royal" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+        </div>
+        <h2 class="text-xl font-bold text-navy mb-2">Welcome, {{ user.name.split()[0] }}!</h2>
+        <p class="text-slate-500 text-sm mb-6">
+          Your dashboard is ready. Once you enquire about a service, your case, documents and progress will appear here.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="{{ url_for('contact') }}" class="btn-primary">Request a service</a>
+          <a href="{{ url_for('services') }}" class="rounded-xl border border-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-50">Browse services</a>
+        </div>
+        <p class="text-xs text-slate-400 mt-6">Questions? WhatsApp or call the office — details on the <a href="{{ url_for('contact') }}" class="text-royal underline">Contact page</a>.</p>
+      </div>
+    {% else %}
+
+    <div class="grid md:grid-cols-3 gap-4 mb-8">
+      <div class="glass-card rounded-2xl p-5">
+        <div class="text-xs text-slate-400 font-semibold uppercase">Active jobs</div>
+        <div class="text-3xl font-extrabold mt-1">{{ jobs|length }}</div>
+      </div>
+      <div class="glass-card rounded-2xl p-5">
+        <div class="text-xs text-slate-400 font-semibold uppercase">Docs still needed</div>
+        <div class="text-3xl font-extrabold text-amber-600 mt-1">{{ needed_docs_total }}</div>
+      </div>
+      <div class="glass-card rounded-2xl p-5">
+        <div class="text-xs text-slate-400 font-semibold uppercase">Amount due</div>
+        <div class="text-3xl font-extrabold text-royal mt-1">₹{{ '%.0f'|format(due_total) }}</div>
+      </div>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-5 mb-8">
+      <div class="glass-card rounded-2xl p-6">
+        <div class="flex items-start justify-between gap-3 mb-4">
+          <div>
+            <h2 class="font-bold text-navy">Action &amp; compliance centre</h2>
+            <p class="text-xs text-slate-500 mt-1">Deadlines and documents that need your attention.</p>
+          </div>
+          {% if action_alerts_total %}
+            <span class="bg-amber-100 text-amber-700 text-xs font-bold px-2.5 py-1 rounded-full">{{ action_alerts_total }} action needed</span>
+          {% endif %}
+        </div>
+        <div class="space-y-2">
+          {% for job in jobs %}
+            {% for alert in job.alerts %}
+              {% if alert.status != 'completed' %}
+                <div class="flex items-start justify-between gap-3 rounded-xl bg-slate-50 px-3 py-2.5">
+                  <div>
+                    <div class="text-xs font-semibold text-navy">{{ alert.title }}</div>
+                    <div class="text-[11px] text-slate-400">{{ job.case.case_no }} · {{ alert.category }}</div>
+                  </div>
+                  <div class="text-right shrink-0">
+                    <div class="text-xs font-semibold {% if alert.status == 'action_needed' %}text-amber-600{% else %}text-royal{% endif %}">{{ alert.due_date }}</div>
+                    <div class="text-[10px] text-slate-400">{{ alert.status.replace('_', ' ') }}</div>
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-6">
+        <h2 class="font-bold text-navy">Book an expert consultation</h2>
+        <p class="text-xs text-slate-500 mt-1 mb-4">Choose a matter, preferred slot and call mode. Your expert will confirm.</p>
+        <form method="post" action="{{ url_for('portal_consultation_book') }}" class="grid sm:grid-cols-2 gap-3">
+          <select name="case_id" class="rounded-xl border border-slate-200 px-3 py-2 text-xs">
+            <option value="">General consultation</option>
+            {% for job in jobs %}<option value="{{ job.case.id }}">{{ job.case.case_no }}</option>{% endfor %}
+          </select>
+          <select name="practice_area" required class="rounded-xl border border-slate-200 px-3 py-2 text-xs">
+            <option value="">Practice area</option>
+            <option>Business &amp; MCA</option>
+            <option>Trademark &amp; IP</option>
+            <option>Contracts</option>
+            <option>Family Law</option>
+          </select>
+          <input type="date" name="preferred_date" required class="rounded-xl border border-slate-200 px-3 py-2 text-xs"/>
+          <input type="time" name="preferred_time" required class="rounded-xl border border-slate-200 px-3 py-2 text-xs"/>
+          <select name="mode" class="rounded-xl border border-slate-200 px-3 py-2 text-xs">
+            <option>Video</option><option>Phone</option>
+          </select>
+          <input type="text" name="note" placeholder="What should the expert review?"
+                 class="rounded-xl border border-slate-200 px-3 py-2 text-xs"/>
+          <button type="submit" class="btn-primary text-xs sm:col-span-2 justify-center">Request consultation</button>
+        </form>
+        {% if consultations %}
+          <div class="mt-4 pt-4 border-t border-slate-100">
+            <div class="text-xs font-semibold text-slate-500 mb-2">Upcoming requests</div>
+            {% for co in consultations[:3] %}
+              <div class="flex justify-between gap-2 text-xs py-1.5">
+                <span>{{ co.preferred_date }} at {{ co.preferred_time }} · {{ co.mode }}</span>
+                <span class="font-semibold text-royal">{{ co.status }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="grid lg:grid-cols-12 gap-6">
+      <!-- Job list -->
+      <aside class="lg:col-span-4 space-y-3">
+        {% for job in jobs %}
+          {% set c = job.case %}
+          <button type="button" @click="openJob={{ c.id }}; tab='progress'"
+                  class="w-full text-left glass-card rounded-2xl p-4 border-2 transition-colors"
+                  :class="openJob==={{ c.id }} ? 'border-royal' : 'border-transparent hover:border-slate-200'">
+            <div class="flex justify-between gap-2 items-start">
+              <div>
+                <div class="text-xs font-bold text-royal">{{ c.case_no }}</div>
+                <h3 class="font-bold text-navy text-sm mt-0.5">{{ c.title }}</h3>
+              </div>
+              <span class="text-[10px] font-semibold px-2 py-1 rounded-full shrink-0
+                {% if c.status == 'Closed' %}bg-slate-100 text-slate-600
+                {% elif c.status == 'Awaiting Client' %}bg-amber-50 text-amber-700
+                {% else %}bg-green-50 text-green-700{% endif %}">{{ c.status }}</span>
+            </div>
+            <div class="mt-3">
+              <div class="flex justify-between text-[10px] text-slate-400 mb-1">
+                <span>Progress</span><span>{{ job.progress }}%</span>
+              </div>
+              <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-royal to-gold rounded-full" style="width:{{ job.progress }}%"></div>
+              </div>
+            </div>
+            <p class="text-xs text-slate-500 mt-2 truncate">
+              Lead: {{ c.partner_name }}
+              {% if job.needed_docs|length %} · <span class="text-amber-600 font-semibold">{{ job.needed_docs|length }} docs needed</span>{% endif %}
+            </p>
+          </button>
+        {% endfor %}
+      </aside>
+
+      <!-- Job detail -->
+      <section class="lg:col-span-8">
+        {% for job in jobs %}
+          {% set c = job.case %}
+          <div x-show="openJob==={{ c.id }}" x-cloak class="space-y-5">
+            <div class="glass-card rounded-2xl p-6">
+              <div class="flex flex-wrap justify-between gap-3 items-start">
+                <div>
+                  <div class="text-xs font-bold text-royal">{{ c.case_no }}</div>
+                  <h2 class="text-xl font-extrabold text-navy mt-1">{{ c.title }}</h2>
+                  <p class="text-sm text-slate-500 mt-1">
+                    Status: <strong>{{ c.status }}</strong>
+                    {% if c.hearing_date %} · Next milestone date: {{ c.hearing_date }}{% endif %}
+                  </p>
+                </div>
+                <div class="text-right">
+                  <div class="text-2xl font-extrabold text-navy">{{ job.progress }}%</div>
+                  <div class="text-xs text-slate-400">complete</div>
+                </div>
+              </div>
+              {% if job.current_step %}
+                <div class="mt-4 bg-blue-50 border border-blue-100 rounded-xl px-4 py-3 text-sm">
+                  <span class="font-semibold text-royal">Current step:</span>
+                  {{ job.current_step.title }}
+                  {% if job.current_step.detail %}<span class="text-slate-500"> — {{ job.current_step.detail }}</span>{% endif %}
+                </div>
+              {% endif %}
+              {% if c.billing_note %}
+                <p class="text-xs text-slate-400 mt-3">Fee note: {{ c.billing_note }}</p>
+              {% endif %}
+            </div>
+
+            <!-- Assigned team -->
+            <div class="glass-card rounded-2xl p-6">
+              <h3 class="font-bold text-navy mb-4">Assigned team</h3>
+              <div class="grid sm:grid-cols-2 gap-4">
+                <div class="rounded-xl border border-slate-100 p-4">
+                  <div class="text-xs text-slate-400 uppercase font-semibold">Partner / Advocate</div>
+                  <div class="font-bold text-navy mt-1">{{ c.partner_name }}</div>
+                  <div class="text-xs text-slate-500 mt-0.5">{{ c.partner_email }}</div>
+                  <div class="text-xs text-royal mt-2 font-semibold">Case owner · approvals &amp; advice</div>
+                </div>
+                {% for s in job.staff %}
+                  <div class="rounded-xl border border-slate-100 p-4">
+                    <div class="text-xs text-slate-400 uppercase font-semibold">Office staff</div>
+                    <div class="font-bold text-navy mt-1">{{ s.name }}</div>
+                    <div class="text-xs text-slate-500 mt-0.5">{{ s.email }}</div>
+                    <div class="text-xs text-slate-500 mt-2">Documentation &amp; coordination</div>
+                  </div>
+                {% else %}
+                  <div class="rounded-xl border border-dashed border-slate-200 p-4 text-sm text-slate-400">Staff will be assigned shortly.</div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex gap-2 flex-wrap">
+              <button type="button" @click="tab='progress'" :class="tab==='progress'?'bg-navy text-white':'bg-white text-slate-600 border border-slate-200'" class="px-4 py-2 rounded-full text-xs font-bold">Progress</button>
+              <button type="button" @click="tab='docs'" :class="tab==='docs'?'bg-navy text-white':'bg-white text-slate-600 border border-slate-200'" class="px-4 py-2 rounded-full text-xs font-bold">Documents</button>
+              <button type="button" @click="tab='updates'" :class="tab==='updates'?'bg-navy text-white':'bg-white text-slate-600 border border-slate-200'" class="px-4 py-2 rounded-full text-xs font-bold">Updates</button>
+              <button type="button" @click="tab='alerts'" :class="tab==='alerts'?'bg-navy text-white':'bg-white text-slate-600 border border-slate-200'" class="px-4 py-2 rounded-full text-xs font-bold">Deadlines</button>
+              <button type="button" @click="tab='ask'" :class="tab==='ask'?'bg-navy text-white':'bg-white text-slate-600 border border-slate-200'" class="px-4 py-2 rounded-full text-xs font-bold">Ask firm</button>
+              <button type="button" @click="tab='billing'" :class="tab==='billing'?'bg-navy text-white':'bg-white text-slate-600 border border-slate-200'" class="px-4 py-2 rounded-full text-xs font-bold">Billing</button>
+            </div>
+
+            <div x-show="tab==='progress'" class="glass-card rounded-2xl p-6">
+              <h3 class="font-bold text-navy mb-4">Execution checklist</h3>
+              <ol class="space-y-3">
+                {% for m in job.milestones %}
+                  <li class="flex gap-3 items-start">
+                    <span class="mt-0.5 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0
+                      {% if m.status == 'done' %}bg-green-100 text-green-700
+                      {% elif m.status == 'in_progress' %}bg-amber-100 text-amber-700
+                      {% else %}bg-slate-100 text-slate-400{% endif %}">
+                      {% if m.status == 'done' %}✓{% elif m.status == 'in_progress' %}…{% else %}{{ loop.index }}{% endif %}
+                    </span>
+                    <div>
+                      <div class="font-semibold text-sm {% if m.status == 'pending' %}text-slate-400{% else %}text-navy{% endif %}">{{ m.title }}</div>
+                      {% if m.detail %}<div class="text-xs text-slate-500">{{ m.detail }}</div>{% endif %}
+                      <div class="text-[10px] uppercase font-semibold mt-0.5
+                        {% if m.status == 'done' %}text-green-600
+                        {% elif m.status == 'in_progress' %}text-amber-600
+                        {% else %}text-slate-400{% endif %}">{{ m.status.replace('_', ' ') }}</div>
+                    </div>
+                  </li>
+                {% else %}
+                  <li class="text-sm text-slate-500">Progress steps will appear once your matter is set up.</li>
+                {% endfor %}
+              </ol>
+            </div>
+
+            <div x-show="tab==='docs'" x-cloak class="space-y-4">
+              <div class="glass-card rounded-2xl p-6">
+                <h3 class="font-bold text-navy mb-3">Documents we still need</h3>
+                {% if job.needed_docs %}
+                  <ul class="space-y-2 mb-4">
+                    {% for d in job.doc_requests %}
+                      <li class="flex justify-between items-center text-sm bg-slate-50 rounded-xl px-3 py-2">
+                        <span>{{ d.title }}</span>
+                        <span class="text-xs font-semibold
+                          {% if d.status == 'needed' %}text-amber-600
+                          {% elif d.status == 'uploaded' %}text-royal
+                          {% else %}text-green-600{% endif %}">{{ d.status }}</span>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% else %}
+                  <p class="text-sm text-slate-500 mb-4">No pending checklist items — great.</p>
+                {% endif %}
+                <form method="post" action="{{ url_for('portal_documents_upload') }}" enctype="multipart/form-data" class="border-2 border-dashed border-slate-200 rounded-xl p-4 space-y-3">
+                  <input type="hidden" name="case_id" value="{{ c.id }}"/>
+                  <input type="hidden" name="next_view" value="docs"/>
+                  <p class="text-xs text-slate-500">Upload PDF / JPEG / PNG · max 10 MB · logged for audit (§4.3)</p>
+                  <input type="file" name="file" accept=".pdf,.jpg,.jpeg,.png" required class="text-sm w-full"/>
+                  <button type="submit" class="btn-primary text-sm">Upload for this job</button>
+                </form>
+              </div>
+              <div class="glass-card rounded-2xl p-6">
+                <h3 class="font-bold text-navy mb-3">Your uploaded files</h3>
+                <ul class="space-y-2 text-sm">
+                  {% for d in job.documents %}
+                    <li class="flex justify-between bg-white border border-slate-100 rounded-xl px-4 py-3">
+                      <span>{{ d.filename }} <span class="text-xs text-slate-400">· {{ d.created_at }}</span></span>
+                      <a href="{{ url_for('portal_document_download', doc_id=d.id) }}" class="text-royal text-xs font-semibold">View</a>
+                    </li>
+                  {% else %}
+                    <li class="text-slate-400 text-sm">No files uploaded yet.</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+
+            <div x-show="tab==='updates'" x-cloak class="glass-card rounded-2xl p-6">
+              <h3 class="font-bold text-navy mb-4">Activity from your team</h3>
+              <ul class="space-y-3">
+                {% for u in job.updates %}
+                  <li class="border-l-2 border-royal/30 pl-4">
+                    <div class="text-xs text-slate-400">{{ u.created_at }} · {{ u.author_name or 'Vinnita Legal Consultancy' }} {% if u.author_role %}({{ u.author_role }}){% endif %}</div>
+                    <p class="text-sm text-navy mt-0.5">{{ u.body }}</p>
+                  </li>
+                {% else %}
+                  <li class="text-sm text-slate-500">No updates posted yet.</li>
+                {% endfor %}
+              </ul>
+            </div>
+
+            <div x-show="tab==='alerts'" x-cloak class="glass-card rounded-2xl p-6">
+              <h3 class="font-bold text-navy mb-4">Deadlines &amp; reminders</h3>
+              <div class="space-y-2">
+                {% for alert in job.alerts %}
+                  <div class="flex items-center justify-between gap-3 rounded-xl bg-slate-50 px-4 py-3">
+                    <div>
+                      <div class="text-sm font-semibold">{{ alert.title }}</div>
+                      <div class="text-xs text-slate-400">{{ alert.category }}</div>
+                    </div>
+                    <div class="text-right">
+                      <div class="text-sm font-bold">{{ alert.due_date }}</div>
+                      <div class="text-[10px] uppercase font-semibold {% if alert.status == 'action_needed' %}text-amber-600{% elif alert.status == 'completed' %}text-green-600{% else %}text-royal{% endif %}">{{ alert.status.replace('_', ' ') }}</div>
+                    </div>
+                  </div>
+                {% else %}
+                  <p class="text-sm text-slate-500">No deadlines recorded for this job.</p>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div x-show="tab==='ask'" x-cloak class="glass-card rounded-2xl p-6 space-y-4">
+              <h3 class="font-bold text-navy">Message your legal team</h3>
+              <p class="text-xs text-slate-500">Formal portal messages — logged for record-keeping (§4.2).</p>
+              <form method="post" action="{{ url_for('portal_queries') }}" class="space-y-3">
+                <input type="hidden" name="case_id" value="{{ c.id }}"/>
+                <textarea name="body" rows="3" required placeholder="Ask about timeline, documents, or next steps…" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm"></textarea>
+                <button type="submit" class="btn-primary text-sm">Send message</button>
+              </form>
+              <div class="space-y-3 pt-2 max-h-72 overflow-y-auto">
+                {% for q in job.queries %}
+                  <div class="flex {% if q.author_role == 'client' %}justify-end{% else %}justify-start{% endif %}">
+                    <div class="max-w-[85%] rounded-2xl px-4 py-3 text-sm
+                      {% if q.author_role == 'client' %}bg-royal text-white{% else %}bg-slate-100 text-navy{% endif %}">
+                      <div class="text-[10px] font-semibold mb-1 opacity-70">
+                        {% if q.author_role == 'client' %}You{% else %}{{ q.author_name or 'Legal team' }}{% endif %}
+                        · {{ q.created_at }}
+                      </div>
+                      {{ q.body }}
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div x-show="tab==='billing'" x-cloak class="glass-card rounded-2xl overflow-hidden">
+              <table class="w-full text-sm">
+                <thead class="bg-slate-50 text-left text-xs text-slate-500">
+                  <tr><th class="p-4">Invoice</th><th class="p-4">Amount</th><th class="p-4">Status</th></tr>
+                </thead>
+                <tbody>
+                  {% for i in job.invoices %}
+                    <tr class="border-t border-slate-100">
+                      <td class="p-4 font-medium">{{ i.invoice_no }}</td>
+                      <td class="p-4">₹{{ '%.0f'|format(i.amount) }}</td>
+                      <td class="p-4"><span class="text-xs font-semibold {% if i.status == 'Paid' %}text-green-600{% else %}text-amber-600{% endif %}">{{ i.status }}{% if i.due_date and i.status != 'Paid' %} · due {{ i.due_date }}{% endif %}</span></td>
+                    </tr>
+                  {% else %}
+                    <tr><td class="p-4 text-slate-400" colspan="3">No invoices yet.</td></tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        {% endfor %}
+      </section>
+    </div>
+    {% endif %}
+  </main>
+
+  <footer class="border-t border-slate-200 py-4 text-center text-xs text-slate-400">
+    Vinnita Legal Consultancy Client Portal · Your data is limited to your own matters (§4.1) ·
+    <a href="{{ url_for('portal-usage-policy') }}" class="text-royal">Usage Policy</a>
+  </footer>
+</body>
+</html>

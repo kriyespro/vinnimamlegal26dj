@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}FAQ | VinnitaLegal{% endblock %}
+{% block description %}Answers to common questions about VinnitaLegal services, timelines, documents, pricing, payments and how the client portal works.{% endblock %}
+{% block xdata %}, open:1{% endblock %}
+{% block content %}
+
+  <section class="hero-gradient pt-20 pb-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+      <h1 class="text-4xl md:text-5xl font-extrabold text-white mt-2 mb-4">Frequently Asked Questions</h1>
+      <p class="text-white/70 text-lg">Quick answers about our legal &amp; compliance services.</p>
+    </div>
+  </section>
+
+  <section class="section-padding">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 space-y-3">
+      {% for q, a in faqs %}
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <h2 class="text-base"><button type="button" @click="open=open==={{ loop.index }}?null:{{ loop.index }}" :aria-expanded="open==={{ loop.index }}" aria-controls="faq-a{{ loop.index }}" class="w-full flex justify-between items-center p-5 text-left font-semibold"><span>{{ q }}</span><span aria-hidden="true" x-text="open==={{ loop.index }}?'−':'+'"></span></button></h2>
+          <div id="faq-a{{ loop.index }}" x-show="open==={{ loop.index }}" {% if not loop.first %}x-cloak{% endif %} class="px-5 pb-5 text-sm text-slate-600">{{ a }}</div>
+        </div>
+      {% endfor %}
+      <div class="text-center pt-8">
+        <p class="text-slate-500 mb-4">Still have a question?</p>
+        <a href="{{ url_for('contact') }}" class="btn-primary">Contact Support</a>
+      </div>
+    </div>
+  </section>
+{% endblock %}

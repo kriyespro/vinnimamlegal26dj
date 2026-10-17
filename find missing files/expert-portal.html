@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Expert Portal — Hire CA, CS &amp; Lawyers Online | LexAssist</title>
+  <meta name="description" content="LexAssist Expert Portal: connect with verified CAs, Company Secretaries and lawyers for company law, GST, trademark, contracts, marriage & adoption matters. Book a consultation."/>
+  <link rel="stylesheet" href="styles.css"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{navy:{DEFAULT:'#0A1628'},royal:{DEFAULT:'#1E40AF',light:'#3B82F6'},gold:{DEFAULT:'#F59E0B',dark:'#D97706'}}}}}</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="font-inter bg-slate-50 text-navy" x-data="{ mobileOpen:false, scrolled:false, specialty:'all' }" @scroll.window="scrolled = window.scrollY > 60">
+
+  <nav class="nav-sticky w-full transition-all duration-300" :class="scrolled ? 'nav-scrolled' : 'bg-navy/95 backdrop-blur-md border-b border-white/10'">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+      <a href="index.html" class="flex items-center gap-2.5"><div class="w-9 h-9 rounded-xl bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A1628" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span class="text-white font-bold text-xl">Lex<span class="text-gold">Assist</span></span></a>
+      <div class="hidden lg:flex items-center gap-1">
+        <a href="services.html" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">Services</a>
+        <a href="contracts.html" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">Contracts</a>
+        <a href="pricing.html" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">Pricing</a>
+        <a href="contact.html" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">Contact</a>
+      </div>
+      <a href="contact.html" class="hidden lg:flex btn-primary text-sm py-2.5 px-5">Book Expert</a>
+      <button @click="mobileOpen = !mobileOpen" class="lg:hidden w-10 h-10 flex flex-col justify-center items-center gap-1.5 rounded-xl border border-white/20"><span class="w-5 h-0.5 bg-white rounded"></span><span class="w-5 h-0.5 bg-white rounded"></span><span class="w-5 h-0.5 bg-white rounded"></span></button>
+    </div>
+    <div x-show="mobileOpen" x-cloak class="lg:hidden bg-navy border-t border-white/10 px-4 py-4 space-y-1"><a href="contact.html" class="block btn-primary text-sm mt-3 justify-center">Book Expert</a></div>
+  </nav>
+
+  <section class="hero-gradient pt-20 pb-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+      <div class="section-badge" style="background:rgba(255,255,255,0.12);color:white;border:1px solid rgba(255,255,255,0.2);">Expert Portal</div>
+      <h1 class="text-4xl md:text-5xl font-extrabold text-white mt-4 mb-4">Talk to Verified<br/><span class="gradient-text">CAs, CSs &amp; Lawyers</span></h1>
+      <p class="text-white/70 text-lg max-w-2xl mx-auto">One portal for business and personal legal work — registration, GST, IP, contracts, marriage certificate, adoption and more. Inspired by how Vakilsearch connects you to specialists.</p>
+    </div>
+  </section>
+
+  <section class="bg-white border-b border-slate-100 sticky top-16 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex gap-2 overflow-x-auto py-3">
+      <button @click="specialty='all'" :class="specialty==='all'?'bg-navy text-white':'bg-slate-100'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold">All Experts</button>
+      <button @click="specialty='ca'" :class="specialty==='ca'?'bg-navy text-white':'bg-slate-100'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold">CA / Tax</button>
+      <button @click="specialty='cs'" :class="specialty==='cs'?'bg-navy text-white':'bg-slate-100'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold">Company Law</button>
+      <button @click="specialty='ip'" :class="specialty==='ip'?'bg-navy text-white':'bg-slate-100'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold">IP / Trademark</button>
+      <button @click="specialty='family'" :class="specialty==='family'?'bg-navy text-white':'bg-slate-100'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold">Family Law</button>
+      <button @click="specialty='contracts'" :class="specialty==='contracts'?'bg-navy text-white':'bg-slate-100'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold">Contracts</button>
+    </div>
+  </section>
+
+  <section class="section-padding">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div x-show="specialty==='all'||specialty==='ca'" class="glass-card rounded-2xl p-6">
+          <div class="flex items-center gap-4 mb-4">
+            <img src="https://ui-avatars.com/api/?name=Neha+Kapoor&background=1E40AF&color=fff&size=64" alt="" class="w-14 h-14 rounded-full"/>
+            <div><h3 class="font-bold text-navy">CA Neha Kapoor</h3><p class="text-xs text-slate-500">GST · ITR · Tax Planning · 12 yrs</p></div>
+          </div>
+          <p class="text-sm text-slate-500 mb-4">Monthly GST filing, notices, tax planning for startups and MSMEs.</p>
+          <div class="flex items-center justify-between"><span class="text-gold font-bold text-sm">★★★★★ 4.9</span><a href="contact.html" class="text-royal text-sm font-semibold">Book →</a></div>
+        </div>
+        <div x-show="specialty==='all'||specialty==='cs'" class="glass-card rounded-2xl p-6">
+          <div class="flex items-center gap-4 mb-4">
+            <img src="https://ui-avatars.com/api/?name=Rahul+Iyer&background=10B981&color=fff&size=64" alt="" class="w-14 h-14 rounded-full"/>
+            <div><h3 class="font-bold text-navy">CS Rahul Iyer</h3><p class="text-xs text-slate-500">Incorporation · ROC · LLP · 10 yrs</p></div>
+          </div>
+          <p class="text-sm text-slate-500 mb-4">Pvt Ltd / LLP / OPC registration, annual ROC, director KYC and conversions.</p>
+          <div class="flex items-center justify-between"><span class="text-gold font-bold text-sm">★★★★★ 4.8</span><a href="contact.html" class="text-royal text-sm font-semibold">Book →</a></div>
+        </div>
+        <div x-show="specialty==='all'||specialty==='ip'" class="glass-card rounded-2xl p-6">
+          <div class="flex items-center gap-4 mb-4">
+            <img src="https://ui-avatars.com/api/?name=Ananya+Shah&background=8B5CF6&color=fff&size=64" alt="" class="w-14 h-14 rounded-full"/>
+            <div><h3 class="font-bold text-navy">Adv. Ananya Shah</h3><p class="text-xs text-slate-500">Trademark · Copyright · Patents</p></div>
+          </div>
+          <p class="text-sm text-slate-500 mb-4">Brand search, TM filing, objection replies and IP assignment deeds.</p>
+          <div class="flex items-center justify-between"><span class="text-gold font-bold text-sm">★★★★★ 4.9</span><a href="contact.html" class="text-royal text-sm font-semibold">Book →</a></div>
+        </div>
+        <div x-show="specialty==='all'||specialty==='contracts'" class="glass-card rounded-2xl p-6">
+          <div class="flex items-center gap-4 mb-4">
+            <img src="https://ui-avatars.com/api/?name=Vikram+Malhotra&background=F59E0B&color=0A1628&size=64" alt="" class="w-14 h-14 rounded-full"/>
+            <div><h3 class="font-bold text-navy">Adv. Vikram Malhotra</h3><p class="text-xs text-slate-500">Commercial Contracts · 15 yrs</p></div>
+          </div>
+          <p class="text-sm text-slate-500 mb-4">SHA, NDA, employment, franchise and vendor agreements for growing companies.</p>
+          <div class="flex items-center justify-between"><span class="text-gold font-bold text-sm">★★★★★ 4.7</span><a href="contact.html" class="text-royal text-sm font-semibold">Book →</a></div>
+        </div>
+        <div x-show="specialty==='all'||specialty==='family'" class="glass-card rounded-2xl p-6">
+          <div class="flex items-center gap-4 mb-4">
+            <img src="https://ui-avatars.com/api/?name=Meera+Nair&background=EC4899&color=fff&size=64" alt="" class="w-14 h-14 rounded-full"/>
+            <div><h3 class="font-bold text-navy">Adv. Meera Nair</h3><p class="text-xs text-slate-500">Marriage · Adoption · Family Law</p></div>
+          </div>
+          <p class="text-sm text-slate-500 mb-4">Marriage registration, Special Marriage Act, HAMA / JJ Act adoption documentation.</p>
+          <div class="flex items-center justify-between"><span class="text-gold font-bold text-sm">★★★★★ 4.9</span><a href="contact.html" class="text-royal text-sm font-semibold">Book →</a></div>
+        </div>
+        <div x-show="specialty==='all'||specialty==='ca'" class="glass-card rounded-2xl p-6">
+          <div class="flex items-center gap-4 mb-4">
+            <img src="https://ui-avatars.com/api/?name=Suresh+Patil&background=0EA5E9&color=fff&size=64" alt="" class="w-14 h-14 rounded-full"/>
+            <div><h3 class="font-bold text-navy">CA Suresh Patil</h3><p class="text-xs text-slate-500">MSME · Funding Docs · Audit</p></div>
+          </div>
+          <p class="text-sm text-slate-500 mb-4">Udyam registration, bank loan docs, projections and statutory audits.</p>
+          <div class="flex items-center justify-between"><span class="text-gold font-bold text-sm">★★★★★ 4.8</span><a href="contact.html" class="text-royal text-sm font-semibold">Book →</a></div>
+        </div>
+      </div>
+
+      <div class="mt-14 grid md:grid-cols-3 gap-6 text-center">
+        <div class="bg-white rounded-2xl p-6 border border-slate-100"><div class="text-3xl font-extrabold text-navy">500+</div><div class="text-sm text-slate-500 mt-1">Verified experts</div></div>
+        <div class="bg-white rounded-2xl p-6 border border-slate-100"><div class="text-3xl font-extrabold text-navy">30 min</div><div class="text-sm text-slate-500 mt-1">Avg. callback time</div></div>
+        <div class="bg-white rounded-2xl p-6 border border-slate-100"><div class="text-3xl font-extrabold text-navy">Pan-India</div><div class="text-sm text-slate-500 mt-1">Video &amp; phone consults</div></div>
+      </div>
+
+      <div class="mt-12 hero-gradient rounded-3xl p-10 text-center">
+        <h2 class="text-2xl font-bold text-white mb-3">Not sure which expert you need?</h2>
+        <p class="text-white/70 mb-6">Tell us your issue — we’ll match you to the right CA, CS or lawyer.</p>
+        <a href="contact.html" class="btn-primary">Get Matched Free</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer-gradient text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 flex flex-col md:flex-row justify-between items-center gap-4">
+      <a href="index.html" class="font-bold text-lg">Lex<span class="text-gold">Assist</span></a>
+      <div class="flex gap-5 text-sm text-white/60"><a href="contracts.html" class="hover:text-white">Contracts</a><a href="marriage-certificate.html" class="hover:text-white">Marriage</a><a href="contact.html" class="hover:text-white">Contact</a></div>
+      <span class="text-white/40 text-sm">© 2025 LexAssist</span>
+    </div>
+  </footer>
+  <a href="https://wa.me/919876543210" target="_blank" class="whatsapp-float" aria-label="WhatsApp"><svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg></a>
+</body>
+</html>

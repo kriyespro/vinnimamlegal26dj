@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Legal Glossary for Entrepreneurs | VinnitaLegal{% endblock %}
+{% block description %}Plain-English definitions of GSTIN, DIN, DSC, ROC, Udyam, MoA, AoA and trademark classes — learn the terms before you file.{% endblock %}
+{% block xdata %}, q:'', letter:'all'{% endblock %}
+{% block content %}
+
+  <section class="hero-gradient pt-20 pb-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+      <div class="section-badge" style="background:rgba(255,255,255,0.12);color:white;border:1px solid rgba(255,255,255,0.2);">Knowledge Hub</div>
+      <h1 class="text-4xl md:text-5xl font-extrabold text-white mt-4 mb-4">Legal Glossary</h1>
+      <p class="text-white/70 text-lg max-w-2xl mx-auto mb-8">Plain-English meanings of Indian business &amp; compliance terms — so you never get lost in MCA, GST or IP jargon.</p>
+      <input type="search" x-model="q" placeholder="Search terms (e.g. GSTIN, DIN, Udyam)..." class="form-input max-w-xl mx-auto text-navy"/>
+    </div>
+  </section>
+
+  <section class="section-padding">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 space-y-4" x-data="{
+      terms: [
+        {t:'Stamp Paper / Stamp Duty', d:'State tax paid via non-judicial stamp paper or e-stamp (SHCIL) to make agreements legally admissible. Typical: affidavits ₹10–₹100; NDA/employment ₹100–₹500; partnership deed ₹200–₹5,000 by state. See our stamp price tables on Contracts, Partnership and Marriage pages.'},
+        {t:'AoA', d:'Articles of Association — internal rules of a company (director powers, share transfers, meetings).'},
+        {t:'CARA', d:'Central Adoption Resource Authority — statutory body regulating adoption of children in India under the JJ Act.'},
+        {t:'CIN', d:'Corporate Identity Number — unique 21-digit ID allotted by MCA on company incorporation.'},
+        {t:'DIN', d:'Director Identification Number — unique ID for every company / LLP director, allotted by MCA.'},
+        {t:'DSC', d:'Digital Signature Certificate — used to digitally sign MCA, GST and Income Tax filings.'},
+        {t:'FSSAI', d:'Food Safety and Standards Authority of India licence required for food businesses.'},
+        {t:'GSTIN', d:'15-digit Goods and Services Tax Identification Number issued after GST registration.'},
+        {t:'GSTR-1 / 3B', d:'Monthly / quarterly GST returns — outward supplies (GSTR-1) and summary tax payment return (GSTR-3B).'},
+        {t:'HAMA', d:'Hindu Adoptions and Maintenance Act, 1956 — personal law governing Hindu adoptions.'},
+        {t:'IEC', d:'Import Export Code — mandatory for import/export, issued by DGFT.'},
+        {t:'LLP', d:'Limited Liability Partnership — partnership with limited liability under the LLP Act, 2008.'},
+        {t:'MCA', d:'Ministry of Corporate Affairs — regulates companies and LLPs in India.'},
+        {t:'MoA', d:'Memorandum of Association — charter defining company name, objects and capital.'},
+        {t:'MSME / Udyam', d:'Micro, Small & Medium Enterprises registration on the Udyam portal for government benefits.'},
+        {t:'OPC', d:'One Person Company — company with a single shareholder and director under Companies Act, 2013.'},
+        {t:'PAN', d:'Permanent Account Number — 10-character tax ID issued by the Income Tax Department.'},
+        {t:'Partnership Deed', d:'Written agreement among partners covering capital, profit share, duties and dissolution.'},
+        {t:'ROC', d:'Registrar of Companies — MCA office that incorporates and regulates companies in a region.'},
+        {t:'SPICe+', d:'MCA web form used for company name reservation and incorporation in India.'},
+        {t:'Trademark Class', d:'Nice Classification category (1–45) defining goods/services covered by a trademark application.'},
+        {t:'Udyam', d:'Online MSME registration system (replaced Udyog Aadhaar) — permanent certificate with no expiry.'}
+      ]
+    }">
+      <template x-for="item in terms.filter(i => !q || i.t.toLowerCase().includes(q.toLowerCase()) || i.d.toLowerCase().includes(q.toLowerCase()))" :key="item.t">
+        <div class="glass-card rounded-2xl p-5">
+          <h3 class="font-bold text-navy text-lg" x-text="item.t"></h3>
+          <p class="text-slate-500 text-sm mt-1 leading-relaxed" x-text="item.d"></p>
+        </div>
+      </template>
+      <p class="text-center text-slate-400 text-sm pt-4">Need a term explained live? <a href="{{ url_for('contact') }}" class="text-royal font-semibold">Ask our experts</a> or browse <a href="{{ url_for('blog') }}" class="text-royal font-semibold">Resources</a>.</p>
+    </div>
+  </section>
+{% endblock %}

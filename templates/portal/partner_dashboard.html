@@ -1,0 +1,183 @@
+{% extends 'portal/base.html' %}
+{% from 'portal/_ui.html' import pill, kpi, money with context %}
+{% block title %}Case book{% endblock %}
+{% block role %}Partner{% endblock %}
+{% block xdata %}openCase: {{ open_case or 'null' }}, inbox: ''{% endblock %}
+
+{% block content %}
+  <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+    <div><h1 class="text-xl font-extrabold leading-tight">Case book</h1><p class="text-xs text-slate-500">Update progress, reply to clients and approve drafts — all on one screen.</p></div>
+    <div class="flex gap-2">
+      <button type="button" @click="inbox = inbox==='consult' ? '' : 'consult'" :class="inbox==='consult' ? 'db-btn-navy' : 'db-btn-ghost'" class="db-btn">📅 Consultations{% if consultations %} ({{ consultations|length }}){% endif %}</button>
+      <button type="button" @click="inbox = inbox==='conflict' ? '' : 'conflict'" :class="inbox==='conflict' ? 'db-btn-navy' : 'db-btn-ghost'" class="db-btn">⚖ Conflict disclosure</button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3">
+    {{ kpi('Active cases', jobs|length) }}
+    {{ kpi('Client messages', client_messages_total, 'text-royal' if client_messages_total else 'text-navy') }}
+    {{ kpi('Drafts to approve', pending_drafts, 'text-orange-600' if pending_drafts else 'text-navy') }}
+    {{ kpi('Consultations', consultations|length, 'text-navy', 'incl. unassigned') }}
+  </div>
+
+  <div x-show="inbox==='consult'" x-cloak x-transition class="db-panel mb-3">
+    <div class="db-title">Consultation requests <small>confirm only after the fee is paid, if one applies</small></div>
+    {% for co in consultations %}
+      <form method="post" action="{{ url_for('portal_consultation_status', consultation_id=co.id) }}" class="db-row text-sm flex-wrap">{{ csrf_input }}
+        <span class="flex-1 min-w-[12rem]"><b>{{ co.client_name }}</b> <span class="db-meta">· {{ co.practice_area }} · {{ co.case_no or 'general' }}</span></span>
+        <span class="db-meta">{{ co.preferred_date }} {{ co.preferred_time }} · {{ co.mode }}</span>
+        <select name="status" aria-label="Status" class="db-in w-auto" @change="$el.form.requestSubmit()">{% for s in ['Requested', 'Confirmed', 'Completed', 'Cancelled'] %}<option value="{{ s }}" {% if co.status == s %}selected{% endif %}>{{ s }}</option>{% endfor %}</select>
+      </form>
+    {% else %}<p class="db-meta">No consultation requests.</p>{% endfor %}
+  </div>
+  <div x-show="inbox==='conflict'" x-cloak x-transition class="db-panel mb-3">
+    <div class="db-title">Conflict-of-interest disclosure <small>recorded for Compliance review (§3.2)</small></div>
+    <form method="post" action="{{ url_for('portal_conflicts') }}" class="grid sm:grid-cols-[1fr_2fr_auto] gap-2">{{ csrf_input }}
+      <input name="prospective_client" required maxlength="200" aria-label="Prospective client" placeholder="Prospective client / matter" class="db-in"/>
+      <input name="note" required aria-label="Details" placeholder="Nature of the potential conflict" class="db-in"/>
+      <button type="submit" class="db-btn db-btn-navy">Record</button>
+    </form>
+  </div>
+
+  {% if not jobs %}
+    <div class="db-panel text-center py-10"><p class="text-sm text-slate-500">No cases are assigned to you yet. The office assigns cases from the admin console.</p></div>
+  {% else %}
+  <div class="grid lg:grid-cols-[17rem_1fr] gap-3 items-start">
+    <aside class="db-case-list lg:space-y-2 lg:sticky lg:top-16" aria-label="Cases">
+      {% for job in jobs %}{% set c = job.case %}
+        <button type="button" @click="openCase={{ c.id }}" :class="openCase==={{ c.id }} ? 'is-open' : ''" class="db-case">
+          <div class="flex items-center justify-between gap-2"><span class="text-[11px] font-bold text-royal">{{ c.case_no }}</span>{{ pill(c.status) }}</div>
+          <div class="text-sm font-semibold leading-snug truncate">{{ c.title }}</div>
+          <div class="db-meta truncate">{{ c.client_name }}</div>
+          <div class="db-bar mt-1.5"><i style="width: {{ job.progress }}%"></i></div>
+          <div class="db-meta mt-1 flex flex-wrap gap-x-2">{{ job.progress }}%{% if job.pending_replies %}<b class="text-royal">· {{ job.pending_replies }} msg</b>{% endif %}{% if job.pending_drafts %}<b class="text-orange-600">· {{ job.pending_drafts }} draft</b>{% endif %}</div>
+        </button>
+      {% endfor %}
+    </aside>
+
+    <div>
+    {% for job in jobs %}{% set c = job.case %}
+      <section x-show="openCase==={{ c.id }}" x-cloak class="space-y-3" x-data="{ inv: false, ms: false }" aria-label="{{ c.case_no }}">
+        {# ----- header + status in one row ----- #}
+        <div class="db-panel">
+          <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
+            <div class="min-w-0"><div class="text-[11px] font-bold text-royal">{{ c.case_no }}</div><h2 class="text-base font-extrabold leading-snug">{{ c.title }}</h2>
+              <div class="db-meta">Client <b class="text-navy">{{ c.client_name }}</b> · {{ c.client_email }}{% for st in job.staff %} · Staff {{ st.name }}{% endfor %}</div></div>
+            <div class="text-right"><div class="text-2xl font-extrabold text-royal leading-none">{{ job.progress }}%</div><div class="db-meta">client sees this</div></div>
+          </div>
+          <form method="post" action="{{ url_for('portal_case_status', case_id=c.id) }}" class="grid sm:grid-cols-[auto_auto_1fr_auto] gap-2 items-end">{{ csrf_input }}
+            <input type="hidden" name="redirect_case" value="{{ c.id }}"/>
+            <label class="db-meta">Status<select name="status" class="db-in mt-0.5">{% for s in ['In Progress', 'Awaiting Client', 'Under Review', 'On Hold', 'Completed'] %}<option value="{{ s }}" {% if c.status == s %}selected{% endif %}>{{ s }}</option>{% endfor %}</select></label>
+            <label class="db-meta">Next date<input type="date" name="hearing_date" value="{{ c.hearing_date or '' }}" class="db-in mt-0.5"/></label>
+            <label class="db-meta">Billing note (client-visible)<input name="billing_note" maxlength="200" value="{{ c.billing_note or '' }}" class="db-in mt-0.5"/></label>
+            <button type="submit" class="db-btn db-btn-navy">Save</button>
+          </form>
+        </div>
+
+        <div class="grid xl:grid-cols-2 gap-3">
+          <div class="space-y-3">
+            {# ----- checklist ----- #}
+            <div class="db-panel">
+              <div class="db-title">Execution checklist <button type="button" @click="ms=!ms" class="text-royal normal-case text-xs font-bold" x-text="ms ? 'Cancel' : '+ Add step'"></button></div>
+              <form x-show="ms" x-cloak method="post" action="{{ url_for('portal_milestone_add', case_id=c.id) }}" class="flex gap-2 mb-2">{{ csrf_input }}
+                <input type="hidden" name="redirect_case" value="{{ c.id }}"/>
+                <input name="title" required maxlength="200" aria-label="Step name" placeholder="e.g. Name approval" class="db-in"/><button class="db-btn db-btn-blue">Add</button>
+              </form>
+              {% for m in job.milestones %}
+                <form method="post" action="{{ url_for('portal_milestone_update', milestone_id=m.id) }}" class="db-row text-sm">{{ csrf_input }}
+                  <input type="hidden" name="redirect_case" value="{{ c.id }}"/>
+                  <span class="flex-1 min-w-0 truncate {{ 'line-through text-slate-400' if m.status == 'done' }}">{{ m.title }}</span>
+                  <select name="status" aria-label="Step status" class="db-in w-auto" @change="$el.form.requestSubmit()">{% for s in ['pending', 'in_progress', 'done'] %}<option value="{{ s }}" {% if m.status == s %}selected{% endif %}>{{ s.replace('_', ' ') }}</option>{% endfor %}</select>
+                </form>
+              {% else %}<p class="db-meta">No steps yet — click “+ Add step” to build the client's checklist.</p>{% endfor %}
+            </div>
+
+            {# ----- drafts ----- #}
+            {% if job.drafts %}
+              <div class="db-panel">
+                <div class="db-title">Drafts for approval</div>
+                {% for d in job.drafts %}
+                  <div class="db-row text-sm"><span class="flex-1 truncate">📝 {{ d.title }}</span>{{ pill(d.status) }}
+                    {% if d.status == 'pending' %}
+                      <form method="post" action="{{ url_for('portal_draft_approve', draft_id=d.id) }}">{{ csrf_input }}<input type="hidden" name="redirect_case" value="{{ c.id }}"/><button class="db-btn db-btn-blue">Approve</button></form>
+                      <form method="post" action="{{ url_for('portal_draft_reject', draft_id=d.id) }}">{{ csrf_input }}<input type="hidden" name="redirect_case" value="{{ c.id }}"/><button class="db-btn db-btn-red">Reject</button></form>
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            {# ----- documents ----- #}
+            <div class="db-panel">
+              <div class="db-title">Documents <small>{{ job.documents|length }} files · {{ job.needed_docs|length }} requested</small></div>
+              {% for r in job.doc_requests %}
+                <form method="post" action="{{ url_for('portal_document_request_status', request_id=r.id) }}" class="db-row text-sm">{{ csrf_input }}
+                  <input type="hidden" name="redirect_case" value="{{ c.id }}"/>
+                  <span class="flex-1 truncate">☐ {{ r.title }}</span>
+                  <select name="status" aria-label="Request status" class="db-in w-auto" @change="$el.form.requestSubmit()">{% for s in ['needed', 'uploaded', 'verified'] %}<option value="{{ s }}" {% if r.status == s %}selected{% endif %}>{{ s }}</option>{% endfor %}</select>
+                </form>
+              {% endfor %}
+              <form method="post" action="{{ url_for('portal_document_request', case_id=c.id) }}" class="flex gap-2 mt-2">{{ csrf_input }}
+                <input type="hidden" name="redirect_case" value="{{ c.id }}"/>
+                <input name="title" required maxlength="200" aria-label="Document to request" placeholder="Request a document from the client…" class="db-in"/><button class="db-btn db-btn-ghost">Request</button>
+              </form>
+              <form method="post" action="{{ url_for('portal_documents_upload') }}" enctype="multipart/form-data" class="flex gap-2 mt-2 items-center">{{ csrf_input }}
+                <input type="hidden" name="case_id" value="{{ c.id }}"/><input type="hidden" name="redirect_case" value="{{ c.id }}"/>
+                <input type="file" name="file" required accept=".pdf,.jpg,.jpeg,.png" aria-label="Choose file" class="text-xs flex-1 min-w-0"/><button class="db-btn db-btn-blue">Upload for client</button>
+              </form>
+              <div class="db-scroll mt-1">
+                {% for d in job.documents %}<div class="db-row text-sm"><span class="flex-1 truncate">📄 {{ d.filename }} <span class="db-meta">· {{ d.uploader_name }}</span></span><a href="{{ url_for('portal_document_download', doc_id=d.id) }}" class="text-royal text-xs font-bold">Download</a></div>{% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            {# ----- conversation ----- #}
+            <div class="db-panel">
+              <div class="db-title">Client conversation {% if job.pending_replies %}<small><b class="text-royal">{{ job.pending_replies }} from client</b></small>{% endif %}</div>
+              <div class="db-scroll space-y-1.5 mb-2">
+                {% for q in job.queries %}<div class="text-sm rounded-lg px-2.5 py-1.5 {{ 'bg-blue-50 mr-6' if q.author_role == 'client' else 'bg-slate-100 ml-6' }}"><div class="text-[10px] text-slate-400">{{ q.author_name }} · {{ q.created_at }}</div>{{ q.body }}</div>
+                {% else %}<p class="db-meta">No messages yet.</p>{% endfor %}
+              </div>
+              <form method="post" action="{{ url_for('portal_message_reply') }}" class="flex gap-2">{{ csrf_input }}
+                <input type="hidden" name="case_id" value="{{ c.id }}"/><input type="hidden" name="redirect_case" value="{{ c.id }}"/>
+                <input name="body" required maxlength="2000" autocomplete="off" aria-label="Reply" placeholder="Reply to client…" class="db-in"/><button class="db-btn db-btn-orange">Send</button>
+              </form>
+            </div>
+
+            {# ----- updates ----- #}
+            <div class="db-panel">
+              <div class="db-title">Share an update <small>appears on the client's dashboard</small></div>
+              <form method="post" action="{{ url_for('portal_case_update', case_id=c.id) }}" class="flex gap-2 mb-2">{{ csrf_input }}
+                <input type="hidden" name="redirect_case" value="{{ c.id }}"/>
+                <input name="body" required maxlength="2000" autocomplete="off" aria-label="Update" placeholder="e.g. Filing submitted to MCA, SRN 12345" class="db-in"/><button class="db-btn db-btn-navy">Post</button>
+              </form>
+              <div class="db-scroll">{% for u in job.updates %}<div class="db-row items-start text-sm"><span class="mt-1.5 w-1.5 h-1.5 rounded-full bg-gold shrink-0"></span><div><div class="db-meta">{{ u.created_at }} · {{ u.author_name or 'Team' }}</div>{{ u.body }}</div></div>
+                {% else %}<p class="db-meta">Nothing shared yet.</p>{% endfor %}</div>
+            </div>
+
+            {# ----- billing ----- #}
+            <div class="db-panel">
+              <div class="db-title">Invoices <button type="button" @click="inv=!inv" class="text-royal normal-case text-xs font-bold" x-text="inv ? 'Cancel' : '+ Raise invoice'"></button></div>
+              <form x-show="inv" x-cloak method="post" action="{{ url_for('portal_invoice_create', case_id=c.id) }}" class="grid sm:grid-cols-[1fr_6rem_8rem_auto] gap-2 mb-2">{{ csrf_input }}
+                <input type="hidden" name="redirect_case" value="{{ c.id }}"/>
+                <input name="description" required maxlength="200" aria-label="Description" placeholder="Professional fee — stage 2" class="db-in"/>
+                <input type="number" name="amount" required min="1" max="1000000" step="0.01" aria-label="Amount" placeholder="₹" class="db-in"/>
+                <input type="date" name="due_date" aria-label="Due date" class="db-in"/><button class="db-btn db-btn-navy">Raise</button>
+              </form>
+              {% for i in job.invoices %}<div class="db-row text-sm"><span class="flex-1 truncate"><b>{{ i.invoice_no }}</b> <span class="db-meta">{{ i.description or '' }}</span></span><b>{{ money(i.amount) }}</b>{{ pill(i.status) }}</div>
+              {% else %}<p class="db-meta">No invoices raised.</p>{% endfor %}
+            </div>
+
+            {% if job.communications %}
+              <div class="db-panel"><div class="db-title">Office communication log <small>read-only</small></div>
+                <div class="db-scroll">{% for cm in job.communications %}<div class="db-row items-start text-sm"><span class="pill pill-slate">{{ cm.type }}</span><div><div class="db-meta">{{ cm.created_at }} · {{ cm.staff_name }}</div>{{ cm.note }}</div></div>{% endfor %}</div></div>
+            {% endif %}
+          </div>
+        </div>
+      </section>
+    {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+{% endblock %}

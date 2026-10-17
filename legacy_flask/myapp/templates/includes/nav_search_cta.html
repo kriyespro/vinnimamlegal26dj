@@ -1,0 +1,11 @@
+{# Compact portal + search block for marketing page CTAs #}
+<div class="hidden lg:flex items-center gap-2.5">
+  {% include 'includes/site_search.html' %}
+  <a href="{{ url_for('portal') }}"
+     class="inline-flex items-center gap-1.5 text-sm font-semibold text-navy bg-gold hover:bg-gold-light px-3.5 py-2 rounded-full transition-colors shadow-sm whitespace-nowrap">
+    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/>
+    </svg>
+    Client Portal
+  </a>
+</div>

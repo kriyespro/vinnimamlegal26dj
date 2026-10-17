@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign in — VinnitaLegal Portal</title>
+  <meta name="description" content="One secure sign-in for VinnitaLegal clients, partners and office staff. We take you to the right dashboard automatically."/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="preload" href="{{ url_for('static', filename='fonts/inter-latin-wght-normal.woff2') }}" as="font" type="font/woff2" crossorigin/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.min.css') }}"/>
+  <style>[x-cloak]{display:none!important} body{font-family:Inter,system-ui,sans-serif}</style>
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}"/>
+  <script defer src="{{ url_for('static', filename='js/alpine.min.js') }}"></script>
+</head>
+<body class="min-h-screen bg-slate-50 text-navy" x-data="{ mode: {{ (request.GET.get('mode') if request.GET.get('mode') in ['login', 'signup', 'forgot'] else 'login')|tojson|forceescape }}, show: false }">
+  <div class="min-h-screen grid lg:grid-cols-[1.05fr_1fr]">
+
+    {# ---------- brand panel (desktop) ---------- #}
+    <aside class="hero-gradient hidden lg:flex flex-col justify-between p-10 text-white relative">
+      <a href="{{ url_for('index') }}" class="flex items-center gap-2.5 relative z-10">
+        <span class="w-10 h-10 rounded-xl bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+        <span class="font-bold text-xl">Vinnita<span class="text-orange-300">Legal</span></span>
+      </a>
+      <div class="relative z-10 max-w-md">
+        <h1 class="text-3xl font-extrabold leading-tight mb-3">One portal.<br/><span class="gradient-text">Every case, document and payment.</span></h1>
+        <p class="text-white/80 mb-6">Sign in once — we recognise whether you're a client, partner or office team member and open the right workspace.</p>
+        <ul class="space-y-3 text-sm">
+          {% for t in ['Track every step of your matter live', 'Upload documents securely — PDF / JPG / PNG', 'Message your legal team in one place', 'Pay invoices online with UPI, cards or netbanking'] %}
+            <li class="flex items-start gap-2.5"><span class="mt-0.5 w-5 h-5 rounded-full bg-white/15 flex items-center justify-center text-[11px]">✓</span>{{ t }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <p class="text-xs text-white/60 relative z-10">All sessions are encrypted and every action is audit-logged under our <a href="{{ url_for('portal-usage-policy') }}" class="underline">Portal Usage Policy</a>.</p>
+    </aside>
+
+    {# ---------- form panel ---------- #}
+    <main class="flex flex-col">
+      <div class="flex items-center justify-between px-4 sm:px-8 h-14 lg:h-16">
+        <a href="{{ url_for('index') }}" class="lg:hidden font-bold text-lg">Vinnita<span class="text-gold-dark">Legal</span></a>
+        <span class="hidden lg:block"></span>
+        <a href="{{ url_for('index') }}" class="text-xs font-semibold text-slate-500 hover:text-royal">← Back to website</a>
+      </div>
+
+      <div class="flex-1 flex items-center justify-center px-4 sm:px-8 pb-10">
+        <div class="w-full max-w-sm">
+          {% with msgs = get_flashed_messages(with_categories=true) %}
+            {% for category, message in msgs %}
+              <div role="alert" class="mb-4 rounded-xl px-4 py-3 text-sm font-medium {% if category == 'error' %}bg-red-50 text-red-800 border border-red-200{% else %}bg-green-50 text-green-800 border border-green-200{% endif %}">{{ message }}</div>
+            {% endfor %}
+          {% endwith %}
+
+          {# ===== SIGN IN ===== #}
+          <section x-show="mode==='login'" aria-labelledby="h-login">
+            <h2 id="h-login" class="text-2xl font-extrabold">Sign in</h2>
+            <p class="text-sm text-slate-500 mt-1 mb-5">Clients, partners and staff all sign in here.</p>
+            <form method="post" action="{{ url_for('portal') }}" class="space-y-3.5">{{ csrf_input }}
+              <input type="hidden" name="action" value="login"/>
+              <input type="hidden" name="next" value="{{ request.GET.get('next', '') }}"/>
+              <div>
+                <label for="login-email" class="block text-xs font-bold text-slate-600 mb-1">Email</label>
+                <input id="login-email" type="email" name="email" required autocomplete="username" autofocus placeholder="you@example.com" class="db-in !py-2.5 !text-sm"/>
+              </div>
+              <div>
+                <div class="flex items-center justify-between mb-1"><label for="login-pw" class="text-xs font-bold text-slate-600">Password</label><button type="button" @click="mode='forgot'" class="text-xs font-bold text-royal hover:underline">Forgot password?</button></div>
+                <div class="relative">
+                  <input id="login-pw" :type="show ? 'text' : 'password'" name="password" required autocomplete="current-password" placeholder="••••••••" class="db-in !py-2.5 !text-sm pr-14"/>
+                  <button type="button" @click="show=!show" class="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-500 hover:text-royal px-1.5" x-text="show ? 'Hide' : 'Show'" aria-label="Toggle password visibility"></button>
+                </div>
+              </div>
+              <label class="flex items-start gap-2 text-xs text-slate-600 cursor-pointer"><input type="checkbox" name="policy" value="1" required class="mt-0.5 h-4 w-4"/><span>I agree to the <a href="{{ url_for('portal-usage-policy') }}" target="_blank" class="text-royal font-bold underline">Portal Usage Policy</a>.</span></label>
+              <button type="submit" class="db-btn db-btn-orange w-full !py-3 !text-sm">Sign in →</button>
+            </form>
+            <div class="mt-5 rounded-xl bg-white border border-slate-200 px-4 py-3 text-sm">
+              <span class="text-slate-600">New client?</span> <button type="button" @click="mode='signup'" class="font-bold text-royal hover:underline">Create a free account</button>
+            </div>
+          </section>
+
+          {# ===== CLIENT SIGN-UP (only clients can self-register) ===== #}
+          <section x-show="mode==='signup'" x-cloak aria-labelledby="h-signup">
+            <h2 id="h-signup" class="text-2xl font-extrabold">Create client account</h2>
+            <p class="text-sm text-slate-500 mt-1 mb-5">Free. Track your matters, upload documents and pay online.</p>
+            <form method="post" action="{{ url_for('portal') }}" class="space-y-3">{{ csrf_input }}
+              <input type="hidden" name="action" value="signup"/>
+              <div><label for="su-name" class="block text-xs font-bold text-slate-600 mb-1">Full name</label><input id="su-name" type="text" name="name" required autocomplete="name" maxlength="120" class="db-in !py-2.5 !text-sm"/></div>
+              <div><label for="su-email" class="block text-xs font-bold text-slate-600 mb-1">Email</label><input id="su-email" type="email" name="email" required autocomplete="email" class="db-in !py-2.5 !text-sm"/></div>
+              <div class="grid grid-cols-2 gap-2.5">
+                <div><label for="su-pw" class="block text-xs font-bold text-slate-600 mb-1">Password</label><input id="su-pw" type="password" name="password" required minlength="10" autocomplete="new-password" placeholder="Min. 10 characters" class="db-in !py-2.5 !text-sm"/></div>
+                <div><label for="su-pw2" class="block text-xs font-bold text-slate-600 mb-1">Confirm</label><input id="su-pw2" type="password" name="confirm_password" required minlength="10" autocomplete="new-password" class="db-in !py-2.5 !text-sm"/></div>
+              </div>
+              <label class="flex items-start gap-2 text-xs text-slate-600 cursor-pointer"><input type="checkbox" name="policy" value="1" required class="mt-0.5 h-4 w-4"/><span>I agree to the <a href="{{ url_for('portal-usage-policy') }}" target="_blank" class="text-royal font-bold underline">Portal Usage Policy</a>.</span></label>
+              <button type="submit" class="db-btn db-btn-orange w-full !py-3 !text-sm">Create account</button>
+            </form>
+            <p class="text-sm text-center mt-4 text-slate-600">Already registered? <button type="button" @click="mode='login'" class="font-bold text-royal hover:underline">Sign in</button></p>
+          </section>
+
+          {# ===== FORGOT PASSWORD ===== #}
+          <section x-show="mode==='forgot'" x-cloak aria-labelledby="h-forgot">
+            <h2 id="h-forgot" class="text-2xl font-extrabold">Reset password</h2>
+            <p class="text-sm text-slate-500 mt-1 mb-5">Enter your account email — we'll send a link to set a new password.</p>
+            <form method="post" action="{{ url_for('portal') }}" class="space-y-3.5">{{ csrf_input }}
+              <input type="hidden" name="action" value="forgot_request"/>
+              <div><label for="fp-email" class="block text-xs font-bold text-slate-600 mb-1">Email</label><input id="fp-email" type="email" name="email" required autocomplete="email" placeholder="you@example.com" class="db-in !py-2.5 !text-sm"/></div>
+              <button type="submit" class="db-btn db-btn-blue w-full !py-3 !text-sm">Send reset link</button>
+            </form>
+            <p class="text-sm text-center mt-4"><button type="button" @click="mode='login'" class="font-bold text-royal hover:underline">← Back to sign in</button></p>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

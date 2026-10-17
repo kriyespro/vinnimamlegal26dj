@@ -1,0 +1,177 @@
+{% extends 'portal/base.html' %}
+{% from 'portal/_ui.html' import pill, kpi, money with context %}
+{% block title %}Office desk{% endblock %}
+{% block role %}Office staff{% endblock %}
+{% block xdata %}panel: '{{ active_panel }}', openCase: {{ open_case or 'null' }}, filter: 'all',
+  csrf: {{ csrf_token|string|tojson|forceescape }},
+  async post(url, data = {}) { try { const r = await fetch(url, { method: 'POST', credentials: 'same-origin', headers: { 'X-CSRFToken': this.csrf, 'X-Requested-With': 'fetch', 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(data) }); return r.ok; } catch (e) { return false; } }{% endblock %}
+{% set tabs = [('leads', 'Leads' ~ (' (' ~ new_leads ~ ')' if new_leads else '')), ('cases', 'My cases'), ('escalate', 'Escalate / report')] %}
+{% block nav %}{% for key, label in tabs %}<button type="button" @click="panel='{{ key }}'" :class="panel==='{{ key }}' ? 'bg-gold text-white' : 'text-white/75 hover:bg-white/10'" class="text-xs font-bold px-3 py-1.5 rounded-lg">{{ label }}</button>{% endfor %}{% endblock %}
+{% block nav_m %}{% for key, label in tabs %}<button type="button" @click="panel='{{ key }}'" :class="panel==='{{ key }}' ? 'bg-gold text-white' : 'text-white/75'" class="text-xs font-bold px-3 py-1.5 rounded-lg whitespace-nowrap">{{ label }}</button>{% endfor %}{% endblock %}
+
+{% block content %}
+  <h1 class="sr-only">Office desk</h1>
+  <div class="mb-3 rounded-xl border border-orange-200 bg-orange-50 px-3 py-1.5 text-xs text-orange-900"><b>Office rule §2.4:</b> no legal advice on calls or WhatsApp — coordinate documents, payments &amp; updates, and escalate legal questions to the partner.</div>
+
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3">
+    {{ kpi('New leads', new_leads, 'text-royal' if new_leads else 'text-navy', click="panel='leads'; filter='new'") }}
+    {{ kpi('Assigned cases', jobs|length, click="panel='cases'") }}
+    {{ kpi('Docs pending', docs_pending_total, 'text-orange-600' if docs_pending_total else 'text-navy', click="panel='cases'") }}
+    {{ kpi('Payments due', due_invoices_total, 'text-orange-600' if due_invoices_total else 'text-navy', click="panel='cases'") }}
+  </div>
+
+  {# ===================== LEADS ===================== #}
+  <section x-show="panel==='leads'" x-cloak aria-label="Website leads">
+    <div class="db-chip-row mb-2" role="tablist">
+      {% for key, label in [('all', 'All'), ('new', 'New'), ('whatsapp_sent', 'Contacted'), ('converted', 'Converted'), ('closed', 'Closed')] %}
+        <button type="button" role="tab" @click="filter='{{ key }}'" :class="filter==='{{ key }}' ? 'on' : ''" class="db-chip">{{ label }}</button>
+      {% endfor %}
+    </div>
+    <div class="db-panel !p-0 overflow-hidden">
+      {% for eq in enquiries %}
+        <div x-data="{ st: '{{ eq.status }}', n: {{ eq.outreach_count }}, saved: false }" x-show="filter==='all' || filter===st" class="flex flex-wrap items-center gap-x-4 gap-y-2 px-3 py-2.5 border-t border-slate-100 first:border-0">
+          <div class="min-w-0 flex-1 basis-56">
+            <div class="text-sm font-bold truncate">{{ eq.name }} <span class="pill" :class="{'pill-orange': st==='new', 'pill-blue': st==='whatsapp_sent', 'pill-green': st==='converted', 'pill-slate': st==='closed'}" x-text="{new:'New', whatsapp_sent:'Contacted', converted:'Converted', closed:'Closed'}[st]"></span></div>
+            <div class="db-meta truncate"><a href="tel:{{ eq.phone }}" class="text-royal font-semibold">{{ eq.phone }}</a>{% if eq.email %} · {{ eq.email }}{% endif %}{% if eq.city %} · {{ eq.city }}{% endif %}</div>
+          </div>
+          <div class="db-meta basis-52 flex-1 min-w-0"><span class="text-navy font-semibold">{{ eq.service or '—' }}</span> · {{ eq.source_page }}<br>{{ eq.created_at }}<span x-show="n > 0" x-cloak> · <b x-text="n + ' outreach'"></b></span>
+            {% if eq.message %}<div class="truncate" title="{{ eq.message }}">“{{ eq.message }}”</div>{% endif %}</div>
+          <div class="flex items-center gap-2">
+            <select aria-label="Lead status" class="db-in w-auto" x-model="st" @change="saved = await post('{{ url_for('portal_enquiry_status', enquiry_id=eq.id) }}', { status: st }); setTimeout(() => saved = false, 1800)">
+              {% for value, label in [('new', 'New'), ('whatsapp_sent', 'Contacted'), ('converted', 'Converted'), ('closed', 'Closed')] %}<option value="{{ value }}">{{ label }}</option>{% endfor %}
+            </select>
+            <span x-show="saved" x-cloak class="text-green-600 text-xs font-bold">✓</span>
+            <a href="{{ eq.whatsapp_link }}" target="_blank" rel="noopener" class="db-btn db-btn-wa" @click="if (st==='new') st='whatsapp_sent'; n++; post('{{ url_for('portal_enquiry_whatsapp', enquiry_id=eq.id) }}')" title="Opens WhatsApp and logs the outreach">WhatsApp</a>
+          </div>
+        </div>
+      {% else %}<p class="p-4 text-sm text-slate-400">No enquiries yet.</p>{% endfor %}
+    </div>
+  </section>
+
+  {# ===================== CASES ===================== #}
+  <section x-show="panel==='cases'" x-cloak aria-label="My cases">
+    {% if not jobs %}<div class="db-panel text-center py-8 text-sm text-slate-500">No cases are assigned to you yet.</div>{% else %}
+    <div class="grid lg:grid-cols-[17rem_1fr] gap-3 items-start">
+      <aside class="db-case-list lg:space-y-2 lg:sticky lg:top-16">
+        {% for job in jobs %}{% set c = job.case %}
+          <button type="button" @click="openCase={{ c.id }}" :class="openCase==={{ c.id }} ? 'is-open' : ''" class="db-case">
+            <div class="flex items-center justify-between gap-2"><span class="text-[11px] font-bold text-royal">{{ c.case_no }}</span>{{ pill(c.status) }}</div>
+            <div class="text-sm font-semibold leading-snug truncate">{{ c.title }}</div>
+            <div class="db-meta truncate">{{ c.client_name }}</div>
+            <div class="db-bar mt-1.5"><i style="width: {{ job.progress }}%"></i></div>
+            <div class="db-meta mt-1">{{ job.progress }}%{% if job.needed_docs %}<b class="text-orange-600"> · {{ job.needed_docs|length }} docs</b>{% endif %}{% if job.due_invoices %}<b class="text-royal"> · {{ money(job.due_total) }} due</b>{% endif %}</div>
+          </button>
+        {% endfor %}
+      </aside>
+
+      <div>
+      {% for job in jobs %}{% set c = job.case %}
+        <div x-show="openCase==={{ c.id }}" x-cloak class="space-y-3" x-data="{ inv: false }">
+          <div class="db-panel">
+            <div class="flex flex-wrap items-start justify-between gap-2">
+              <div class="min-w-0"><div class="text-[11px] font-bold text-royal">{{ c.case_no }} {{ pill(c.status) }}</div><h2 class="text-base font-extrabold leading-snug">{{ c.title }}</h2>
+                <div class="db-meta">Client <b class="text-navy">{{ job.client.name }}</b> · Partner <b class="text-navy">{{ job.partner.name }}</b></div></div>
+              <div class="text-right"><div class="text-2xl font-extrabold text-royal leading-none">{{ job.progress }}%</div><div class="db-meta">{{ job.current_step.title if job.current_step else 'no steps yet' }}</div></div>
+            </div>
+            {# ---- quick actions: all inline, one line each ---- #}
+            <div class="grid gap-2 mt-3">
+              <form method="post" action="{{ url_for('portal_comms') }}" class="flex gap-1.5">{{ csrf_input }}
+                <input type="hidden" name="case_id" value="{{ c.id }}"/><input type="hidden" name="redirect_case" value="{{ c.id }}"/><input type="hidden" name="redirect_panel" value="cases"/>
+                <select name="type" aria-label="Communication type" class="db-in w-auto"><option>Call</option><option>WhatsApp</option><option>Email</option><option>Meeting</option></select>
+                <input name="note" required maxlength="500" aria-label="Communication note" placeholder="Log a call / message…" class="db-in"/><button class="db-btn db-btn-navy">Log</button>
+              </form>
+              <form method="post" action="{{ url_for('portal_case_update', case_id=c.id) }}" class="flex gap-1.5">{{ csrf_input }}
+                <input type="hidden" name="redirect_case" value="{{ c.id }}"/><input type="hidden" name="redirect_panel" value="cases"/>
+                <select name="update_kind" aria-label="Update type" class="db-in w-auto"><option value="general">Update</option><option value="document">Docs</option><option value="payment">Payment</option></select>
+                <input name="body" required maxlength="2000" aria-label="Update for client" placeholder="Update the client…" class="db-in"/><button class="db-btn db-btn-blue">Post</button>
+              </form>
+              <form method="post" action="{{ url_for('portal_partner_message') }}" class="flex gap-1.5">{{ csrf_input }}
+                <input type="hidden" name="case_id" value="{{ c.id }}"/><input type="hidden" name="redirect_case" value="{{ c.id }}"/><input type="hidden" name="redirect_panel" value="cases"/>
+                <input name="body" required maxlength="2000" aria-label="Message to partner" placeholder="Message {{ job.partner.name.split()[0] }} (partner)…" class="db-in"/><button class="db-btn db-btn-orange">Send</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="grid xl:grid-cols-2 gap-3">
+            <div class="space-y-3">
+              <div class="db-panel">
+                <div class="db-title">Documents <small>{{ job.needed_docs|length }} still needed</small></div>
+                {% for r in job.doc_requests %}
+                  <form method="post" action="{{ url_for('portal_document_request_status', request_id=r.id) }}" class="db-row text-sm">{{ csrf_input }}
+                    <input type="hidden" name="redirect_case" value="{{ c.id }}"/><input type="hidden" name="redirect_panel" value="cases"/>
+                    <span class="flex-1 truncate">☐ {{ r.title }}</span>
+                    <select name="status" aria-label="Request status" class="db-in w-auto" @change="$el.form.requestSubmit()">{% for s in ['needed', 'uploaded', 'verified'] %}<option value="{{ s }}" {% if r.status == s %}selected{% endif %}>{{ s }}</option>{% endfor %}</select>
+                  </form>
+                {% endfor %}
+                <form method="post" action="{{ url_for('portal_document_request', case_id=c.id) }}" class="flex gap-2 mt-2">{{ csrf_input }}
+                  <input type="hidden" name="redirect_case" value="{{ c.id }}"/><input type="hidden" name="redirect_panel" value="cases"/>
+                  <input name="title" required maxlength="200" aria-label="Document to request" placeholder="Request a document…" class="db-in"/><button class="db-btn db-btn-ghost">Request</button>
+                </form>
+                <form method="post" action="{{ url_for('portal_documents_upload') }}" enctype="multipart/form-data" class="flex gap-2 mt-2 items-center">{{ csrf_input }}
+                  <input type="hidden" name="case_id" value="{{ c.id }}"/><input type="hidden" name="redirect_case" value="{{ c.id }}"/><input type="hidden" name="redirect_panel" value="cases"/>
+                  <input type="file" name="file" required accept=".pdf,.jpg,.jpeg,.png" aria-label="Choose file" class="text-xs flex-1 min-w-0"/><button class="db-btn db-btn-blue">Upload</button>
+                </form>
+                <div class="db-scroll mt-1">{% for d in job.documents %}<div class="db-row text-sm"><span class="flex-1 truncate">📄 {{ d.filename }} <span class="db-meta">· {{ d.uploader_name }}</span></span><a href="{{ url_for('portal_document_download', doc_id=d.id) }}" class="text-royal text-xs font-bold">Download</a></div>{% endfor %}</div>
+              </div>
+
+              <div class="db-panel">
+                <div class="db-title">Invoices <button type="button" @click="inv=!inv" class="text-royal normal-case text-xs font-bold" x-text="inv ? 'Cancel' : '+ Raise invoice'"></button></div>
+                <form x-show="inv" x-cloak method="post" action="{{ url_for('portal_invoice_create', case_id=c.id) }}" class="grid sm:grid-cols-[1fr_6rem_8rem_auto] gap-2 mb-2">{{ csrf_input }}
+                  <input type="hidden" name="redirect_case" value="{{ c.id }}"/><input type="hidden" name="redirect_panel" value="cases"/>
+                  <input name="description" required maxlength="200" aria-label="Description" placeholder="Professional fee — stage 2" class="db-in"/>
+                  <input type="number" name="amount" required min="1" max="1000000" step="0.01" aria-label="Amount" placeholder="₹" class="db-in"/>
+                  <input type="date" name="due_date" aria-label="Due date" class="db-in"/><button class="db-btn db-btn-navy">Raise</button>
+                </form>
+                {% for i in job.invoices %}<div class="db-row text-sm"><span class="flex-1 truncate"><b>{{ i.invoice_no }}</b> <span class="db-meta">{{ i.description or '' }}{% if i.due_date and i.status == 'Pending' %} · due {{ i.due_date }}{% endif %}</span></span><b>{{ money(i.amount) }}</b>{{ pill(i.status) }}</div>
+                {% else %}<p class="db-meta">No invoices.</p>{% endfor %}
+                {% if job.due_invoices %}<p class="db-meta mt-1">Clients pay online from their dashboard — no manual “mark paid”.</p>{% endif %}
+              </div>
+            </div>
+
+            <div class="space-y-3">
+              <div class="db-panel">
+                <div class="db-title">Client conversation <small>coordination only</small></div>
+                <div class="db-scroll space-y-1.5 mb-2">
+                  {% for q in job.queries|reverse %}<div class="text-sm rounded-lg px-2.5 py-1.5 {{ 'bg-blue-50 mr-6' if q.author_role == 'client' else 'bg-slate-100 ml-6' }}"><div class="text-[10px] text-slate-400">{{ q.author_name }} · {{ q.created_at }}</div>{{ q.body }}</div>
+                  {% else %}<p class="db-meta">No messages.</p>{% endfor %}
+                </div>
+                <form method="post" action="{{ url_for('portal_message_reply') }}" class="flex gap-2">{{ csrf_input }}
+                  <input type="hidden" name="case_id" value="{{ c.id }}"/><input type="hidden" name="redirect_case" value="{{ c.id }}"/><input type="hidden" name="redirect_panel" value="cases"/>
+                  <input name="body" required maxlength="2000" autocomplete="off" aria-label="Reply to client" placeholder="Reply to client (no legal advice)…" class="db-in"/><button class="db-btn db-btn-orange">Send</button>
+                </form>
+              </div>
+              <div class="db-panel">
+                <div class="db-title">Timeline <small>updates, partner messages, comms</small></div>
+                <div class="db-scroll">
+                  {% for u in job.updates %}<div class="db-row items-start text-sm"><span class="pill pill-blue">{{ u.author_role or 'team' }}</span><div><div class="db-meta">{{ u.created_at }} · {{ u.author_name or 'Team' }}</div>{{ u.body }}</div></div>{% endfor %}
+                  {% for cm in job.communications %}<div class="db-row items-start text-sm"><span class="pill pill-slate">{{ cm.type }}</span><div><div class="db-meta">{{ cm.created_at }} · {{ cm.staff_name }}</div>{{ cm.note }}</div></div>{% endfor %}
+                  {% for pm in job.partner_messages %}<div class="db-row items-start text-sm"><span class="pill pill-orange">to partner</span><div><div class="db-meta">{{ pm.created_at }} · {{ pm.staff_name }}</div>{{ pm.body }}</div></div>{% endfor %}
+                  {% if not (job.updates or job.communications or job.partner_messages) %}<p class="db-meta">Nothing yet.</p>{% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </section>
+
+  {# ===================== ESCALATE / REPORT ===================== #}
+  <section x-show="panel==='escalate'" x-cloak class="grid md:grid-cols-2 gap-3" aria-label="Escalate or report">
+    <form method="post" action="{{ url_for('portal_escalate') }}" class="db-panel space-y-2">{{ csrf_input }}
+      <input type="hidden" name="redirect_panel" value="escalate"/>
+      <div class="db-title">Escalate to partner <small>§2.4 — client wants legal advice</small></div>
+      <select name="case_id" aria-label="Case" class="db-in"><option value="">Case (optional)</option>{% for job in jobs %}<option value="{{ job.case.id }}">{{ job.case.case_no }} — {{ job.case.title[:40] }}</option>{% endfor %}</select>
+      <textarea name="note" rows="3" maxlength="2000" aria-label="Escalation note" placeholder="What did the client ask?" class="db-in"></textarea>
+      <button class="db-btn db-btn-orange">Escalate</button>
+    </form>
+    <form method="post" action="{{ url_for('portal_breach') }}" class="db-panel space-y-2">{{ csrf_input }}
+      <input type="hidden" name="redirect_panel" value="escalate"/>
+      <div class="db-title">Report a security incident <small>§2.3 — phishing, data exposure, unauthorised access</small></div>
+      <textarea name="note" rows="4" maxlength="2000" aria-label="Incident details" placeholder="Describe what happened…" class="db-in"></textarea>
+      <button class="db-btn db-btn-red">Report to compliance</button>
+    </form>
+  </section>
+{% endblock %}

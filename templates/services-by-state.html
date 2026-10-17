@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% block title %}{% if active_state %}Legal Services in {{ active_state.name }}{% else %}Legal Services by State{% endif %} | VinnitaLegal{% endblock %}
+{% block description %}{% if active_state %}Company registration, trademark, partnership firm and legal document services in {{ active_state.name }} — expert-assisted filing with local stamp-duty guidance.{% else %}Find VinnitaLegal services and local stamp-duty and filing guidance for your state.{% endif %}{% endblock %}
+{% block xdata %}, region: 'All', selected: '{{ active_state.slug if active_state else featured_states[0].slug }}'{% endblock %}
+{% block content %}
+
+  <section class="hero-gradient pt-24 pb-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+      <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 mb-4 text-white/90 text-sm">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Gujarat · major cities
+      </div>
+      <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">
+        {% if active_state %}Legal Services in {{ active_state.name }}{% else %}Services by State{% endif %}
+      </h1>
+      <p class="text-white/70 text-lg max-w-2xl mx-auto">
+        {% if active_state %}
+          Expert-assisted registration, trademark &amp; compliance in {{ active_state.cities }} — with local stamp duty and filing guidance.
+        {% else %}
+          Pick your state or city. Same trusted VinnitaLegal workflow — tailored to local Registrar and stamp rules.
+        {% endif %}
+      </p>
+    </div>
+  </section>
+
+  <section class="bg-white border-b border-slate-100 sticky top-16 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3">
+      <div class="flex gap-2 overflow-x-auto">
+        {% for r in regions %}
+          <button type="button" @click="region='{{ r }}'"
+                  :class="region==='{{ r }}' ? 'bg-navy text-white' : 'bg-slate-100 text-slate-600'"
+                  class="flex-shrink-0 px-4 py-2 rounded-full text-xs font-bold transition-all">{{ r }}</button>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="section-padding">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="grid lg:grid-cols-12 gap-8">
+
+        <!-- State list -->
+        <aside class="lg:col-span-4">
+          <h2 class="font-bold text-navy mb-4">Select your state</h2>
+          <div class="space-y-2">
+            {% for st in states %}
+              <a href="{{ url_for('services-by-state', state_slug=st.slug) }}"
+                 x-show="region==='All' || region==='{{ st.region }}'"
+                 class="block glass-card rounded-xl p-4 border-2 transition-colors {% if active_state and active_state.slug == st.slug %}border-royal{% else %}border-transparent hover:border-slate-200{% endif %}">
+                <div class="flex justify-between items-start gap-2">
+                  <div>
+                    <div class="font-bold text-navy text-sm">{{ st.name }}</div>
+                    <div class="text-xs text-slate-500 mt-0.5">{{ st.cities }}</div>
+                  </div>
+                  <span class="text-[10px] font-semibold uppercase bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">{{ st.region }}</span>
+                </div>
+                <div class="text-xs text-royal font-semibold mt-2">{{ st.services|length }} services available</div>
+              </a>
+            {% endfor %}
+          </div>
+        </aside>
+
+        <!-- Services for selected state -->
+        <div class="lg:col-span-8">
+          {% if active_state %}
+            <div class="mb-6">
+              <h2 class="text-2xl font-extrabold text-navy">{{ active_state.name }}</h2>
+              <p class="text-slate-500 text-sm mt-1">{{ active_state.cities }}</p>
+            </div>
+            <div class="grid sm:grid-cols-2 gap-4">
+              {% for svc in state_services %}
+                <a href="{{ url_for(svc.endpoint) }}?state={{ active_state.slug }}"
+                   class="glass-card rounded-2xl p-5 hover:border-royal border-2 border-transparent transition-all group">
+                  <div class="text-xs font-bold text-royal uppercase mb-1">{{ active_state.name }}</div>
+                  <h3 class="font-bold text-navy group-hover:text-royal transition-colors">{{ svc.name }}</h3>
+                  <p class="text-sm text-slate-500 mt-1">{{ svc.desc }}</p>
+                  <span class="inline-block mt-3 text-xs font-semibold text-royal">Get started →</span>
+                </a>
+              {% endfor %}
+            </div>
+
+            <div class="mt-8 glass-card rounded-2xl p-6 bg-gradient-to-br from-navy to-royal text-white">
+              <h3 class="font-bold text-lg mb-2">Need help in {{ active_state.name.split(' ')[0] }}?</h3>
+              <p class="text-white/70 text-sm mb-4">Talk to a VinnitaLegal expert — we handle state-specific stamp duty, Registrar portals and GST jurisdiction.</p>
+              {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                  <div id="enquiry-status" role="status" class="mb-3 rounded-xl px-4 py-3 text-sm font-medium {% if category == 'error' %}bg-red-500/20 text-red-100{% else %}bg-green-500/25 text-green-50{% endif %}">{{ message }}</div>
+                {% endfor %}
+              {% endwith %}
+              <form id="enquiry" method="post" action="{{ url_for('enquire') }}" class="grid sm:grid-cols-2 gap-3">{{ csrf_input }}
+                <input type="hidden" name="next" value="{{ url_for('services-by-state', state_slug=active_state.slug) }}#enquiry"/>
+                <input type="hidden" name="source_page" value="services-by-state/{{ active_state.slug }}"/>
+                <input type="hidden" name="city" value="{{ active_state.name }}"/>
+                <input name="name" required autocomplete="name" aria-label="Your name" placeholder="Your name" class="rounded-xl px-4 py-2.5 text-sm text-navy"/>
+                <input name="phone" type="tel" inputmode="tel" required autocomplete="tel" aria-label="Phone" placeholder="Phone" class="rounded-xl px-4 py-2.5 text-sm text-navy"/>
+                <input name="email" type="email" autocomplete="email" aria-label="Email" placeholder="Email" class="rounded-xl px-4 py-2.5 text-sm text-navy"/>
+                <select name="service" aria-label="Service needed" class="rounded-xl px-4 py-2.5 text-sm text-navy">
+                  <option value="">Service needed</option>
+                  {% for svc in state_services %}
+                    <option>{{ svc.name }} — {{ active_state.name }}</option>
+                  {% endfor %}
+                </select>
+                <textarea name="message" rows="2" placeholder="Tell us about your requirement…"
+                          class="sm:col-span-2 rounded-xl px-4 py-2.5 text-sm text-navy"></textarea>
+                <button type="submit" class="sm:col-span-2 bg-gold hover:bg-gold-dark text-navy font-bold py-3 rounded-xl text-sm transition-colors">Request callback</button>
+              </form>
+            </div>
+          {% else %}
+            <div class="glass-card rounded-2xl p-8 text-center">
+              <h2 class="text-xl font-bold text-navy mb-2">Choose a state from the list</h2>
+              <p class="text-slate-500 text-sm">Or start with our most requested locations:</p>
+              <div class="flex flex-wrap justify-center gap-2 mt-6">
+                {% for st in featured_states %}
+                  <a href="{{ url_for('services-by-state', state_slug=st.slug) }}"
+                     class="px-4 py-2 rounded-full bg-slate-100 hover:bg-royal hover:text-white text-sm font-semibold text-navy transition-colors">
+                    {{ st.name }}
+                  </a>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="mt-8">
+              <h2 class="font-bold text-navy mb-4">All services available nationwide</h2>
+              <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
+                {% for svc in all_services %}
+                  <a href="{{ url_for(svc.endpoint) }}" class="bg-white border border-slate-100 rounded-xl p-4 hover:border-royal transition-colors">
+                    <div class="font-semibold text-sm text-navy">{{ svc.name }}</div>
+                    <div class="text-xs text-slate-500 mt-1">{{ svc.desc }}</div>
+                  </a>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

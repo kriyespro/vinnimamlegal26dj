@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% if q %}Search: {{ q }} — {% endif %}Vinnita Legal Consultancy</title>
+  <meta name="description" content="Search Vinnita Legal Consultancy services and open the client portal quickly."/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{navy:{DEFAULT:'#0A1628'},royal:{DEFAULT:'#1E40AF',light:'#3B82F6'},gold:{DEFAULT:'#F59E0B',dark:'#D97706'}}}}}</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="font-inter bg-slate-50 text-navy" x-data="{ mobileOpen:false, scrolled:false }" @scroll.window="scrolled = window.scrollY > 60">
+
+  <nav class="nav-sticky w-full bg-navy/95 border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+      <a href="{{ url_for('index') }}" class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A1628" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <span class="text-white font-bold text-xl">Vinnita <span class="text-gold">Legal</span></span>
+      </a>
+      {% include 'includes/nav_search_cta.html' %}
+      <button @click="mobileOpen = !mobileOpen" class="lg:hidden w-10 h-10 flex flex-col justify-center items-center gap-1.5 rounded-xl border border-white/20">
+        <span class="w-5 h-0.5 bg-white rounded"></span><span class="w-5 h-0.5 bg-white rounded"></span><span class="w-5 h-0.5 bg-white rounded"></span>
+      </button>
+    </div>
+    <div x-show="mobileOpen" x-cloak class="lg:hidden bg-navy border-t border-white/10 px-4 py-4">
+      {% include 'includes/nav_mobile_portal.html' %}
+    </div>
+  </nav>
+
+  <section class="hero-gradient pt-16 pb-12">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 text-center">
+      <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-3">Search Vinnita Legal Consultancy</h1>
+      <p class="text-white/70 text-sm mb-6">Find services — or jump straight to the <a href="{{ url_for('portal') }}" class="text-gold font-semibold underline">Client Portal</a>.</p>
+      <form action="{{ url_for('site_search') }}" method="get" class="flex gap-2">
+        <input type="search" name="q" value="{{ q }}" autofocus
+               placeholder="Try “portal”, “login”, “trademark”…"
+               class="flex-1 rounded-2xl px-4 py-3 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-gold"/>
+        <button type="submit" class="btn-primary px-6">Search</button>
+      </form>
+    </div>
+  </section>
+
+  <main class="max-w-2xl mx-auto px-4 sm:px-6 py-10">
+    {% if not results %}
+      <p class="text-slate-500 text-center">No results. Try another term, or open the
+        <a href="{{ url_for('portal') }}" class="text-royal font-semibold">Client Portal</a>.</p>
+    {% else %}
+      <div class="space-y-2">
+        {% for item in results %}
+          <a href="{{ item.url }}"
+             class="block glass-card rounded-2xl p-4 hover:border-royal/30 transition-colors {% if item.portal %}border-amber-200 bg-amber-50/40{% endif %}">
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                <div class="font-bold text-navy">
+                  {{ item.title }}
+                  {% if item.portal %}<span class="ml-2 text-[10px] font-bold uppercase text-gold-dark bg-gold/15 px-1.5 py-0.5 rounded">Portal</span>{% endif %}
+                </div>
+                <div class="text-sm text-slate-500 mt-0.5">{{ item.blurb }}</div>
+              </div>
+              <svg class="w-4 h-4 text-slate-300 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="mt-10 text-center">
+      <a href="{{ url_for('portal') }}" class="btn-primary">Open Client Portal</a>
+    </div>
+  </main>
+</body>
+</html>

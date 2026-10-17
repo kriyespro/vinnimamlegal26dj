@@ -1,0 +1,160 @@
+{% extends 'portal/base.html' %}
+{% from 'portal/_ui.html' import pill, kpi, money with context %}
+{% block title %}Founder dashboard{% endblock %}
+{% block role %}Founder / CEO{% endblock %}
+{% block head_extra %}<script src="{{ url_for('static', filename='js/chart.umd.min.js') }}"></script>{% endblock %}
+{% block xdata %}panel: '{{ active_panel }}', drawn: {}{% endblock %}
+{% set tabs = [('overview', 'Overview'), ('cases', 'Cases'), ('team', 'Team'), ('revenue', 'Revenue'), ('leads', 'Leads'), ('activity', 'Activity')] %}
+{% block nav %}{% for key, label in tabs %}<button type="button" @click="panel='{{ key }}'" :class="panel==='{{ key }}' ? 'bg-gold text-white' : 'text-white/75 hover:bg-white/10'" class="text-xs font-bold px-3 py-1.5 rounded-lg">{{ label }}</button>{% endfor %}
+  <a href="{{ url_for('console') }}" class="text-xs font-bold px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 ml-2">Open console →</a>{% endblock %}
+{% block nav_m %}{% for key, label in tabs %}<button type="button" @click="panel='{{ key }}'" :class="panel==='{{ key }}' ? 'bg-gold text-white' : 'text-white/75'" class="text-xs font-bold px-3 py-1.5 rounded-lg whitespace-nowrap">{{ label }}</button>{% endfor %}
+  <a href="{{ url_for('console') }}" class="text-xs font-bold px-3 py-1.5 rounded-lg bg-white/10 whitespace-nowrap">Console →</a>{% endblock %}
+
+{% block content %}
+  <h1 class="sr-only">Founder dashboard</h1>
+  {# ---------- KPI strip (always visible) ---------- #}
+  <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2 mb-3">
+    {{ kpi('Revenue received', money(m.revenue_paid), 'text-green-600', click="panel='revenue'") }}
+    {{ kpi('Outstanding', money(m.revenue_due), 'text-orange-600' if m.overdue_invoices else 'text-navy', (m.overdue_invoices|length ~ ' overdue') if m.overdue_invoices else 'none overdue', click="panel='revenue'") }}
+    {{ kpi('Open matters', m.cases|length, 'text-navy', 'avg progress ' ~ m.avg_progress ~ '%', click="panel='cases'") }}
+    {{ kpi('Leads', m.lead_total, 'text-royal', m.lead_new ~ ' new · ' ~ m.conversion_rate ~ '% converted', click="panel='leads'") }}
+    {{ kpi('Docs needed', m.docs_needed, 'text-orange-600' if m.docs_needed else 'text-navy', 'across all clients', click="panel='cases'") }}
+    {{ kpi('Drafts to approve', m.drafts_pending, 'text-orange-600' if m.drafts_pending else 'text-navy', 'with partners', click="panel='team'") }}
+  </div>
+
+  {# ===================== OVERVIEW ===================== #}
+  <section x-show="panel==='overview'" x-cloak class="space-y-3" aria-label="Overview">
+    {% set att = [] %}
+    {% if m.overdue_invoices %}{% set _ = att.append(('rose', m.overdue_invoices|length ~ ' overdue invoice' ~ ('s' if m.overdue_invoices|length != 1) ~ ' (' ~ money(m.overdue_invoices|sum(attribute='amount')) ~ ')', "panel='revenue'")) %}{% endif %}
+    {% if m.drafts_pending %}{% set _ = att.append(('amber', m.drafts_pending ~ ' draft' ~ ('s' if m.drafts_pending != 1) ~ ' waiting for partner approval', "panel='team'")) %}{% endif %}
+    {% if m.docs_needed %}{% set _ = att.append(('amber', m.docs_needed ~ ' client document' ~ ('s' if m.docs_needed != 1) ~ ' still outstanding', "panel='cases'")) %}{% endif %}
+    {% if m.consult_requested %}{% set _ = att.append(('blue', m.consult_requested ~ ' consultation request' ~ ('s' if m.consult_requested != 1) ~ ' not yet confirmed', "panel='activity'")) %}{% endif %}
+    {% if m.lead_new %}{% set _ = att.append(('blue', m.lead_new ~ ' new lead' ~ ('s' if m.lead_new != 1) ~ ' not yet contacted', "panel='leads'")) %}{% endif %}
+    <div class="db-panel">
+      <div class="db-title">Needs attention <small>click an item to jump to it</small></div>
+      {% for tone, text, go in att %}
+        <button type="button" @click="{{ go }}" class="db-row w-full text-left text-sm hover:bg-slate-50 rounded-lg px-1"><span class="pill {{ 'pill-red' if tone == 'rose' else ('pill-orange' if tone == 'amber' else 'pill-blue') }}">!</span><span class="flex-1">{{ text }}</span><span class="text-royal text-xs font-bold">Open →</span></button>
+      {% else %}<p class="db-meta py-1">✅ Nothing needs attention right now.</p>{% endfor %}
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-3">
+      <div class="db-panel"><div class="db-title">Cases by status</div><div class="relative h-44"><canvas id="chartCaseStatus" aria-label="Cases by status chart" role="img"></canvas></div></div>
+      <div class="db-panel"><div class="db-title">Revenue <small>received vs outstanding</small></div><div class="relative h-44"><canvas id="chartRevenue" aria-label="Revenue chart" role="img"></canvas></div></div>
+      <div class="db-panel"><div class="db-title">Lead funnel</div><div class="relative h-44"><canvas id="chartLeads" aria-label="Lead funnel chart" role="img"></canvas></div></div>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-3">
+      <div class="db-panel"><div class="db-title">Latest client-facing updates <button type="button" @click="panel='activity'" class="text-royal normal-case text-xs font-bold">All →</button></div>
+        {% for u in m.recent_updates[:5] %}<div class="db-row items-start text-sm"><span class="pill pill-blue">{{ u.author_role or 'team' }}</span><div class="min-w-0"><div class="db-meta">{{ u.case_no }} · {{ u.author_name or 'Team' }} · {{ u.created_at }}</div><div class="truncate">{{ u.body }}</div></div></div>
+        {% else %}<p class="db-meta">No updates yet.</p>{% endfor %}</div>
+      <div class="db-panel"><div class="db-title">People <small>active accounts</small></div>
+        <div class="grid grid-cols-3 gap-2 text-center">
+          {% for role, label in [('client', 'Clients'), ('partner', 'Partners'), ('staff', 'Office staff')] %}<div class="rounded-lg bg-slate-50 py-2"><div class="text-xl font-extrabold">{{ m.role_counts.get(role, 0) }}</div><div class="db-meta">{{ label }}</div></div>{% endfor %}
+        </div>
+        <a href="{{ url_for('console_users') }}" class="db-btn db-btn-ghost mt-3 w-full">Manage users in console →</a></div>
+    </div>
+  </section>
+
+  {# ===================== CASES ===================== #}
+  <section x-show="panel==='cases'" x-cloak class="db-panel !p-0 overflow-hidden" aria-label="Cases">
+    <div class="px-3 pt-3"><div class="db-title">All matters <small>{{ m.cases|length }} total · <a class="text-royal font-bold" href="{{ url_for('console_cases') }}">edit in console →</a></small></div></div>
+    {% for row in m.cases %}{% set c = row.case %}
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-1 px-3 py-2.5 border-t border-slate-100 text-sm">
+        <div class="min-w-0 flex-1 basis-56"><div class="text-[11px] font-bold text-royal">{{ c.case_no }}</div><div class="font-semibold truncate">{{ c.title }}</div><div class="db-meta truncate">{{ c.client_name }} · partner {{ c.partner_name }}{% if row.staff_names %} · {{ row.staff_names|join(', ') }}{% endif %}</div></div>
+        <div class="w-32"><div class="db-bar"><i style="width: {{ row.progress }}%"></i></div><div class="db-meta">{{ row.progress }}%</div></div>
+        <div class="db-meta w-28 text-right">{{ money(row.paid) }} paid{% if row.due %}<br><b class="text-orange-600">{{ money(row.due) }} due</b>{% endif %}</div>
+        {{ pill(c.status) }}
+      </div>
+    {% else %}<p class="p-4 text-sm text-slate-400">No cases.</p>{% endfor %}
+  </section>
+
+  {# ===================== TEAM ===================== #}
+  <section x-show="panel==='team'" x-cloak class="grid lg:grid-cols-2 gap-3" aria-label="Team">
+    <div class="db-panel"><div class="db-title">Partners</div>
+      {% for p in m.partners %}<div class="db-row text-sm"><div class="flex-1 min-w-0"><div class="font-semibold truncate">{{ p.name }}</div><div class="db-meta">{{ p.email }}</div></div>
+        <div class="db-meta text-right">{{ p.case_count }} cases · {{ money(p.revenue) }}<br>{{ p.updates_posted }} updates{% if p.pending_drafts %} · <b class="text-orange-600">{{ p.pending_drafts }} drafts</b>{% endif %}</div></div>
+      {% else %}<p class="db-meta">No partners.</p>{% endfor %}</div>
+    <div class="db-panel"><div class="db-title">Office staff</div>
+      {% for s in m.staff %}<div class="db-row text-sm"><div class="flex-1 min-w-0"><div class="font-semibold truncate">{{ s.name }}</div><div class="db-meta">{{ s.email }}</div></div>
+        <div class="db-meta text-right">{{ s.cases_assigned }} cases · {{ s.whatsapp_outreach }} outreach<br>{{ s.client_updates }} updates · {{ s.partner_messages }} msgs</div></div>
+      {% else %}<p class="db-meta">No staff.</p>{% endfor %}</div>
+  </section>
+
+  {# ===================== REVENUE ===================== #}
+  <section x-show="panel==='revenue'" x-cloak class="db-panel !p-0 overflow-hidden" aria-label="Revenue">
+    <div class="px-3 pt-3"><div class="db-title">Invoices <small>{{ money(m.revenue_paid) }} received · {{ money(m.revenue_due) }} outstanding · refunds are full-amount and audited</small></div></div>
+    {% for i in m.invoices %}
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-1 px-3 py-2 border-t border-slate-100 text-sm">
+        <div class="min-w-0 flex-1 basis-52"><b>{{ i.invoice_no }}</b> <span class="db-meta">{{ i.case_no or i.case_title or '' }} · {{ i.client_name }}{% if i.due_date and i.status == 'Pending' %} · due {{ i.due_date }}{% endif %}</span></div>
+        <b>{{ money(i.amount) }}</b>{{ pill(i.status) }}
+        {% if i.captured_payment_id %}
+          <form method="post" action="{{ url_for('billing_refund', payment_id=i.captured_payment_id) }}" @submit="if (!confirm('Refund the full amount to the customer?')) $event.preventDefault()">{{ csrf_input }}<button class="db-btn db-btn-red">Refund</button></form>
+        {% endif %}
+      </div>
+    {% else %}<p class="p-4 text-sm text-slate-400">No invoices.</p>{% endfor %}
+  </section>
+
+  {# ===================== LEADS ===================== #}
+  <section x-show="panel==='leads'" x-cloak class="space-y-3" aria-label="Leads">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
+      {{ kpi('Total', m.lead_total) }}{{ kpi('New', m.lead_new, 'text-orange-600') }}{{ kpi('Contacted', m.lead_contacted, 'text-royal') }}{{ kpi('Converted', m.lead_converted, 'text-green-600') }}{{ kpi('Closed', m.lead_closed) }}
+    </div>
+    <div class="grid lg:grid-cols-[1fr_20rem] gap-3">
+      <div class="db-panel !p-0 overflow-hidden">
+        <div class="px-3 pt-3"><div class="db-title">Latest enquiries <small>{{ m.satisfaction_rate }}% satisfied · {{ m.conversion_rate }}% converted · <a class="text-royal font-bold" href="{{ url_for('console_leads') }}">manage →</a></small></div></div>
+        {% for e in m.enquiries[:15] %}<div class="flex flex-wrap items-center gap-x-3 px-3 py-2 border-t border-slate-100 text-sm"><div class="flex-1 min-w-0 basis-44"><b>{{ e.name }}</b> <span class="db-meta">{{ e.service or e.source_page }} · {{ e.phone }}</span></div><span class="db-meta">{{ e.created_at[:10] }}</span>{{ pill({'new': 'New', 'whatsapp_sent': 'Contacted', 'converted': 'Converted', 'closed': 'Closed'}.get(e.status, e.status), e.status) }}</div>
+        {% else %}<p class="p-4 text-sm text-slate-400">No enquiries.</p>{% endfor %}
+      </div>
+      <div class="db-panel"><div class="db-title">Enquiry sources</div><div class="relative h-56"><canvas id="chartSources" aria-label="Enquiry sources chart" role="img"></canvas></div></div>
+    </div>
+  </section>
+
+  {# ===================== ACTIVITY ===================== #}
+  <section x-show="panel==='activity'" x-cloak class="grid lg:grid-cols-2 gap-3" aria-label="Activity">
+    <div class="db-panel"><div class="db-title">Audit trail <small><a class="text-royal font-bold" href="{{ url_for('console_audit') }}">full log →</a></small></div>
+      <div class="db-scroll !max-h-96">{% for a in m.recent_audit %}<div class="db-row text-sm items-start"><span class="db-meta w-28 shrink-0">{{ a.created_at }}</span><div class="min-w-0"><b>{{ a.action }}</b> <span class="db-meta">{{ a.user_name or 'anonymous' }}{% if a.ref %} · {{ a.ref }}{% endif %}</span></div></div>{% endfor %}</div></div>
+    <div class="space-y-3">
+      <div class="db-panel"><div class="db-title">Consultations</div>
+        {% for co in m.consultations %}<div class="db-row text-sm"><span class="flex-1 truncate"><b>{{ co.client_name }}</b> <span class="db-meta">{{ co.practice_area }}</span></span><span class="db-meta">{{ co.preferred_date }} {{ co.preferred_time }}</span>{{ pill(co.status) }}</div>
+        {% else %}<p class="db-meta">None.</p>{% endfor %}</div>
+      <div class="db-panel"><div class="db-title">Client-facing updates</div>
+        <div class="db-scroll">{% for u in m.recent_updates %}<div class="db-row items-start text-sm"><div><div class="db-meta">{{ u.case_no }} · {{ u.author_name or 'Team' }} · {{ u.created_at }}</div>{{ u.body }}</div></div>{% endfor %}</div></div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block scripts %}
+<script nonce="{{ request.csp_nonce }}">
+  const charts = {{ charts_json|safe }};
+  const palette = ['#1D4ED8', '#F97316', '#3B82F6', '#FB923C', '#1E40AF', '#EA580C', '#93C5FD'];
+  function drawChart(id, type, labels, data, label, horizontal) {
+    const el = document.getElementById(id);
+    if (!el || typeof Chart === 'undefined' || el._drawn) return;
+    el._drawn = true;
+    const round = type === 'doughnut';
+    new Chart(el, {
+      type, data: { labels, datasets: [{ label: label || '', data, backgroundColor: palette, borderWidth: round ? 2 : 0, borderColor: '#fff', borderRadius: round ? 0 : 6, maxBarThickness: 46 }] },
+      options: {
+        responsive: true, maintainAspectRatio: false, indexAxis: horizontal ? 'y' : 'x',
+        plugins: { legend: { display: round, position: 'right', labels: { boxWidth: 10, font: { size: 11 } } } },
+        scales: round ? {} : { x: { grid: { display: false }, ticks: { font: { size: 11 } } }, y: { beginAtZero: true, ticks: { precision: 0, font: { size: 11 } } } }
+      }
+    });
+  }
+  function drawVisible(panel) {
+    if (panel === 'overview') {
+      drawChart('chartCaseStatus', 'doughnut', charts.case_status.labels, charts.case_status.data);
+      drawChart('chartRevenue', 'bar', charts.revenue.labels, charts.revenue.data, '₹');
+      drawChart('chartLeads', 'bar', charts.leads.labels, charts.leads.data, 'Leads');
+    }
+    if (panel === 'leads') drawChart('chartSources', 'doughnut', charts.sources.labels, charts.sources.data);
+  }
+  document.addEventListener('alpine:init', () => {});
+  document.addEventListener('DOMContentLoaded', () => {
+    const root = document.body;
+    const run = () => setTimeout(() => drawVisible(window.Alpine ? Alpine.$data(root).panel : 'overview'), 60);
+    run();
+    root.addEventListener('click', run);   // panel tabs change `panel`; (re)draw lazily when a panel becomes visible
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'console/base.html' %}
+{% from 'portal/_ui.html' import pill, kpi, money with context %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+  <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+    <div><h1 class="text-xl font-extrabold leading-tight">Console</h1><p class="text-xs text-slate-500">People, cases, leads, prices and payments.</p></div>
+    <div class="flex gap-2 flex-wrap">
+      <a href="{{ url_for('console_user_create') }}" class="db-btn db-btn-orange">+ User</a>
+      <a href="{{ url_for('console_case_create') }}" class="db-btn db-btn-navy">+ Case</a>
+      <a href="{{ url_for('console_offering_create') }}" class="db-btn db-btn-ghost">+ Offering</a>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2 mb-3">
+    {% for label, value, target, color in stats %}{{ kpi(label, value, color, href=url_for('console_' ~ target)) }}{% endfor %}
+  </div>
+
+  <div class="db-panel mb-3">
+    <div class="db-title">Needs attention</div>
+    {% if pending_drafts %}<div class="db-row text-sm"><span class="pill pill-orange">!</span><span class="flex-1">{{ pending_drafts }} draft{{ 's' if pending_drafts != 1 }} waiting for partner approval</span></div>{% endif %}
+    {% if consult_requested %}<div class="db-row text-sm"><span class="pill pill-blue">!</span><span class="flex-1">{{ consult_requested }} consultation request{{ 's' if consult_requested != 1 }} not yet confirmed</span></div>{% endif %}
+    {% if inactive_offerings %}<div class="db-row text-sm"><span class="pill pill-orange">!</span><span class="flex-1">{{ inactive_offerings }} fixed-price offering{{ 's' if inactive_offerings != 1 }} hidden</span><a class="text-royal text-xs font-bold" href="{{ url_for('console_billing') }}">Review →</a></div>{% endif %}
+    {% if not (pending_drafts or consult_requested or inactive_offerings) %}<p class="db-meta py-1">✅ Nothing needs attention.</p>{% endif %}
+  </div>
+
+  <div class="grid lg:grid-cols-3 gap-3">
+    <section class="db-panel" aria-label="Latest leads">
+      <div class="db-title">Latest leads <a href="{{ url_for('console_leads') }}" class="text-royal normal-case text-xs font-bold">All →</a></div>
+      {% for lead in recent_leads %}<div class="db-row text-sm"><div class="flex-1 min-w-0"><div class="font-semibold truncate">{{ lead.name }}</div><div class="db-meta truncate">{{ lead.service or lead.source_page }} · {{ lead.phone }}</div></div>{{ pill(lead.get_status_display(), lead.status) }}</div>
+      {% else %}<p class="db-meta">No leads yet.</p>{% endfor %}
+    </section>
+    <section class="db-panel" aria-label="Cases by status">
+      <div class="db-title">Cases by status <a href="{{ url_for('console_cases') }}" class="text-royal normal-case text-xs font-bold">All →</a></div>
+      {% for row in cases_by_status %}<div class="db-row text-sm"><span class="flex-1">{{ pill(row.status) }}</span><b>{{ row.c }}</b></div>{% else %}<p class="db-meta">No cases yet.</p>{% endfor %}
+      <div class="db-meta pt-2 mt-1 border-t border-slate-100">{% for role, label in [('client','clients'),('partner','partners'),('staff','staff'),('ceo','founders')] %}<b class="text-navy">{{ users_by_role.get(role, 0) }}</b> {{ label }}{{ ' · ' if not loop.last }}{% endfor %}</div>
+    </section>
+    <section class="db-panel" aria-label="Recent activity">
+      <div class="db-title">Recent activity <a href="{{ url_for('console_audit') }}" class="text-royal normal-case text-xs font-bold">Log →</a></div>
+      {% for a in recent_audit %}<div class="db-row text-xs items-start"><span class="db-meta w-16 shrink-0">{{ a.created_at.strftime('%d %b %H:%M') }}</span><div class="min-w-0"><b>{{ a.action }}</b> <span class="db-meta break-all">{{ a.user.email if a.user else 'anonymous' }}</span></div></div>
+      {% else %}<p class="db-meta">Nothing yet.</p>{% endfor %}
+    </section>
+  </div>
+{% endblock %}

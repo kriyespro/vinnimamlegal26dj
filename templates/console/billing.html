@@ -1,0 +1,39 @@
+{% extends 'console/base.html' %}
+{% from 'portal/_ui.html' import pill, money with context %}
+{% block title %}Billing{% endblock %}
+{% block content %}
+  <h1 class="text-xl font-extrabold mb-2">Billing</h1>
+
+  {% if review %}
+    <section class="db-panel mb-3 !border-purple-200 !bg-blue-50/60">
+      <div class="db-title">Payments to review <small>a second payment hit an already-paid invoice — refund it from the CEO dashboard, then mark reviewed</small></div>
+      {% for p in review %}<div class="db-row text-sm"><span class="flex-1"><b>{{ p.invoice.invoice_no }}</b> · {{ p.invoice.client.name }} · ₹{{ '{:,.2f}'.format(p.amount_paise / 100) }} · <span class="db-meta">{{ p.razorpay_order_id }}</span></span>
+        <form method="post" action="{{ url_for('console_payment_reviewed', payment_id=p.id) }}">{{ csrf_input }}<button class="db-btn db-btn-ghost">Mark reviewed</button></form></div>{% endfor %}
+    </section>
+  {% endif %}
+
+  <div class="grid lg:grid-cols-[22rem_1fr] gap-3 items-start">
+    <section class="db-panel" aria-label="Fixed-price offerings">
+      <div class="db-title">Offerings <a href="{{ url_for('console_offering_create') }}" class="text-royal normal-case text-xs font-bold">+ Add</a></div>
+      <p class="db-meta mb-1">Active items show “Pay online” on the pricing page.</p>
+      {% for o in offerings %}
+        <div class="db-row text-sm"><div class="flex-1 min-w-0"><div class="font-semibold truncate">{{ o.name }}</div><div class="db-meta">{{ o.get_kind_display() }} · {{ o.slug }}</div></div><b class="text-royal">{{ money(o.amount) }}</b>
+          <form method="post" action="{{ url_for('console_offering_toggle', offering_id=o.id) }}">{{ csrf_input }}<button class="pill {{ 'pill-green' if o.active else 'pill-slate' }} cursor-pointer" title="Click to toggle">{{ 'Active' if o.active else 'Hidden' }}</button></form>
+          <a href="{{ url_for('console_offering_edit', offering_id=o.id) }}" class="text-royal text-xs font-bold">Edit</a></div>
+      {% else %}<p class="db-meta">No offerings yet.</p>{% endfor %}
+    </section>
+
+    <section aria-label="Invoices">
+      {% with q='', hide_search=True, selects = [('status', status, statuses, 'All statuses')] %}{% include 'console/_filters.html' %}{% endwith %}
+      <div class="db-panel !p-0 overflow-hidden">
+        {% for i in page %}
+          <div class="flex flex-wrap items-center gap-x-3 gap-y-0.5 px-3 py-2 border-t border-slate-100 first:border-0 text-sm">
+            <div class="min-w-0 flex-1 basis-52"><div class="font-semibold">{{ i.invoice_no }}{% if i.case %} <span class="db-meta font-normal">· {{ i.case.case_no }}</span>{% endif %}</div><div class="db-meta truncate">{{ i.client.name }} · {{ i.description or i.get_kind_display() }}{% if i.due_date and i.status == 'Pending' %} · due {{ i.due_date }}{% endif %}</div></div>
+            <b>{{ money(i.amount) }}</b>{{ pill(i.status) }}
+          </div>
+        {% else %}<p class="p-4 text-sm text-slate-400">No invoices.</p>{% endfor %}
+      </div>
+      {% include 'console/_pager.html' %}
+    </section>
+  </div>
+{% endblock %}

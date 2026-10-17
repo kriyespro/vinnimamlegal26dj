@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Vinnita Legal Consultancy — Founded by Vinnita Maheshwari | India's Legal Platform</title>
+  <meta name="description" content="Vinnita Legal Consultancy is founded and led by Vinnita Maheshwari, Founder & CEO. Trusted by 2 Lakh+ businesses with expert CAs, CSs and legal professionals across India."/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{navy:{DEFAULT:'#0A1628'},royal:{DEFAULT:'#1E40AF',light:'#3B82F6'},gold:{DEFAULT:'#F59E0B',dark:'#D97706'}}}}}</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="font-inter bg-slate-50 text-navy" x-data="{ mobileOpen:false, scrolled:false }" @scroll.window="scrolled = window.scrollY > 60">
+
+  <!-- NAVBAR -->
+  <nav class="nav-sticky w-full transition-all duration-300" :class="scrolled ? 'nav-scrolled' : 'bg-navy/95 backdrop-blur-md border-b border-white/10'">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+      <a href="{{ url_for('index') }}" class="flex items-center gap-2.5"><div class="w-9 h-9 rounded-xl bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A1628" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span class="text-white font-bold text-xl">Vinnita <span class="text-gold">Legal</span></span></a>
+      <div class="hidden lg:flex items-center gap-1">
+        <a href="{{ url_for('index') }}" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">Home</a>
+        <a href="{{ url_for('services') }}" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">Services</a>
+        <a href="{{ url_for('pricing') }}" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">Pricing</a>
+        <a href="{{ url_for('about') }}" class="text-white px-3 py-2 rounded-lg text-sm bg-white/10">About</a>
+        <a href="{{ url_for('contact') }}" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">Contact</a>
+      </div>
+      {% include 'includes/nav_search_cta.html' %}
+      <button @click="mobileOpen = !mobileOpen" class="lg:hidden w-10 h-10 flex flex-col justify-center items-center gap-1.5 rounded-xl border border-white/20"><span class="w-5 h-0.5 bg-white rounded"></span><span class="w-5 h-0.5 bg-white rounded"></span><span class="w-5 h-0.5 bg-white rounded"></span></button>
+    </div>
+    <div x-show="mobileOpen" x-cloak class="lg:hidden bg-navy border-t border-white/10 px-4 py-4 space-y-1"><a href="{{ url_for('index') }}" class="block text-white/80 px-4 py-2.5 rounded-lg text-sm">Home</a><a href="{{ url_for('services') }}" class="block text-white/80 px-4 py-2.5 rounded-lg text-sm">Services</a><a href="{{ url_for('contact') }}" class="block btn-primary text-sm mt-3 justify-center">Get Started</a>
+      {% include 'includes/nav_mobile_portal.html' %}</div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero-gradient pt-20 pb-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <div class="section-badge" style="background:rgba(255,255,255,0.12);color:white;">Our Story</div>
+        <h1 class="text-4xl md:text-5xl font-extrabold text-white mt-4 mb-5">Built to Make Legal<br/><span class="gradient-text">Simple for Every Indian</span></h1>
+        <p class="text-white/70 text-lg leading-relaxed">Vinnita Legal Consultancy was founded by <strong class="text-white">Vinnita Maheshwari</strong> with a simple belief: every Indian entrepreneur deserves clear, affordable legal support. Under her leadership as Founder &amp; CEO, we've grown into a trusted compliance partner for businesses nationwide.</p>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+        <div class="glass rounded-2xl p-5 text-center"><div class="stat-number">2009</div><div class="text-white/60 text-sm mt-1">Founded</div></div>
+        <div class="glass rounded-2xl p-5 text-center"><div class="stat-number">2L+</div><div class="text-white/60 text-sm mt-1">Clients Served</div></div>
+        <div class="glass rounded-2xl p-5 text-center"><div class="stat-number">500+</div><div class="text-white/60 text-sm mt-1">Expert Team</div></div>
+        <div class="glass rounded-2xl p-5 text-center"><div class="stat-number">28</div><div class="text-white/60 text-sm mt-1">States Covered</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MISSION & VALUES -->
+  <section class="section-padding bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <div class="section-badge">Our Mission</div>
+          <h2 class="text-3xl md:text-4xl font-bold text-navy mt-4 mb-5">Making Legal Services Accessible to Every Indian Business</h2>
+          <p class="text-slate-500 text-lg mb-5 leading-relaxed">India has over 6 crore MSMEs — yet most of them struggle with legal compliance because it's complex, expensive, and time-consuming. We're changing that.</p>
+          <p class="text-slate-500 mb-6 leading-relaxed">Vinnita Legal Consultancy combines the expertise of qualified CAs, CSs, and lawyers with intelligent technology to deliver legal services that are fast, affordable, and completely transparent. We don't just file documents — we partner with you for the long-term success of your business.</p>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-blue-50 rounded-xl p-4"><div class="font-bold text-royal text-lg">Transparency</div><div class="text-slate-500 text-sm mt-1">No hidden costs. No surprise bills. Ever.</div></div>
+            <div class="bg-amber-50 rounded-xl p-4"><div class="font-bold text-amber-700 text-lg">Excellence</div><div class="text-slate-500 text-sm mt-1">Every filing reviewed by a qualified professional.</div></div>
+            <div class="bg-emerald-50 rounded-xl p-4"><div class="font-bold text-emerald-700 text-lg">Speed</div><div class="text-slate-500 text-sm mt-1">Fast turnaround without compromising accuracy.</div></div>
+            <div class="bg-purple-50 rounded-xl p-4"><div class="font-bold text-purple-700 text-lg">Trust</div><div class="text-slate-500 text-sm mt-1">2 Lakh+ businesses trust us with their compliance.</div></div>
+          </div>
+        </div>
+        <div class="relative">
+          <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=700&q=80&fit=crop" alt="Vinnita Legal Consultancy Office" class="rounded-3xl w-full h-96 object-cover shadow-2xl"/>
+          <div class="absolute bottom-6 left-6 right-6 glass-dark rounded-2xl p-5">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center text-navy font-bold text-lg">VM</div>
+              <div>
+                <div class="text-white font-bold">Vinnita Maheshwari</div>
+                <div class="text-white/60 text-sm">Founder &amp; CEO, Vinnita Legal Consultancy</div>
+              </div>
+            </div>
+            <p class="text-white/70 text-sm mt-3 italic">"Every Indian entrepreneur deserves world-class legal support. We're here to make that a reality."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section class="section-padding bg-slate-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12">
+        <div class="section-badge">Leadership Team</div>
+        <h2 class="text-3xl md:text-4xl font-bold text-navy mt-2 mb-3">Meet the Experts Behind Vinnita Legal Consultancy</h2>
+        <p class="text-slate-500 max-w-xl mx-auto">Our leadership team brings together decades of combined experience across law, finance, technology and operations.</p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white rounded-2xl p-6 text-center border border-slate-100 hover:shadow-lg transition-shadow ring-2 ring-gold/40">
+          <img src="https://ui-avatars.com/api/?name=Vinnita+Maheshwari&background=0A1628&color=F59E0B&size=80" alt="Vinnita Maheshwari — Founder & CEO of Vinnita Legal Consultancy" class="w-20 h-20 rounded-full mx-auto mb-4"/>
+          <h3 class="font-bold text-navy text-base mb-0.5">Vinnita Maheshwari</h3>
+          <div class="text-gold text-sm font-semibold mb-2">Founder &amp; CEO</div>
+          <p class="text-slate-500 text-xs leading-relaxed">Founder and Chief Executive Officer of Vinnita Legal Consultancy. Leads the portal’s vision to make business registration, GST, trademark, contracts and personal legal services simple for every Indian.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 text-center border border-slate-100 hover:shadow-lg transition-shadow">
+          <img src="https://ui-avatars.com/api/?name=Rajesh+Kumar&background=1E40AF&color=fff&size=80" alt="Rajesh Kumar" class="w-20 h-20 rounded-full mx-auto mb-4"/>
+          <h3 class="font-bold text-navy text-base mb-0.5">Rajesh Kumar</h3>
+          <div class="text-royal text-sm font-medium mb-2">Head of Tax (CA)</div>
+          <p class="text-slate-500 text-xs leading-relaxed">Fellow CA with 18+ years in direct & indirect taxation. Handled 1000+ GST notices.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 text-center border border-slate-100 hover:shadow-lg transition-shadow">
+          <img src="https://ui-avatars.com/api/?name=Priyanka+Menon&background=10B981&color=fff&size=80" alt="Priyanka Menon" class="w-20 h-20 rounded-full mx-auto mb-4"/>
+          <h3 class="font-bold text-navy text-base mb-0.5">Priyanka Menon</h3>
+          <div class="text-royal text-sm font-medium mb-2">Head of CS & MCA</div>
+          <p class="text-slate-500 text-xs leading-relaxed">Fellow CS with expertise in company law, mergers, and RBI regulations. 12+ years experience.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 text-center border border-slate-100 hover:shadow-lg transition-shadow">
+          <img src="https://ui-avatars.com/api/?name=Amit+Joshi&background=8B5CF6&color=fff&size=80" alt="Amit Joshi" class="w-20 h-20 rounded-full mx-auto mb-4"/>
+          <h3 class="font-bold text-navy text-base mb-0.5">Amit Joshi</h3>
+          <div class="text-royal text-sm font-medium mb-2">Chief Technology Officer</div>
+          <p class="text-slate-500 text-xs leading-relaxed">Ex-Infosys. Leads our AI/ML compliance automation platform. IIT Delhi graduate.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACHIEVEMENTS -->
+  <section class="section-padding bg-navy">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12">
+        <div class="section-badge" style="background:rgba(255,255,255,0.12);color:white;">Awards & Recognition</div>
+        <h2 class="text-3xl font-bold text-white mt-4 mb-3">Recognized by Industry Leaders</h2>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="glass rounded-2xl p-6">
+          <div class="text-3xl mb-3">🏆</div>
+          <h3 class="font-bold text-white mb-2">Best Legal Tech Startup 2023</h3>
+          <p class="text-white/60 text-sm">Awarded by NASSCOM & Startup India for innovation in legal technology for small businesses.</p>
+        </div>
+        <div class="glass rounded-2xl p-6">
+          <div class="text-3xl mb-3">⭐</div>
+          <h3 class="font-bold text-white mb-2">4.9★ on Google (12,000+ reviews)</h3>
+          <p class="text-white/60 text-sm">Consistently rated among the top 3 legal service providers in India by our clients.</p>
+        </div>
+        <div class="glass rounded-2xl p-6">
+          <div class="text-3xl mb-3">📜</div>
+          <h3 class="font-bold text-white mb-2">ISO 9001:2015 Certified</h3>
+          <p class="text-white/60 text-sm">International quality management certification ensuring consistent, high-quality service delivery.</p>
+        </div>
+        <div class="glass rounded-2xl p-6">
+          <div class="text-3xl mb-3">🤝</div>
+          <h3 class="font-bold text-white mb-2">MCA Approved Agent</h3>
+          <p class="text-white/60 text-sm">Officially approved by the Ministry of Corporate Affairs for company registration and filings.</p>
+        </div>
+        <div class="glass rounded-2xl p-6">
+          <div class="text-3xl mb-3">🇮🇳</div>
+          <h3 class="font-bold text-white mb-2">DPIIT Recognized Startup</h3>
+          <p class="text-white/60 text-sm">Recognized by the Department for Promotion of Industry and Internal Trade, India.</p>
+        </div>
+        <div class="glass rounded-2xl p-6">
+          <div class="text-3xl mb-3">💼</div>
+          <h3 class="font-bold text-white mb-2">Featured in ET & Business Today</h3>
+          <p class="text-white/60 text-sm">Covered by leading Indian financial media for our contribution to MSME growth and compliance simplification.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section-padding bg-white">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-navy mb-4">Join 2 Lakh+ Businesses That Trust Us</h2>
+      <p class="text-slate-500 text-lg mb-8 max-w-xl mx-auto">Experience the Vinnita Legal Consultancy difference — expert legal support at a fraction of traditional costs. Start with a free consultation today.</p>
+      <div class="flex gap-4 justify-center flex-wrap">
+        <a href="{{ url_for('contact') }}" class="btn-blue text-base px-8 py-3.5">Book Free Consultation</a>
+        <a href="{{ url_for('services') }}" class="text-royal font-semibold text-base px-8 py-3.5 border-2 border-royal rounded-full hover:bg-royal hover:text-white transition-all">Explore Services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer-gradient text-white"><div class="max-w-7xl mx-auto px-4 sm:px-6 py-10"><div class="flex flex-col md:flex-row justify-between items-center gap-4"><a href="{{ url_for('index') }}" class="flex items-center gap-2.5"><div class="w-8 h-8 rounded-lg bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0A1628" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span class="font-bold text-lg">Vinnita <span class="text-gold">Legal</span></span></a><div class="flex gap-6 text-sm text-white/60"><a href="{{ url_for('index') }}" class="hover:text-white">Home</a><a href="{{ url_for('services') }}" class="hover:text-white">Services</a><a href="{{ url_for('blog') }}" class="hover:text-white">Blog</a><a href="{{ url_for('contact') }}" class="hover:text-white">Contact</a></div><span class="text-white/40 text-sm">© 2025 Vinnita Legal Consultancy. All rights reserved.</span></div></div></footer>
+  <a href="https://wa.me/919876543210" target="_blank" class="whatsapp-float"><svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg></a>
+</body>
+</html>

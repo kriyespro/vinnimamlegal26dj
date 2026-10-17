@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Office Dashboard — Vinnita Legal Consultancy</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{navy:{DEFAULT:'#0A1628'},royal:{DEFAULT:'#1E40AF',light:'#3B82F6'},gold:{DEFAULT:'#F59E0B',dark:'#D97706'}}}}}</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="font-inter bg-slate-50 text-navy min-h-screen flex flex-col"
+      x-data="{ panel: '{{ active_panel }}', openCase: {{ open_case or 'null' }}, tab: '{{ active_tab }}' }">
+
+  <header class="bg-navy text-white sticky top-0 z-50 border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
+      <div class="flex items-center gap-3">
+        <a href="{{ url_for('index') }}" class="font-bold text-lg">Vinnita <span class="text-gold">Legal</span></a>
+        <span class="hidden sm:inline text-xs px-2.5 py-1 rounded-full bg-white/10 text-white/80">Office Staff</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="{{ url_for('index') }}" class="text-xs text-white/50 hover:text-white/80 hidden sm:inline">← Site</a>
+        <a href="{{ url_for('portal-usage-policy') }}" class="hidden sm:inline text-xs text-white/60 hover:text-white">Policy</a>
+        <span class="text-xs text-white/60">{{ user.name }}</span>
+        <form method="post" action="{{ url_for('portal_logout') }}">
+          <button type="submit" class="text-xs font-semibold bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg">Logout</button>
+        </form>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex gap-1 overflow-x-auto pb-2">
+      <button @click="panel='leads'" :class="panel==='leads'?'bg-gold text-navy':'text-white/70 hover:bg-white/10'" class="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold">Website leads{% if new_leads %} ({{ new_leads }}){% endif %}</button>
+      <button @click="panel='cases'; if(openCase===null && {{ jobs[0].case.id if jobs else 'null' }}) openCase={{ jobs[0].case.id if jobs else 'null' }}"
+              :class="panel==='cases'?'bg-gold text-navy':'text-white/70 hover:bg-white/10'" class="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold">My cases</button>
+      <button @click="panel='escalate'" :class="panel==='escalate'?'bg-gold text-navy':'text-white/70 hover:bg-white/10'" class="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold">Escalate / Report</button>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="mb-6 space-y-2">
+          {% for category, message in messages %}
+            <div class="rounded-xl px-4 py-3 text-sm {% if category == 'error' %}bg-red-50 text-red-700 border border-red-100{% else %}bg-green-50 text-green-700 border border-green-100{% endif %}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="bg-amber-50 border border-amber-100 rounded-2xl p-4 text-sm text-amber-900 mb-8">
+      <strong>Office rule (§2.4):</strong> Do not give legal advice on calls or WhatsApp. Coordinate documents, payments &amp; updates — escalate legal questions to the Partner.
+    </div>
+
+    <div class="grid md:grid-cols-4 gap-4 mb-8">
+      <div class="glass-card rounded-2xl p-5">
+        <div class="text-xs text-slate-400 font-semibold uppercase">New website leads</div>
+        <div class="text-3xl font-extrabold text-royal mt-1">{{ new_leads }}</div>
+      </div>
+      <div class="glass-card rounded-2xl p-5">
+        <div class="text-xs text-slate-400 font-semibold uppercase">Assigned cases</div>
+        <div class="text-3xl font-extrabold mt-1">{{ jobs|length }}</div>
+      </div>
+      <div class="glass-card rounded-2xl p-5">
+        <div class="text-xs text-slate-400 font-semibold uppercase">Docs pending</div>
+        <div class="text-3xl font-extrabold text-amber-600 mt-1">{{ docs_pending_total }}</div>
+      </div>
+      <div class="glass-card rounded-2xl p-5">
+        <div class="text-xs text-slate-400 font-semibold uppercase">Payments due</div>
+        <div class="text-3xl font-extrabold text-green-600 mt-1">{{ due_invoices_total }}</div>
+      </div>
+    </div>
+
+    <!-- WEBSITE LEADS -->
+    <div x-show="panel==='leads'" class="space-y-4">
+      <div>
+        <h1 class="text-2xl font-extrabold text-navy">Website enquiries</h1>
+        <p class="text-sm text-slate-500 mt-1">Clients who checked on the site — follow up on WhatsApp and log every touch (§2.2).</p>
+      </div>
+      {% for eq in enquiries %}
+        <div class="glass-card rounded-2xl p-5 {% if eq.status == 'new' %}border-2 border-royal/30{% endif %}">
+          <div class="flex flex-wrap justify-between gap-3 items-start">
+            <div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <h3 class="font-bold text-navy">{{ eq.name }}</h3>
+                <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full
+                  {% if eq.status == 'new' %}bg-royal/10 text-royal
+                  {% elif eq.status == 'whatsapp_sent' %}bg-green-50 text-green-700
+                  {% elif eq.status == 'converted' %}bg-emerald-100 text-emerald-700
+                  {% else %}bg-slate-100 text-slate-600{% endif %}">{{ eq.status.replace('_', ' ') }}</span>
+              </div>
+              <p class="text-sm text-slate-500 mt-1">
+                {{ eq.phone }}{% if eq.email %} · {{ eq.email }}{% endif %}
+                {% if eq.city %} · {{ eq.city }}{% endif %}
+              </p>
+              <p class="text-xs text-royal font-semibold mt-1">{{ eq.service or 'General enquiry' }} · from {{ eq.source_page or 'site' }}</p>
+              {% if eq.message %}<p class="text-sm text-navy mt-2 bg-slate-50 rounded-xl px-3 py-2">{{ eq.message }}</p>{% endif %}
+              <p class="text-xs text-slate-400 mt-2">{{ eq.created_at }}{% if eq.outreach_count %} · {{ eq.outreach_count }} outreach logged{% endif %}</p>
+            </div>
+            <div class="flex flex-col gap-2 shrink-0">
+              <a href="{{ eq.whatsapp_link }}" target="_blank" rel="noopener"
+                 class="inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1da851] text-white text-xs font-bold px-4 py-2.5 rounded-xl">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 0 0 .611.611l4.458-1.495A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.387 0-4.608-.832-6.348-2.223l-.452-.361-2.919.98.98-2.919-.361-.452A9.955 9.955 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+                WhatsApp reply
+              </a>
+              <form method="post" action="{{ url_for('portal_enquiry_whatsapp', enquiry_id=eq.id) }}">
+                <input type="hidden" name="redirect_panel" value="leads"/>
+                <button type="submit" class="w-full text-xs font-semibold border border-slate-200 rounded-xl px-3 py-2 hover:bg-slate-50">Log WhatsApp sent</button>
+              </form>
+              <form method="post" action="{{ url_for('portal_enquiry_status', enquiry_id=eq.id) }}" class="flex gap-1">
+                <input type="hidden" name="redirect_panel" value="leads"/>
+                <select name="status" class="text-xs border border-slate-200 rounded-lg px-2 py-1.5 flex-1">
+                  <option value="new" {% if eq.status == 'new' %}selected{% endif %}>New</option>
+                  <option value="whatsapp_sent" {% if eq.status == 'whatsapp_sent' %}selected{% endif %}>WhatsApp sent</option>
+                  <option value="converted" {% if eq.status == 'converted' %}selected{% endif %}>Converted</option>
+                  <option value="closed" {% if eq.status == 'closed' %}selected{% endif %}>Closed</option>
+                </select>
+                <button type="submit" class="text-xs font-semibold text-royal px-2">Save</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <p class="text-slate-500 text-sm">No website enquiries yet.</p>
+      {% endfor %}
+    </div>
+
+    <!-- CASES -->
+    <div x-show="panel==='cases'" x-cloak>
+      {% if not jobs %}
+        <p class="text-slate-500">No cases assigned to you yet.</p>
+      {% else %}
+      <div class="grid lg:grid-cols-12 gap-6">
+        <aside class="lg:col-span-4 space-y-3">
+          {% for job in jobs %}
+            {% set c = job.case %}
+            <button type="button" @click="openCase={{ c.id }}; tab='progress'"
+                    class="w-full text-left glass-card rounded-2xl p-4 border-2 transition-colors"
+                    :class="openCase==={{ c.id }} ? 'border-royal' : 'border-transparent hover:border-slate-200'">
+              <div class="text-xs font-bold text-royal">{{ c.case_no }}</div>
+              <h3 class="font-bold text-sm">{{ c.title }}</h3>
+              <p class="text-xs text-slate-500 mt-1">{{ job.client.name }} · Partner: {{ c.partner_name }}</p>
+              <div class="mt-2 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-royal rounded-full" style="width:{{ job.progress }}%"></div>
+              </div>
+              {% if job.needed_docs or job.due_invoices %}
+                <p class="text-xs text-amber-600 font-semibold mt-2">
+                  {% if job.needed_docs %}{{ job.needed_docs|length }} docs{% endif %}
+                  {% if job.due_invoices %} · ₹ due{% endif %}
+                </p>
+              {% endif %}
+            </button>
+          {% endfor %}
+        </aside>
+
+        <section class="lg:col-span-8">
+          {% for job in jobs %}
+            {% set c = job.case %}
+            <div x-show="openCase==={{ c.id }}" x-cloak class="space-y-5">
+              <div class="glass-card rounded-2xl p-6">
+                <div class="text-xs font-bold text-royal">{{ c.case_no }}</div>
+                <h2 class="text-xl font-extrabold">{{ c.title }}</h2>
+                <p class="text-sm text-slate-500 mt-1">
+                  Client: <strong>{{ job.client.name }}</strong> ({{ job.client.email }})
+                  · Partner: <strong>{{ c.partner_name }}</strong>
+                  · {{ job.progress }}% complete
+                </p>
+              </div>
+
+              <div class="flex gap-2 flex-wrap">
+                <button @click="tab='progress'" :class="tab==='progress'?'bg-navy text-white':'bg-white border border-slate-200 text-slate-600'" class="px-4 py-2 rounded-full text-xs font-bold">Progress</button>
+                <button @click="tab='partner'" :class="tab==='partner'?'bg-navy text-white':'bg-white border border-slate-200 text-slate-600'" class="px-4 py-2 rounded-full text-xs font-bold">Partner updates</button>
+                <button @click="tab='client'" :class="tab==='client'?'bg-navy text-white':'bg-white border border-slate-200 text-slate-600'" class="px-4 py-2 rounded-full text-xs font-bold">Update client</button>
+                <button @click="tab='payments'" :class="tab==='payments'?'bg-navy text-white':'bg-white border border-slate-200 text-slate-600'" class="px-4 py-2 rounded-full text-xs font-bold">Payments</button>
+              </div>
+
+              <!-- Progress -->
+              <div x-show="tab==='progress'" class="glass-card rounded-2xl p-6">
+                <h3 class="font-bold mb-4">Case progress</h3>
+                <ol class="space-y-2">
+                  {% for m in job.milestones %}
+                    <li class="flex gap-3 items-start text-sm">
+                      <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0
+                        {% if m.status == 'done' %}bg-green-100 text-green-700{% elif m.status == 'in_progress' %}bg-amber-100 text-amber-700{% else %}bg-slate-100 text-slate-400{% endif %}">
+                        {% if m.status == 'done' %}✓{% else %}{{ loop.index }}{% endif %}
+                      </span>
+                      <div>
+                        <div class="font-semibold">{{ m.title }}</div>
+                        {% if m.detail %}<div class="text-xs text-slate-500">{{ m.detail }}</div>{% endif %}
+                      </div>
+                    </li>
+                  {% endfor %}
+                </ol>
+                {% if job.client_queries %}
+                  <div class="mt-6 pt-4 border-t border-slate-100">
+                    <h4 class="text-sm font-bold mb-2">Recent client portal messages</h4>
+                    {% for q in job.client_queries %}
+                      <div class="bg-slate-50 rounded-xl px-3 py-2 text-sm mb-2">{{ q.body }} <span class="text-xs text-slate-400">· {{ q.created_at }}</span></div>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+
+              <!-- Partner -->
+              <div x-show="tab==='partner'" x-cloak class="space-y-4">
+                <div class="glass-card rounded-2xl p-6">
+                  <h3 class="font-bold mb-3">Partner work &amp; reverts</h3>
+                  <ul class="space-y-3">
+                    {% for u in job.partner_updates %}
+                      <li class="border-l-2 border-royal/40 pl-4">
+                        <div class="text-xs text-slate-400">{{ u.created_at }} · {{ u.author_name }}</div>
+                        <p class="text-sm">{{ u.body }}</p>
+                      </li>
+                    {% else %}
+                      <li class="text-sm text-slate-500">No partner updates yet.</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                <div class="glass-card rounded-2xl p-6">
+                  <h3 class="font-bold mb-3">Message partner — {{ c.partner_name }}</h3>
+                  <form method="post" action="{{ url_for('portal_partner_message') }}" class="space-y-3">
+                    <input type="hidden" name="case_id" value="{{ c.id }}"/>
+                    <input type="hidden" name="redirect_case" value="{{ c.id }}"/>
+                    <input type="hidden" name="redirect_tab" value="partner"/>
+                    <textarea name="body" required rows="3" placeholder="Ask about status, documents needed, or client query…"
+                              class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm"></textarea>
+                    <button type="submit" class="btn-primary text-sm">Send to partner</button>
+                  </form>
+                  {% if job.partner_messages %}
+                    <ul class="mt-4 space-y-2 border-t border-slate-100 pt-4">
+                      {% for pm in job.partner_messages %}
+                        <li class="text-sm bg-slate-50 rounded-xl px-3 py-2">
+                          <span class="text-xs text-slate-400">{{ pm.created_at }} · You</span><br/>{{ pm.body }}
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+                </div>
+              </div>
+
+              <!-- Client updates -->
+              <div x-show="tab==='client'" x-cloak class="space-y-4">
+                <div class="glass-card rounded-2xl p-6">
+                  <h3 class="font-bold mb-1">Post update for client dashboard</h3>
+                  <p class="text-xs text-slate-500 mb-4">Document status, next steps, or coordination notes — visible on client's Updates tab.</p>
+                  <form method="post" action="{{ url_for('portal_case_update', case_id=c.id) }}" class="space-y-3">
+                    <input type="hidden" name="redirect_case" value="{{ c.id }}"/>
+                    <input type="hidden" name="redirect_tab" value="client"/>
+                    <input type="hidden" name="redirect_panel" value="cases"/>
+                    <select name="update_kind" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm">
+                      <option value="document">Document update</option>
+                      <option value="general">General update</option>
+                    </select>
+                    <textarea name="body" required rows="3"
+                              placeholder="e.g. Received signed affidavit. Verified and logged on file."
+                              class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm"></textarea>
+                    <button type="submit" class="btn-primary text-sm">Post to client dashboard</button>
+                  </form>
+                </div>
+                <div class="glass-card rounded-2xl p-6">
+                  <h3 class="font-bold mb-3">Documents on file</h3>
+                  <ul class="space-y-2 text-sm">
+                    {% for d in job.documents %}
+                      <li class="flex justify-between bg-slate-50 rounded-xl px-3 py-2">
+                        <span>{{ d.filename }} <span class="text-xs text-slate-400">· {{ d.uploader_role }}</span></span>
+                        <a href="{{ url_for('portal_document_download', doc_id=d.id) }}" class="text-royal text-xs font-semibold">View</a>
+                      </li>
+                    {% else %}
+                      <li class="text-slate-400">No files yet.</li>
+                    {% endfor %}
+                  </ul>
+                  {% if job.needed_docs %}
+                    <div class="mt-4 pt-4 border-t border-slate-100">
+                      <h4 class="text-sm font-bold text-amber-700 mb-2">Still needed from client</h4>
+                      {% for d in job.needed_docs %}
+                        <div class="text-sm py-1">{{ d.title }}</div>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+
+              <!-- Payments -->
+              <div x-show="tab==='payments'" x-cloak class="glass-card rounded-2xl p-6">
+                <h3 class="font-bold mb-4">Invoices &amp; payments</h3>
+                <div class="space-y-4">
+                  {% for inv in job.invoices %}
+                    <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-50 rounded-xl px-4 py-3">
+                      <div>
+                        <div class="font-semibold text-sm">{{ inv.invoice_no }}</div>
+                        <div class="text-lg font-extrabold text-navy">₹{{ '%.0f'|format(inv.amount) }}</div>
+                        <span class="text-xs font-semibold {% if inv.status == 'Paid' %}text-green-600{% else %}text-amber-600{% endif %}">{{ inv.status }}{% if inv.due_date and inv.status != 'Paid' %} · due {{ inv.due_date }}{% endif %}</span>
+                      </div>
+                      {% if inv.status != 'Paid' %}
+                        <form method="post" action="{{ url_for('portal_invoice_payment', invoice_id=inv.id) }}">
+                          <input type="hidden" name="redirect_case" value="{{ c.id }}"/>
+                          <input type="hidden" name="redirect_tab" value="payments"/>
+                          <input type="hidden" name="redirect_panel" value="cases"/>
+                          <button type="submit" class="bg-green-600 text-white text-xs font-bold px-4 py-2 rounded-lg">Mark paid &amp; notify client</button>
+                        </form>
+                      {% endif %}
+                    </div>
+                  {% else %}
+                    <p class="text-sm text-slate-500">No invoices on this matter.</p>
+                  {% endfor %}
+                </div>
+                <form method="post" action="{{ url_for('portal_case_update', case_id=c.id) }}" class="mt-6 pt-6 border-t border-slate-100 space-y-3">
+                  <input type="hidden" name="redirect_case" value="{{ c.id }}"/>
+                  <input type="hidden" name="redirect_tab" value="payments"/>
+                  <input type="hidden" name="redirect_panel" value="cases"/>
+                  <input type="hidden" name="update_kind" value="payment"/>
+                  <h4 class="text-sm font-bold">Payment note to client</h4>
+                  <p class="text-xs text-slate-500">Posted on the client's dashboard Updates tab — use for UPI, bank transfer, or receipt details.</p>
+                  <textarea name="body" rows="3" required
+                            placeholder="e.g. Payment of ₹12,500 received via UPI (Ref: 482910). Receipt emailed."
+                            class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm"></textarea>
+                  <button type="submit" class="bg-navy text-white text-xs font-bold px-4 py-2.5 rounded-lg">Post payment update</button>
+                </form>
+                {% if job.updates %}
+                  <div class="mt-6 pt-4 border-t border-slate-100">
+                    <h4 class="text-sm font-bold text-navy mb-3">Recent updates sent to client</h4>
+                    <ul class="space-y-2 max-h-48 overflow-y-auto">
+                      {% for u in job.updates %}
+                        <li class="text-sm bg-slate-50 rounded-xl px-3 py-2 border-l-2 {% if 'Payment' in u.body %}border-green-400{% else %}border-slate-200{% endif %}">
+                          <div class="text-[10px] text-slate-400">{{ u.created_at }} · {{ u.author_name or 'Office' }}</div>
+                          <div>{{ u.body }}</div>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </section>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- ESCALATE -->
+    <div x-show="panel==='escalate'" x-cloak class="space-y-6">
+      <div class="grid sm:grid-cols-2 gap-4">
+        <form method="post" action="{{ url_for('portal_escalate') }}" class="glass-card rounded-2xl p-5 space-y-3">
+          <input type="hidden" name="redirect_panel" value="escalate"/>
+          <h3 class="font-bold">Escalate to Partner</h3>
+          <select name="case_id" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm">
+            <option value="">Case (optional)</option>
+            {% for job in jobs %}<option value="{{ job.case.id }}">{{ job.case.case_no }}</option>{% endfor %}
+          </select>
+          <textarea name="note" rows="2" placeholder="Client asked for legal opinion…" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm"></textarea>
+          <button type="submit" class="bg-navy text-white text-xs font-bold px-4 py-2.5 rounded-lg w-full">Escalate</button>
+        </form>
+        <form method="post" action="{{ url_for('portal_breach') }}" class="glass-card rounded-2xl p-5 space-y-3">
+          <input type="hidden" name="redirect_panel" value="escalate"/>
+          <h3 class="font-bold">Report incident</h3>
+          <textarea name="note" rows="2" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm"></textarea>
+          <button type="submit" class="bg-red-600 text-white text-xs font-bold px-4 py-2.5 rounded-lg w-full">Report</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer class="border-t border-slate-200 py-4 text-center text-xs text-slate-400">
+    Vinnita Legal Consultancy Office Portal · All outreach logged for audit (§2.2, §5)
+  </footer>
+</body>
+</html>

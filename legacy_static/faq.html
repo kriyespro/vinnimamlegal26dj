@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FAQ — LexAssist Legal &amp; Compliance Questions Answered</title>
+  <meta name="description" content="Frequently asked questions about LexAssist services: company registration, GST, trademark, MSME, partnership, marriage certificate, adoption and pricing."/>
+  <link rel="stylesheet" href="styles.css"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{navy:{DEFAULT:'#0A1628'},royal:{DEFAULT:'#1E40AF',light:'#3B82F6'},gold:{DEFAULT:'#F59E0B',dark:'#D97706'}}}}}</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="font-inter bg-slate-50 text-navy" x-data="{ mobileOpen:false, scrolled:false, open:1 }" @scroll.window="scrolled = window.scrollY > 60">
+
+  <nav class="nav-sticky w-full transition-all duration-300" :class="scrolled ? 'nav-scrolled' : 'bg-navy/95 backdrop-blur-md border-b border-white/10'">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+      <a href="index.html" class="flex items-center gap-2.5"><div class="w-9 h-9 rounded-xl bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A1628" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span class="text-white font-bold text-xl">Lex<span class="text-gold">Assist</span></span></a>
+      <div class="hidden lg:flex items-center gap-1">
+        <a href="services.html" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">Services</a>
+        <a href="pricing.html" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">Pricing</a>
+        <a href="contact.html" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">Contact</a>
+      </div>
+      <a href="contact.html" class="hidden lg:flex btn-primary text-sm py-2.5 px-5">Talk to Us</a>
+      <button @click="mobileOpen = !mobileOpen" class="lg:hidden w-10 h-10 flex flex-col justify-center items-center gap-1.5 rounded-xl border border-white/20"><span class="w-5 h-0.5 bg-white rounded"></span><span class="w-5 h-0.5 bg-white rounded"></span><span class="w-5 h-0.5 bg-white rounded"></span></button>
+    </div>
+  </nav>
+
+  <section class="hero-gradient pt-20 pb-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+      <h1 class="text-4xl md:text-5xl font-extrabold text-white mt-2 mb-4">Frequently Asked Questions</h1>
+      <p class="text-white/70 text-lg">Quick answers about our legal &amp; compliance services.</p>
+    </div>
+  </section>
+
+  <section class="section-padding">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 space-y-3">
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <button @click="open=open===1?null:1" class="w-full flex justify-between items-center p-5 text-left font-semibold"><span>What services does LexAssist offer?</span><span x-text="open===1?'−':'+'"></span></button>
+        <div x-show="open===1" class="px-5 pb-5 text-sm text-slate-500">Business registration (Pvt Ltd, LLP, OPC, partnership), GST, trademark, MSME/Udyam, contracts, compliance deadlines, marriage certificate, adoption documentation and expert consultations — similar breadth to Vakilsearch and IndiaFilings.</div>
+      </div>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <button @click="open=open===2?null:2" class="w-full flex justify-between items-center p-5 text-left font-semibold"><span>Is the process fully online?</span><span x-text="open===2?'−':'+'"></span></button>
+        <div x-show="open===2" x-cloak class="px-5 pb-5 text-sm text-slate-500">Most business filings are 100% online. Some state partnership filings, marriage registration appointments or court steps may need physical presence — we guide you either way.</div>
+      </div>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <button @click="open=open===3?null:3" class="w-full flex justify-between items-center p-5 text-left font-semibold"><span>Are government fees included in the price?</span><span x-text="open===3?'−':'+'"></span></button>
+        <div x-show="open===3" x-cloak class="px-5 pb-5 text-sm text-slate-500">Listed prices are LexAssist professional fees unless marked all-inclusive. Stamp duty, MCA, GST and registrar fees are usually extra and shown transparently before you pay.</div>
+      </div>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <button @click="open=open===4?null:4" class="w-full flex justify-between items-center p-5 text-left font-semibold"><span>How do I track my application?</span><span x-text="open===4?'−':'+'"></span></button>
+        <div x-show="open===4" x-cloak class="px-5 pb-5 text-sm text-slate-500">Your relationship manager updates you on WhatsApp/email at every milestone. You can also call support@lexassist.in or +91 98765 43210.</div>
+      </div>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <button @click="open=open===5?null:5" class="w-full flex justify-between items-center p-5 text-left font-semibold"><span>Do you help with personal legal work?</span><span x-text="open===5?'−':'+'"></span></button>
+        <div x-show="open===5" x-cloak class="px-5 pb-5 text-sm text-slate-500">Yes — marriage certificate registration, adoption documentation assistance, wills and related family-law drafting via our Expert Portal.</div>
+      </div>
+      <div class="text-center pt-8">
+        <p class="text-slate-500 mb-4">Still have a question?</p>
+        <a href="contact.html" class="btn-primary">Contact Support</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer-gradient text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8 flex flex-col md:flex-row justify-between items-center gap-4">
+      <a href="index.html" class="font-bold text-lg">Lex<span class="text-gold">Assist</span></a>
+      <span class="text-white/40 text-sm">© 2025 LexAssist</span>
+    </div>
+  </footer>
+</body>
+</html>

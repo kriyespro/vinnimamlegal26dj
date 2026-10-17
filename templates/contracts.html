@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% block title %}Contract &amp; Agreement Drafting | VinnitaLegal{% endblock %}
+{% block description %}Lawyer-drafted NDAs, employment, shareholder and vendor agreements, MoUs and more — custom drafting with stamp-paper guidance.{% endblock %}
+{% block xdata %}, filter:'all'{% endblock %}
+{% block content %}
+
+  <section class="hero-gradient pt-20 pb-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+      <div class="section-badge" style="background:rgba(255,255,255,0.12);color:white;border:1px solid rgba(255,255,255,0.2);">Legal Drafting</div>
+      <h1 class="text-4xl md:text-5xl font-extrabold text-white mt-4 mb-4">Contracts That Protect<br/><span class="gradient-text">Your Business</span></h1>
+      <p class="text-white/70 text-lg max-w-2xl mx-auto">NDAs, employment agreements, shareholder deals, MoUs, vendor &amp; franchise contracts — drafted by Indian lawyers, tailored to your industry.</p>
+      <div class="mt-8 flex gap-4 justify-center flex-wrap">
+        <a href="{{ url_for('contact') }}" class="btn-primary text-base px-7 py-3">Request Drafting</a>
+        <a href="{{ url_for('expert-portal') }}" class="btn-secondary text-base px-7 py-3">Talk to a Lawyer</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white border-b border-slate-100 sticky top-16 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex gap-2 overflow-x-auto py-3">
+      <button @click="filter='all'" :class="filter==='all'?'bg-navy text-white':'bg-slate-100 text-slate-600'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold">All</button>
+      <button @click="filter='business'" :class="filter==='business'?'bg-navy text-white':'bg-slate-100 text-slate-600'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold">Business</button>
+      <button @click="filter='hr'" :class="filter==='hr'?'bg-navy text-white':'bg-slate-100 text-slate-600'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold">HR &amp; Employment</button>
+      <button @click="filter='ip'" :class="filter==='ip'?'bg-navy text-white':'bg-slate-100 text-slate-600'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold">IP &amp; Confidentiality</button>
+      <button @click="filter='property'" :class="filter==='property'?'bg-navy text-white':'bg-slate-100 text-slate-600'" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold">Property</button>
+    </div>
+  </section>
+
+  <section class="section-padding">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="services-grid">
+        <a href="{{ url_for('contact') }}" x-show="filter==='all'||filter==='ip'" class="service-card">
+          <h3 class="font-bold text-navy mb-1">NDA / Confidentiality</h3>
+          <p class="text-slate-500 text-sm mb-3">Mutual or one-way NDA for founders, vendors, employees and investors.</p>
+          <span class="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-semibold">From ₹2,499</span>
+        </a>
+        <a href="{{ url_for('contact') }}" x-show="filter==='all'||filter==='hr'" class="service-card">
+          <h3 class="font-bold text-navy mb-1">Employment Agreement</h3>
+          <p class="text-slate-500 text-sm mb-3">Offer letters with IP assignment, non-compete and notice clauses.</p>
+          <span class="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-semibold">From ₹3,999</span>
+        </a>
+        <a href="{{ url_for('contact') }}" x-show="filter==='all'||filter==='business'" class="service-card">
+          <h3 class="font-bold text-navy mb-1">Shareholder Agreement</h3>
+          <p class="text-slate-500 text-sm mb-3">Voting rights, vesting, drag/tag, exit &amp; dispute resolution.</p>
+          <span class="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-semibold">From ₹9,999</span>
+        </a>
+        <a href="{{ url_for('contact') }}" x-show="filter==='all'||filter==='business'" class="service-card">
+          <h3 class="font-bold text-navy mb-1">MoU / JV Agreement</h3>
+          <p class="text-slate-500 text-sm mb-3">Memorandum of Understanding and joint venture frameworks.</p>
+          <span class="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-semibold">From ₹4,999</span>
+        </a>
+        <a href="{{ url_for('contact') }}" x-show="filter==='all'||filter==='business'" class="service-card">
+          <h3 class="font-bold text-navy mb-1">Vendor / Client Agreement</h3>
+          <p class="text-slate-500 text-sm mb-3">Service SOWs, SLAs, payment terms and liability caps.</p>
+          <span class="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-semibold">From ₹3,499</span>
+        </a>
+        <a href="{{ url_for('contact') }}" x-show="filter==='all'||filter==='business'" class="service-card">
+          <h3 class="font-bold text-navy mb-1">Franchise Agreement</h3>
+          <p class="text-slate-500 text-sm mb-3">Territory, royalties, brand use and termination rights.</p>
+          <span class="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-semibold">From ₹12,999</span>
+        </a>
+        <a href="{{ url_for('contact') }}" x-show="filter==='all'||filter==='business'" class="service-card">
+          <h3 class="font-bold text-navy mb-1">Partnership Deed</h3>
+          <p class="text-slate-500 text-sm mb-3">Full deed for firm registration — linked to our partnership service.</p>
+          <span class="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-semibold">From ₹2,999</span>
+        </a>
+        <a href="{{ url_for('contact') }}" x-show="filter==='all'||filter==='hr'" class="service-card">
+          <h3 class="font-bold text-navy mb-1">Consultant / Freelancer Agreement</h3>
+          <p class="text-slate-500 text-sm mb-3">Independent contractor terms with deliverables and IP ownership.</p>
+          <span class="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-semibold">From ₹2,999</span>
+        </a>
+        <a href="{{ url_for('contact') }}" x-show="filter==='all'||filter==='property'" class="service-card">
+          <h3 class="font-bold text-navy mb-1">Rental / Lease Agreement</h3>
+          <p class="text-slate-500 text-sm mb-3">Residential &amp; commercial rent agreements, e-stamp ready.</p>
+          <span class="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-semibold">From ₹1,999</span>
+        </a>
+        <a href="{{ url_for('contact') }}" x-show="filter==='all'||filter==='business'" class="service-card">
+          <h3 class="font-bold text-navy mb-1">Loan Agreement</h3>
+          <p class="text-slate-500 text-sm mb-3">Inter-company or founder loans with interest and repayment schedule.</p>
+          <span class="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-semibold">From ₹3,499</span>
+        </a>
+        <a href="{{ url_for('contact') }}" x-show="filter==='all'||filter==='ip'" class="service-card">
+          <h3 class="font-bold text-navy mb-1">IP Assignment Deed</h3>
+          <p class="text-slate-500 text-sm mb-3">Transfer of trademark, copyright or patent rights.</p>
+          <span class="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-semibold">From ₹4,499</span>
+        </a>
+        <a href="{{ url_for('contact') }}" x-show="filter==='all'||filter==='business'" class="service-card">
+          <h3 class="font-bold text-navy mb-1">Founders Agreement</h3>
+          <p class="text-slate-500 text-sm mb-3">Equity split, roles, vesting and founder exit terms.</p>
+          <span class="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-semibold">From ₹7,999</span>
+        </a>
+      </div>
+
+      <!-- STAMP PAPER PRICES -->
+      <div class="mt-16" id="stamp-paper">
+        <div class="text-center mb-8">
+          <div class="section-badge">Stamp Paper Price</div>
+          <h2 class="text-3xl font-bold text-navy mt-2 mb-3">Stamp Paper Cost for Contracts</h2>
+          <p class="text-slate-500 max-w-xl mx-auto">Drafting fee is listed on each card. Stamp paper / e-stamp is extra and paid at state rates:</p>
+        </div>
+        <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white mb-6">
+          <table class="w-full text-sm text-left">
+            <thead class="bg-navy text-white">
+              <tr>
+                <th class="px-5 py-3.5 font-semibold">Document</th>
+                <th class="px-5 py-3.5 font-semibold">Typical Stamp Paper</th>
+                <th class="px-5 py-3.5 font-semibold">VinnitaLegal Drafting</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-600">
+              <tr><td class="px-5 py-3 font-medium text-navy">NDA / Confidentiality</td><td class="px-5 py-3">₹100 – ₹500</td><td class="px-5 py-3">From ₹2,499</td></tr>
+              <tr class="bg-slate-50"><td class="px-5 py-3 font-medium text-navy">Employment Agreement</td><td class="px-5 py-3">₹100 – ₹200</td><td class="px-5 py-3">From ₹3,999</td></tr>
+              <tr><td class="px-5 py-3 font-medium text-navy">Consultant / Freelancer</td><td class="px-5 py-3">₹100 – ₹500</td><td class="px-5 py-3">From ₹2,999</td></tr>
+              <tr class="bg-slate-50"><td class="px-5 py-3 font-medium text-navy">Service / Vendor Agreement</td><td class="px-5 py-3">₹100 – ₹500</td><td class="px-5 py-3">From ₹3,499</td></tr>
+              <tr><td class="px-5 py-3 font-medium text-navy">MoU / JV</td><td class="px-5 py-3">₹100 – ₹500</td><td class="px-5 py-3">From ₹4,999</td></tr>
+              <tr class="bg-slate-50"><td class="px-5 py-3 font-medium text-navy">Shareholder / Founders Agreement</td><td class="px-5 py-3">₹200 – ₹1,000+</td><td class="px-5 py-3">From ₹7,999</td></tr>
+              <tr><td class="px-5 py-3 font-medium text-navy">Partnership Deed</td><td class="px-5 py-3">₹200 – ₹5,000 (by state)</td><td class="px-5 py-3">From ₹2,999</td></tr>
+              <tr class="bg-slate-50"><td class="px-5 py-3 font-medium text-navy">Rental / Lease (&lt; 1 year)</td><td class="px-5 py-3">₹100 – ₹500</td><td class="px-5 py-3">From ₹1,999</td></tr>
+              <tr><td class="px-5 py-3 font-medium text-navy">Loan Agreement</td><td class="px-5 py-3">0.1% – 0.5% of amount*</td><td class="px-5 py-3">From ₹3,499</td></tr>
+              <tr class="bg-slate-50"><td class="px-5 py-3 font-medium text-navy">Power of Attorney (general)</td><td class="px-5 py-3">₹100 – ₹500</td><td class="px-5 py-3">On request</td></tr>
+              <tr><td class="px-5 py-3 font-medium text-navy">Adoption Deed</td><td class="px-5 py-3">₹25 – ₹500 (state-wise)</td><td class="px-5 py-3"><a href="{{ url_for('adoption') }}" class="text-royal">See adoption</a></td></tr>
+              <tr class="bg-slate-50"><td class="px-5 py-3 font-medium text-navy">Marriage affidavits</td><td class="px-5 py-3">₹10 – ₹100 each</td><td class="px-5 py-3"><a href="{{ url_for('marriage-certificate') }}#stamp-paper" class="text-royal">See marriage</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-xs text-slate-400 text-center mb-6">*Ad valorem rates apply in many states for loans and long leases. Property sale deeds attract much higher % stamp duty (typically 3–8%) — ask us for a quote. We use SHCIL e-stamping where available.</p>
+        <div class="text-center"><a href="{{ url_for('contact') }}" class="btn-primary">Get Stamp + Drafting Quote</a></div>
+      </div>
+
+      <div class="mt-14 hero-gradient rounded-3xl p-10 text-center">
+        <h2 class="text-2xl font-bold text-white mb-3">Need a Custom Contract?</h2>
+        <p class="text-white/70 mb-6">Describe your deal — our lawyers draft from scratch or review what you already have.</p>
+        <a href="{{ url_for('contact') }}" class="btn-primary">Get a Quote</a>
+      </div>
+    </div>
+  </section>
+{% endblock %}

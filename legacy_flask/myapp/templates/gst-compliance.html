@@ -1,0 +1,206 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GST Registration & Filing Services India | LexAssist</title>
+  <meta name="description" content="GST registration in 3 days. Monthly GSTR-1, GSTR-3B filing, annual returns, reconciliation and GST notice handling by expert CAs. Starting ₹999/month."/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{navy:{DEFAULT:'#0A1628'},royal:{DEFAULT:'#1E40AF',light:'#3B82F6'},gold:{DEFAULT:'#F59E0B',dark:'#D97706'}}}}}</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="font-inter bg-slate-50 text-navy" x-data="{ mobileOpen: false, scrolled: false, billing: 'monthly' }" @scroll.window="scrolled = window.scrollY > 60">
+
+  <!-- NAVBAR -->
+  <nav class="nav-sticky w-full transition-all duration-300" :class="scrolled ? 'nav-scrolled' : 'bg-navy/95 backdrop-blur-md border-b border-white/10'">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+      <a href="{{ url_for('index') }}" class="flex items-center gap-2.5"><div class="w-9 h-9 rounded-xl bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A1628" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span class="text-white font-bold text-xl">Lex<span class="text-gold">Assist</span></span></a>
+      <div class="hidden lg:flex items-center gap-1">
+        <a href="{{ url_for('index') }}" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">Home</a>
+        <a href="{{ url_for('services') }}" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">All Services</a>
+        <a href="{{ url_for('pricing') }}" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">Pricing</a>
+        <a href="{{ url_for('contact') }}" class="text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm">Contact</a>
+      </div>
+      {% include 'includes/nav_search_cta.html' %}
+      <button @click="mobileOpen = !mobileOpen" class="lg:hidden w-10 h-10 flex flex-col justify-center items-center gap-1.5 rounded-xl border border-white/20">
+        <span class="w-5 h-0.5 bg-white rounded"></span><span class="w-5 h-0.5 bg-white rounded"></span><span class="w-5 h-0.5 bg-white rounded"></span>
+      </button>
+    </div>
+    <div x-show="mobileOpen" x-cloak class="lg:hidden bg-navy border-t border-white/10 px-4 py-4 space-y-1">
+      <a href="{{ url_for('index') }}" class="block text-white/80 px-4 py-2.5 rounded-lg text-sm">Home</a>
+      <a href="{{ url_for('services') }}" class="block text-white/80 px-4 py-2.5 rounded-lg text-sm">All Services</a>
+      <a href="{{ url_for('contact') }}" class="block btn-primary text-sm mt-3 justify-center">Get Started</a>
+      {% include 'includes/nav_mobile_portal.html' %}
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero-gradient pt-20 pb-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="text-center max-w-3xl mx-auto">
+        <div class="section-badge" style="background:rgba(16,185,129,0.15);color:#34D399;border:1px solid rgba(16,185,129,0.3);">GST Compliance</div>
+        <h1 class="text-4xl md:text-5xl font-extrabold text-white mt-4 mb-5">GST Registration &<br/><span class="gradient-text">Filing Made Easy</span></h1>
+        <p class="text-white/70 text-lg mb-8 leading-relaxed">From GST registration to monthly return filing, annual GSTR-9 to notice responses — our expert team keeps you 100% GST-compliant, on time, every time.</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="{{ url_for('contact') }}" class="btn-primary text-base px-8 py-3.5">Register for GST</a>
+          <a href="{{ url_for('contact') }}" class="btn-secondary text-base px-8 py-3.5">File GST Returns</a>
+        </div>
+      </div>
+
+      <!-- Key metrics -->
+      <div class="grid grid-cols-3 gap-4 max-w-2xl mx-auto mt-12">
+        <div class="glass rounded-2xl p-4 text-center"><div class="stat-number">3</div><div class="text-white/60 text-sm mt-1">Days to Register</div></div>
+        <div class="glass rounded-2xl p-4 text-center"><div class="stat-number">50K+</div><div class="text-white/60 text-sm mt-1">Returns Filed</div></div>
+        <div class="glass rounded-2xl p-4 text-center"><div class="stat-number">0%</div><div class="text-white/60 text-sm mt-1">Penalty Rate</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GST SERVICES -->
+  <section class="section-padding bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12">
+        <div class="section-badge">Our GST Services</div>
+        <h2 class="text-3xl md:text-4xl font-bold text-navy mt-2 mb-3">Complete GST Management</h2>
+        <p class="text-slate-500 max-w-xl mx-auto">We handle the entire GST lifecycle for your business — registration, returns, reconciliation and more.</p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="service-card border-l-4 border-emerald-500">
+          <div class="service-icon bg-emerald-50"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="m9 12 2 2 4-4"/></svg></div>
+          <h3 class="font-bold text-navy text-lg mb-2">GST Registration</h3>
+          <p class="text-slate-500 text-sm mb-3">Get your GSTIN in 3–5 days. Mandatory for businesses with ₹20L+ turnover (₹10L in NE states). Composite scheme available.</p>
+          <div class="flex justify-between items-center"><span class="text-emerald-600 font-bold">From ₹1,499</span><a href="{{ url_for('contact') }}" class="text-royal text-sm font-semibold">Apply Now →</a></div>
+        </div>
+        <div class="service-card border-l-4 border-blue-500">
+          <div class="service-icon bg-blue-50"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1E40AF" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+          <h3 class="font-bold text-navy text-lg mb-2">Monthly GST Return Filing</h3>
+          <p class="text-slate-500 text-sm mb-3">GSTR-1 (outward supplies) and GSTR-3B (summary return) filed accurately every month. Never pay a late fee again.</p>
+          <div class="flex justify-between items-center"><span class="text-emerald-600 font-bold">₹999/month</span><a href="{{ url_for('contact') }}" class="text-royal text-sm font-semibold">Subscribe →</a></div>
+        </div>
+        <div class="service-card border-l-4 border-purple-500">
+          <div class="service-icon bg-purple-50"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+          <h3 class="font-bold text-navy text-lg mb-2">GST Reconciliation</h3>
+          <p class="text-slate-500 text-sm mb-3">GSTR-2A/2B reconciliation with purchase registers. Maximize ITC claims and prevent mismatches that trigger notices.</p>
+          <div class="flex justify-between items-center"><span class="text-emerald-600 font-bold">From ₹2,499</span><a href="{{ url_for('contact') }}" class="text-royal text-sm font-semibold">Learn More →</a></div>
+        </div>
+        <div class="service-card border-l-4 border-amber-500">
+          <div class="service-icon bg-amber-50"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg></div>
+          <h3 class="font-bold text-navy text-lg mb-2">Annual GST Return (GSTR-9)</h3>
+          <p class="text-slate-500 text-sm mb-3">Comprehensive annual return with full reconciliation, GSTR-9C audit (if applicable), and CA certification.</p>
+          <div class="flex justify-between items-center"><span class="text-emerald-600 font-bold">From ₹3,999</span><a href="{{ url_for('contact') }}" class="text-royal text-sm font-semibold">File Now →</a></div>
+        </div>
+        <div class="service-card border-l-4 border-red-500">
+          <div class="service-icon bg-red-50"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <h3 class="font-bold text-navy text-lg mb-2">GST Notice Response</h3>
+          <p class="text-slate-500 text-sm mb-3">Expert handling of GST scrutiny notices, assessment orders, and department queries with proper legal responses.</p>
+          <div class="flex justify-between items-center"><span class="text-emerald-600 font-bold">From ₹4,999</span><a href="{{ url_for('contact') }}" class="text-royal text-sm font-semibold">Get Help →</a></div>
+        </div>
+        <div class="service-card border-l-4 border-sky-500">
+          <div class="service-icon bg-sky-50"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0EA5E9" stroke-width="2"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg></div>
+          <h3 class="font-bold text-navy text-lg mb-2">GST Cancellation / Surrender</h3>
+          <p class="text-slate-500 text-sm mb-3">Voluntary or involuntary GST registration cancellation filed properly with the department to avoid future liabilities.</p>
+          <div class="flex justify-between items-center"><span class="text-emerald-600 font-bold">From ₹1,999</span><a href="{{ url_for('contact') }}" class="text-royal text-sm font-semibold">Apply →</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING PLANS -->
+  <section class="section-padding bg-slate-50">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-10">
+        <div class="section-badge">GST Filing Plans</div>
+        <h2 class="text-3xl font-bold text-navy mt-2 mb-3">Simple, Transparent GST Plans</h2>
+        <!-- Toggle -->
+        <div class="flex items-center justify-center gap-3 mt-6">
+          <span class="text-sm font-medium" :class="billing==='monthly' ? 'text-navy' : 'text-slate-400'">Monthly</span>
+          <button @click="billing = billing==='monthly' ? 'annual' : 'monthly'" class="w-12 h-6 rounded-full transition-all duration-300 relative" :class="billing==='annual' ? 'bg-royal' : 'bg-slate-300'">
+            <div class="w-5 h-5 bg-white rounded-full absolute top-0.5 transition-all duration-300 shadow" :class="billing==='annual' ? 'left-6' : 'left-0.5'"></div>
+          </button>
+          <span class="text-sm font-medium" :class="billing==='annual' ? 'text-navy' : 'text-slate-400'">Annual <span class="text-emerald-600 font-bold text-xs ml-1">Save 25%</span></span>
+        </div>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="pricing-card">
+          <h3 class="font-bold text-navy text-lg mb-1">Starter</h3>
+          <p class="text-slate-500 text-sm mb-4">For small businesses & freelancers</p>
+          <div class="mb-6">
+            <div class="text-4xl font-extrabold text-navy" x-text="billing==='monthly' ? '₹999' : '₹8,999'"></div>
+            <div class="text-slate-400 text-sm" x-text="billing==='monthly' ? 'per month' : 'per year (₹750/month)'"></div>
+          </div>
+          <ul class="space-y-2.5 text-sm text-slate-600 mb-6">
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>GSTR-1 & 3B filing</li>
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Up to 50 invoices/month</li>
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Dedicated CA support</li>
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Filing status alerts</li>
+          </ul>
+          <a href="{{ url_for('contact') }}" class="btn-blue w-full justify-center py-3">Choose Starter</a>
+        </div>
+        <div class="pricing-card featured relative">
+          <div class="pricing-badge">Most Popular</div>
+          <h3 class="font-bold text-white text-lg mb-1">Professional</h3>
+          <p class="text-white/60 text-sm mb-4">For growing businesses</p>
+          <div class="mb-6">
+            <div class="text-4xl font-extrabold text-white" x-text="billing==='monthly' ? '₹1,999' : '₹17,999'"></div>
+            <div class="text-white/50 text-sm" x-text="billing==='monthly' ? 'per month' : 'per year (₹1,500/month)'"></div>
+          </div>
+          <ul class="space-y-2.5 text-sm text-white/80 mb-6">
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Everything in Starter</li>
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Up to 300 invoices/month</li>
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>ITC reconciliation</li>
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Annual GSTR-9 included</li>
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Priority support</li>
+          </ul>
+          <a href="{{ url_for('contact') }}" class="btn-primary w-full justify-center py-3">Choose Professional</a>
+        </div>
+        <div class="pricing-card">
+          <h3 class="font-bold text-navy text-lg mb-1">Enterprise</h3>
+          <p class="text-slate-500 text-sm mb-4">For large businesses & corporates</p>
+          <div class="mb-6">
+            <div class="text-4xl font-extrabold text-navy" x-text="billing==='monthly' ? '₹4,999' : '₹44,999'"></div>
+            <div class="text-slate-400 text-sm" x-text="billing==='monthly' ? 'per month' : 'per year (₹3,750/month)'"></div>
+          </div>
+          <ul class="space-y-2.5 text-sm text-slate-600 mb-6">
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Everything in Professional</li>
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Unlimited invoices</li>
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Dedicated account manager</li>
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Notice handling included</li>
+            <li class="check-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>GSTR-9C audit</li>
+          </ul>
+          <a href="{{ url_for('contact') }}" class="btn-blue w-full justify-center py-3">Choose Enterprise</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section-padding bg-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-10"><div class="section-badge">FAQ</div><h2 class="text-3xl font-bold text-navy mt-2">GST Questions Answered</h2></div>
+      <div class="space-y-2">
+        <div class="faq-item" x-data="{open:false}"><button class="faq-question" @click="open=!open">Who needs to register for GST in India?<svg class="faq-icon" :class="open?'rotate-45':''" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button><div class="faq-answer" x-show="open" x-collapse>Businesses with an aggregate annual turnover exceeding ₹20 lakhs (₹10 lakhs for special category states) are mandatorily required to register for GST. Certain businesses like e-commerce operators and inter-state suppliers must register regardless of turnover.</div></div>
+        <div class="faq-item" x-data="{open:false}"><button class="faq-question" @click="open=!open">What returns does a regular taxpayer need to file?<svg class="faq-icon" :class="open?'rotate-45':''" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button><div class="faq-answer" x-show="open" x-collapse>A regular taxpayer must file GSTR-1 (monthly/quarterly), GSTR-3B (monthly), and GSTR-9 (annual). Some businesses may also need to file GSTR-2B reconciliation and GSTR-9C audit certificate if their turnover exceeds ₹2 crores.</div></div>
+        <div class="faq-item" x-data="{open:false}"><button class="faq-question" @click="open=!open">What is the penalty for late GST return filing?<svg class="faq-icon" :class="open?'rotate-45':''" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button><div class="faq-answer" x-show="open" x-collapse>Late filing of GSTR-3B attracts a late fee of ₹50 per day (₹25 CGST + ₹25 SGST), capped at ₹10,000 per return. For nil returns, the late fee is ₹20 per day. Delayed payment of tax also attracts interest at 18% p.a.</div></div>
+        <div class="faq-item" x-data="{open:false}"><button class="faq-question" @click="open=!open">Can I claim Input Tax Credit (ITC)?<svg class="faq-icon" :class="open?'rotate-45':''" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button><div class="faq-answer" x-show="open" x-collapse>Yes, registered businesses can claim ITC on goods and services used for business purposes. ITC is visible in GSTR-2B based on supplier filings. Our team reconciles your purchase register with GSTR-2B to maximize your eligible ITC claims.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="hero-gradient section-padding">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Never Miss a GST Deadline Again</h2>
+      <p class="text-white/70 text-lg mb-8">Start with a free GST consultation. Our CA team will review your current compliance status and create a plan for you.</p>
+      <div class="flex gap-4 justify-center flex-wrap">
+        <a href="{{ url_for('contact') }}" class="btn-primary text-base px-8 py-3.5">Get Free GST Consultation</a>
+        <a href="{{ url_for('pricing') }}" class="btn-secondary text-base px-8 py-3.5">View Plans</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer-gradient text-white"><div class="max-w-7xl mx-auto px-4 sm:px-6 py-10"><div class="flex flex-col md:flex-row justify-between items-center gap-4"><a href="{{ url_for('index') }}" class="flex items-center gap-2.5"><div class="w-8 h-8 rounded-lg bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0A1628" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span class="font-bold text-lg">Lex<span class="text-gold">Assist</span></span></a><div class="flex gap-6 text-sm text-white/60"><a href="{{ url_for('index') }}" class="hover:text-white">Home</a><a href="{{ url_for('services') }}" class="hover:text-white">Services</a><a href="{{ url_for('about') }}" class="hover:text-white">About</a><a href="{{ url_for('contact') }}" class="hover:text-white">Contact</a><a href="{{ url_for('faq') }}" class="hover:text-white">FAQ</a></div><span class="text-white/40 text-sm">© 2025 LexAssist. All rights reserved.</span></div></div></footer>
+  <a href="https://wa.me/919876543210" target="_blank" class="whatsapp-float"><svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg></a>
+</body>
+</html>

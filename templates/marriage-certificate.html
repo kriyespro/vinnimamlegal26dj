@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+{% block title %}Marriage Certificate Registration | VinnitaLegal{% endblock %}
+{% block description %}Marriage registration support under the Hindu Marriage Act and Special Marriage Act — document checklist, appointment and certificate delivery.{% endblock %}
+{% block xdata %}, act:'hindu', openFaq:null{% endblock %}
+{% block content %}
+
+  <section class="hero-gradient pt-20 pb-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <div class="section-badge" style="background:rgba(255,255,255,0.12);color:white;border:1px solid rgba(255,255,255,0.2);">Personal Legal</div>
+          <h1 class="text-4xl md:text-5xl font-extrabold text-white mt-4 mb-5 leading-tight">Marriage Certificate<br/><span class="gradient-text">Registration Made Easy</span></h1>
+          <p class="text-white/70 text-lg mb-6">Hindu Marriage Act or Special Marriage Act — we guide document collection, online/offline application, appointment booking and certificate delivery across India.</p>
+          <a href="{{ url_for('contact') }}" class="btn-primary text-base px-7 py-3">Start Application</a>
+        </div>
+        <div class="glass rounded-3xl p-6">
+          <h3 class="text-white font-bold text-lg mb-4">Marriage Registration Enquiry</h3>
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+              <div class="mb-3 rounded-xl px-3 py-2 text-xs {% if category == 'error' %}bg-red-500/20 text-red-100{% else %}bg-green-500/20 text-green-100{% endif %}">{{ message }}</div>
+            {% endfor %}
+          {% endwith %}
+          <form method="post" action="{{ url_for('enquire') }}" class="space-y-3">{{ csrf_input }}
+            <input type="hidden" name="source" value="marriage-certificate"/>
+            <input type="hidden" name="next" value="{{ url_for('marriage-certificate') }}"/>
+            <input type="hidden" name="service" value="Marriage Certificate"/>
+            <div><label class="form-label text-white/80 text-sm">Your Name *</label><input required name="name" type="text" class="form-input" placeholder="Full name"/></div>
+            <div><label class="form-label text-white/80 text-sm">Phone *</label><input required name="phone" type="tel" class="form-input" placeholder="{{ site.phone }}"/></div>
+            <div><label class="form-label text-white/80 text-sm">Registration Type</label>
+              <select name="extra" class="form-input"><option>Hindu Marriage Act</option><option>Special Marriage Act</option><option>Court Marriage</option><option>Not sure — advise me</option></select>
+            </div>
+            <div><label class="form-label text-white/80 text-sm">City / State</label><input name="city" type="text" class="form-input" placeholder="Where you want to register"/></div>
+            <button type="submit" class="btn-primary w-full justify-center py-3">Get Free Guidance</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-padding bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="flex flex-wrap gap-2 justify-center mb-8">
+        <button @click="act='hindu'" :class="act==='hindu'?'bg-navy text-white':'bg-slate-100'" class="px-5 py-2.5 rounded-full text-sm font-semibold">Hindu Marriage Act</button>
+        <button @click="act='sma'" :class="act==='sma'?'bg-navy text-white':'bg-slate-100'" class="px-5 py-2.5 rounded-full text-sm font-semibold">Special Marriage Act</button>
+      </div>
+      <div x-show="act==='hindu'" class="max-w-3xl mx-auto">
+        <h2 class="text-2xl font-bold text-navy mb-3">Hindu Marriage Act, 1955</h2>
+        <p class="text-slate-500 mb-4">For couples who married through Hindu rites (also covers Buddhists, Jains, Sikhs). Certificate is proof of marriage for passport, visa, bank, insurance and name change.</p>
+        <ul class="space-y-2 text-sm text-slate-600">
+          <li>• Marriage invitation / wedding photos</li>
+          <li>• Age proof &amp; address proof of both spouses</li>
+          <li>• Affidavit of marriage &amp; witness statements</li>
+          <li>• Application to local Registrar / Municipal office</li>
+        </ul>
+      </div>
+      <div x-show="act==='sma'" x-cloak class="max-w-3xl mx-auto">
+        <h2 class="text-2xl font-bold text-navy mb-3">Special Marriage Act, 1954</h2>
+        <p class="text-slate-500 mb-4">For inter-faith, civil or court marriages. Requires 30-day public notice before solemnisation, then certificate issuance by the Marriage Officer.</p>
+        <ul class="space-y-2 text-sm text-slate-600">
+          <li>• Notice of intended marriage (Form)</li>
+          <li>• Age, address &amp; marital status affidavits</li>
+          <li>• Three witnesses on the day of solemnisation</li>
+          <li>• Certificate under Section 13</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-padding">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <h2 class="text-3xl font-bold text-navy text-center mb-10">How VinnitaLegal Helps</h2>
+      <div class="grid md:grid-cols-4 gap-5">
+        <div class="glass-card rounded-2xl p-5 text-center"><div class="text-gold font-bold mb-2">01</div><h3 class="font-bold text-navy mb-1">Eligibility Check</h3><p class="text-slate-500 text-sm">We confirm which Act applies and what your state portal needs.</p></div>
+        <div class="glass-card rounded-2xl p-5 text-center"><div class="text-gold font-bold mb-2">02</div><h3 class="font-bold text-navy mb-1">Documents</h3><p class="text-slate-500 text-sm">Checklist, affidavits and witness forms prepared for you.</p></div>
+        <div class="glass-card rounded-2xl p-5 text-center"><div class="text-gold font-bold mb-2">03</div><h3 class="font-bold text-navy mb-1">Filing</h3><p class="text-slate-500 text-sm">Online portal filing or appointment booking at the Registrar.</p></div>
+        <div class="glass-card rounded-2xl p-5 text-center"><div class="text-gold font-bold mb-2">04</div><h3 class="font-bold text-navy mb-1">Certificate</h3><p class="text-slate-500 text-sm">Guidance till you receive the official marriage certificate.</p></div>
+      </div>
+      <div class="mt-10 text-center">
+        <div class="inline-block bg-white rounded-2xl border border-slate-100 px-8 py-6">
+          <div class="text-sm text-slate-500">Assisted packages from</div>
+          <div class="text-3xl font-extrabold text-navy">₹4,999</div>
+          <p class="text-xs text-slate-400 mt-1">+ stamp paper &amp; govt. fees (see below)</p>
+          <a href="{{ url_for('contact') }}" class="btn-primary mt-4">Book Consultation</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAMP PAPER PRICES -->
+  <section class="section-padding bg-white" id="stamp-paper">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-10">
+        <div class="section-badge">Stamp Paper &amp; Fees</div>
+        <h2 class="text-3xl font-bold text-navy mt-2 mb-3">Stamp Paper Price Guide</h2>
+        <p class="text-slate-500 max-w-2xl mx-auto">Affidavits and related documents for marriage registration are executed on non-judicial stamp paper. Rates vary by state — indicative guide below.</p>
+      </div>
+
+      <div class="overflow-x-auto rounded-2xl border border-slate-200 mb-8">
+        <table class="w-full text-sm text-left">
+          <thead class="bg-navy text-white">
+            <tr>
+              <th class="px-5 py-3.5 font-semibold">Document</th>
+              <th class="px-5 py-3.5 font-semibold">Typical Stamp Paper</th>
+              <th class="px-5 py-3.5 font-semibold">Govt. / Registrar Fee</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-slate-100 text-slate-600">
+            <tr>
+              <td class="px-5 py-3.5 font-medium text-navy">Marriage affidavit (each spouse)</td>
+              <td class="px-5 py-3.5">₹10 – ₹100</td>
+              <td class="px-5 py-3.5">Included in application</td>
+            </tr>
+            <tr class="bg-slate-50">
+              <td class="px-5 py-3.5 font-medium text-navy">Witness affidavit</td>
+              <td class="px-5 py-3.5">₹10 – ₹50</td>
+              <td class="px-5 py-3.5">—</td>
+            </tr>
+            <tr>
+              <td class="px-5 py-3.5 font-medium text-navy">Hindu Marriage registration</td>
+              <td class="px-5 py-3.5">State-wise (often ₹10–₹100 for forms)</td>
+              <td class="px-5 py-3.5">₹100 – ₹1,150*</td>
+            </tr>
+            <tr class="bg-slate-50">
+              <td class="px-5 py-3.5 font-medium text-navy">Special Marriage Act (notice + solemnisation)</td>
+              <td class="px-5 py-3.5">Affidavits ₹10 – ₹100 each</td>
+              <td class="px-5 py-3.5">₹150 – ₹1,050*</td>
+            </tr>
+            <tr>
+              <td class="px-5 py-3.5 font-medium text-navy">Certified copy of certificate</td>
+              <td class="px-5 py-3.5">₹10 – ₹50 (if required)</td>
+              <td class="px-5 py-3.5">₹10 – ₹100 / copy</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="rounded-xl border border-slate-200 p-4 text-center">
+          <div class="text-xs text-slate-400 font-semibold uppercase mb-1">Delhi NCR</div>
+          <div class="text-lg font-bold text-navy">₹10 – ₹50</div>
+          <div class="text-xs text-slate-500 mt-1">per affidavit stamp</div>
+        </div>
+        <div class="rounded-xl border border-slate-200 p-4 text-center">
+          <div class="text-xs text-slate-400 font-semibold uppercase mb-1">Maharashtra</div>
+          <div class="text-lg font-bold text-navy">₹100</div>
+          <div class="text-xs text-slate-500 mt-1">common affidavit value</div>
+        </div>
+        <div class="rounded-xl border border-slate-200 p-4 text-center">
+          <div class="text-xs text-slate-400 font-semibold uppercase mb-1">Karnataka / TN</div>
+          <div class="text-lg font-bold text-navy">₹20 – ₹100</div>
+          <div class="text-xs text-slate-500 mt-1">e-stamp / paper</div>
+        </div>
+        <div class="rounded-xl border border-slate-200 p-4 text-center">
+          <div class="text-xs text-slate-400 font-semibold uppercase mb-1">Most states</div>
+          <div class="text-lg font-bold text-navy">₹10 – ₹100</div>
+          <div class="text-xs text-slate-500 mt-1">non-judicial stamp</div>
+        </div>
+      </div>
+
+      <p class="text-xs text-slate-400 text-center mb-6">*Late filing can increase registrar fees (e.g. Tamil Nadu: ₹100 within 90 days, higher thereafter). Stamp duty is a state subject — we confirm the exact e-stamp value for your city before purchase. Physical stamp paper or SHCIL e-stamp both accepted where enabled.</p>
+      <div class="text-center">
+        <a href="{{ url_for('contact') }}" class="btn-blue text-sm px-6 py-2.5">Get Exact Stamp Cost for Your State</a>
+        <a href="{{ url_for('contracts') }}#stamp-paper" class="ml-3 text-royal text-sm font-semibold hover:underline">See all document stamp prices →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-padding">
+    <div class="max-w-3xl mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-8">FAQs</h2>
+      <div class="space-y-3">
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <button @click="openFaq=openFaq===1?null:1" class="w-full flex justify-between items-center p-5 text-left font-semibold"><span>How long does marriage registration take?</span><span x-text="openFaq===1?'−':'+'"></span></button>
+          <div x-show="openFaq===1" x-cloak class="px-5 pb-5 text-sm text-slate-500">Hindu Marriage Act: typically 7–30 days after complete documents. Special Marriage Act: minimum 30 days notice period plus solemnisation.</div>
+        </div>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <button @click="openFaq=openFaq===2?null:2" class="w-full flex justify-between items-center p-5 text-left font-semibold"><span>Can NRIs register marriage in India?</span><span x-text="openFaq===2?'−':'+'"></span></button>
+          <div x-show="openFaq===2" x-cloak class="px-5 pb-5 text-sm text-slate-500">Yes, with additional passport/visa documents and often presence before the Marriage Officer. We guide NRI couples through the checklist.</div>
+        </div>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <button @click="openFaq=openFaq===3?null:3" class="w-full flex justify-between items-center p-5 text-left font-semibold"><span>Who buys the stamp paper?</span><span x-text="openFaq===3?'−':'+'"></span></button>
+          <div x-show="openFaq===3" x-cloak class="px-5 pb-5 text-sm text-slate-500">You can buy e-stamp / stamp paper yourself, or VinnitaLegal can arrange the correct denomination for your state and add it to your package invoice (at actual cost, no markup on duty).</div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
